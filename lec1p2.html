@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIS – الليكتشر الأول</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0f1a;
+    --card: #121828;
+    --card2: #161d2e;
+    --border: #1e2a42;
+    --accent1: #3b82f6;
+    --accent2: #8b5cf6;
+    --accent3: #10b981;
+    --accent4: #f59e0b;
+    --accent5: #ef4444;
+    --text: #e2e8f0;
+    --muted: #8899b4;
+    --glow1: rgba(59,130,246,0.15);
+    --glow2: rgba(139,92,246,0.12);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Cairo', 'Tajawal', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── BACKGROUND ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 80% 10%, rgba(59,130,246,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 35% at 10% 80%, rgba(139,92,246,0.07) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 30% at 50% 50%, rgba(16,185,129,0.04) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 3.5rem 1.5rem 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #1e3a5f, #1e295f);
+    border: 1px solid rgba(59,130,246,0.4);
+    color: var(--accent1);
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    padding: .35rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 1.2rem;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 900;
+    line-height: 1.2;
+    background: linear-gradient(135deg, #fff 30%, #93c5fd 70%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: .6rem;
+  }
+  .hero-sub {
+    color: var(--muted);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  /* ── NAV PILLS ── */
+  .nav-bar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(11,15,26,0.92);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+    padding: .7rem 1rem;
+    display: flex; flex-wrap: wrap; gap: .5rem;
+    justify-content: center;
+  }
+  .nav-pill {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .42rem 1rem;
+    border-radius: 100px;
+    font-size: .8rem; font-weight: 700;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all .25s;
+    background: var(--card2);
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .nav-pill:hover, .nav-pill.active { color: #fff; }
+  .nav-pill[data-c="org"]:hover, .nav-pill[data-c="org"].active { background: rgba(59,130,246,0.2); border-color: var(--accent1); color: var(--accent1); }
+  .nav-pill[data-c="mgmt"]:hover, .nav-pill[data-c="mgmt"].active { background: rgba(139,92,246,0.2); border-color: var(--accent2); color: var(--accent2); }
+  .nav-pill[data-c="tech"]:hover, .nav-pill[data-c="tech"].active { background: rgba(16,185,129,0.2); border-color: var(--accent3); color: var(--accent3); }
+  .nav-pill[data-c="biz"]:hover, .nav-pill[data-c="biz"].active { background: rgba(245,158,11,0.2); border-color: var(--accent4); color: var(--accent4); }
+  .nav-pill[data-c="chain"]:hover, .nav-pill[data-c="chain"].active { background: rgba(59,130,246,0.2); border-color: #60a5fa; color: #60a5fa; }
+  .nav-pill[data-c="invest"]:hover, .nav-pill[data-c="invest"].active { background: rgba(239,68,68,0.18); border-color: var(--accent5); color: var(--accent5); }
+  .nav-pill[data-c="comp"]:hover, .nav-pill[data-c="comp"].active { background: rgba(251,191,36,0.18); border-color: #fbbf24; color: #fbbf24; }
+  .nav-pill[data-c="approach"]:hover, .nav-pill[data-c="approach"].active { background: rgba(139,92,246,0.2); border-color: var(--accent2); color: var(--accent2); }
+  .nav-pill[data-c="socio"]:hover, .nav-pill[data-c="socio"].active { background: rgba(16,185,129,0.2); border-color: var(--accent3); color: var(--accent3); }
+
+  /* ── LAYOUT ── */
+  .container {
+    position: relative; z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 4rem;
+    display: flex; flex-direction: column; gap: 2.5rem;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: box-shadow .3s;
+  }
+  .section:hover { box-shadow: 0 0 40px rgba(59,130,246,0.07); }
+
+  .section-header {
+    padding: 1.5rem 1.8rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-icon {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-size: 1.3rem; font-weight: 800;
+    line-height: 1.3;
+  }
+  .section-header .subtitle {
+    font-size: .82rem; color: var(--muted); margin-top: .15rem;
+  }
+  .section-body { padding: 1.6rem 1.8rem; }
+
+  /* ── COLOR THEMES ── */
+  .theme-blue .section-icon { background: rgba(59,130,246,0.15); }
+  .theme-blue .section-header h2 { color: #93c5fd; }
+  .theme-blue .section-header { border-color: rgba(59,130,246,0.15); }
+
+  .theme-purple .section-icon { background: rgba(139,92,246,0.15); }
+  .theme-purple .section-header h2 { color: #c4b5fd; }
+  .theme-purple .section-header { border-color: rgba(139,92,246,0.15); }
+
+  .theme-green .section-icon { background: rgba(16,185,129,0.15); }
+  .theme-green .section-header h2 { color: #6ee7b7; }
+  .theme-green .section-header { border-color: rgba(16,185,129,0.15); }
+
+  .theme-amber .section-icon { background: rgba(245,158,11,0.15); }
+  .theme-amber .section-header h2 { color: #fcd34d; }
+  .theme-amber .section-header { border-color: rgba(245,158,11,0.15); }
+
+  .theme-red .section-icon { background: rgba(239,68,68,0.15); }
+  .theme-red .section-header h2 { color: #fca5a5; }
+  .theme-red .section-header { border-color: rgba(239,68,68,0.15); }
+
+  /* ── GRID ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; }
+  @media(max-width:768px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  }
+  @media(max-width:900px) {
+    .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.2rem 1.1rem;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,.3); }
+  .card-icon { font-size: 1.6rem; margin-bottom: .6rem; }
+  .card h3 { font-size: .95rem; font-weight: 700; margin-bottom: .4rem; }
+  .card p { font-size: .82rem; color: var(--muted); line-height: 1.65; }
+
+  /* ── TAG ── */
+  .tag {
+    display: inline-block;
+    font-size: .72rem; font-weight: 700;
+    padding: .22rem .7rem;
+    border-radius: 100px;
+    margin: .2rem .1rem;
+  }
+  .tag-blue { background: rgba(59,130,246,0.18); color: #93c5fd; }
+  .tag-purple { background: rgba(139,92,246,0.18); color: #c4b5fd; }
+  .tag-green { background: rgba(16,185,129,0.18); color: #6ee7b7; }
+  .tag-amber { background: rgba(245,158,11,0.18); color: #fcd34d; }
+  .tag-red { background: rgba(239,68,68,0.18); color: #fca5a5; }
+
+  /* ── LIST ── */
+  .nice-list { list-style: none; display: flex; flex-direction: column; gap: .55rem; }
+  .nice-list li {
+    display: flex; align-items: flex-start; gap: .7rem;
+    font-size: .88rem; line-height: 1.6; color: #cbd5e1;
+  }
+  .nice-list li .bullet {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-top: .45rem;
+    flex-shrink: 0;
+  }
+  .bullet-blue { background: var(--accent1); }
+  .bullet-purple { background: var(--accent2); }
+  .bullet-green { background: var(--accent3); }
+  .bullet-amber { background: var(--accent4); }
+
+  /* ── VALUE CHAIN DIAGRAM ── */
+  .chain-wrap {
+    overflow-x: auto;
+    padding: .5rem 0 1rem;
+  }
+  .chain {
+    display: flex; align-items: center; gap: 0;
+    min-width: 700px;
+  }
+  .chain-step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+  }
+  .chain-box {
+    background: var(--card2);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 1rem .8rem;
+    margin: 0 .3rem;
+    transition: all .25s;
+    cursor: default;
+  }
+  .chain-box:hover { transform: scale(1.04); }
+  .chain-box .step-num {
+    font-size: .65rem; font-weight: 800; letter-spacing: .1em;
+    text-transform: uppercase; margin-bottom: .35rem;
+  }
+  .chain-box .step-icon { font-size: 1.8rem; margin-bottom: .4rem; }
+  .chain-box .step-title { font-size: .82rem; font-weight: 700; margin-bottom: .3rem; }
+  .chain-box .step-desc { font-size: .72rem; color: var(--muted); line-height: 1.5; }
+
+  .chain-step:not(:last-child)::after {
+    content: '←';
+    position: absolute;
+    left: -12px; top: 50%; transform: translateY(-50%);
+    font-size: 1.2rem; color: var(--muted);
+    z-index: 5;
+  }
+  [dir="rtl"] .chain-step:not(:last-child)::after { content: '→'; left: auto; right: -12px; }
+
+  .c1 .chain-box { border-color: rgba(59,130,246,0.5); }
+  .c1 .step-num { color: var(--accent1); }
+  .c2 .chain-box { border-color: rgba(139,92,246,0.5); }
+  .c2 .step-num { color: var(--accent2); }
+  .c3 .chain-box { border-color: rgba(16,185,129,0.5); }
+  .c3 .step-num { color: var(--accent3); }
+  .c4 .chain-box { border-color: rgba(245,158,11,0.5); }
+  .c4 .step-num { color: var(--accent4); }
+  .c5 .chain-box { border-color: rgba(239,68,68,0.5); }
+  .c5 .step-num { color: var(--accent5); }
+
+  /* ── APPROACHES DIAGRAM ── */
+  .approach-diagram {
+    display: flex; gap: 1rem; align-items: stretch;
+    flex-wrap: wrap;
+  }
+  .approach-side {
+    flex: 1; min-width: 220px;
+    background: var(--card2);
+    border-radius: 16px;
+    padding: 1.4rem 1.2rem;
+    border: 1.5px solid var(--border);
+  }
+  .approach-center {
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+    padding: 1rem .6rem;
+    gap: .6rem;
+  }
+  .approach-center .mis-circle {
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: .85rem; font-weight: 900;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(139,92,246,0.3);
+  }
+  .approach-center p { font-size: .72rem; color: var(--muted); text-align: center; }
+
+  /* ── SOCIOTECHNICAL DIAGRAM ── */
+  .socio-diagram {
+    display: flex; gap: 1.5rem; align-items: center; justify-content: center;
+    flex-wrap: wrap; padding: 1rem 0;
+  }
+  .socio-box {
+    flex: 1; min-width: 200px;
+    background: var(--card2);
+    border-radius: 16px;
+    padding: 1.4rem;
+    border: 2px solid;
+    text-align: center;
+  }
+  .socio-box.tech { border-color: rgba(59,130,246,0.5); }
+  .socio-box.org { border-color: rgba(16,185,129,0.5); }
+  .socio-box h3 { font-size: 1rem; font-weight: 800; margin: .5rem 0 .4rem; }
+  .socio-box.tech h3 { color: #93c5fd; }
+  .socio-box.org h3 { color: #6ee7b7; }
+  .socio-mid {
+    display: flex; flex-direction: column; align-items: center; gap: .4rem;
+    font-size: 1.5rem;
+  }
+  .fit-badge {
+    background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(16,185,129,0.2));
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: .5rem .9rem;
+    font-size: .75rem; font-weight: 700; color: #e2e8f0;
+    text-align: center;
+  }
+
+  /* ── ALERT BOX ── */
+  .alert {
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    display: flex; gap: .8rem; align-items: flex-start;
+    margin-top: 1rem;
+  }
+  .alert-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: .1rem; }
+  .alert-text { font-size: .85rem; line-height: 1.65; }
+  .alert-text strong { display: block; margin-bottom: .2rem; }
+  .alert-danger { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); }
+  .alert-info { background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3); }
+  .alert-success { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); }
+
+  /* ── EXAM QUESTIONS ── */
+  .exam-section { background: var(--card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
+  .exam-header {
+    background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(239,68,68,0.1));
+    border-bottom: 1px solid rgba(245,158,11,0.2);
+    padding: 1.2rem 1.8rem;
+    display: flex; align-items: center; gap: .8rem;
+  }
+  .exam-header h2 { font-size: 1.2rem; font-weight: 800; color: #fcd34d; }
+  .exam-body { padding: 1.5rem 1.8rem; display: flex; flex-direction: column; gap: .8rem; }
+  .exam-q {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .exam-q:hover { border-color: rgba(245,158,11,0.4); }
+  .exam-q .q-text {
+    font-size: .88rem; font-weight: 700; color: #e2e8f0;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .exam-q .q-text span { color: var(--muted); font-size: .8rem; }
+  .exam-q .a-text {
+    display: none;
+    margin-top: .7rem;
+    padding-top: .7rem;
+    border-top: 1px solid var(--border);
+    font-size: .84rem; color: #6ee7b7; line-height: 1.6;
+  }
+  .exam-q.open .a-text { display: block; }
+  .exam-q.open .q-text span { color: var(--accent4); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    text-align: center; color: var(--muted);
+    font-size: .78rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .divider::before, .divider::after {
+    content: ''; flex: 1; height: 1px;
+    background: var(--border);
+  }
+
+  /* ── COMPARISON TABLE ── */
+  .cmp-table {
+    width: 100%; border-collapse: collapse;
+    font-size: .85rem;
+  }
+  .cmp-table th, .cmp-table td {
+    padding: .8rem 1rem;
+    border: 1px solid var(--border);
+    text-align: right;
+  }
+  .cmp-table th {
+    background: rgba(255,255,255,0.04);
+    font-weight: 700;
+  }
+  .cmp-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* ── SUMMARY BOX ── */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: .8rem;
+  }
+  .summary-item {
+    background: var(--card2);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 1rem;
+  }
+  .summary-item .s-label {
+    font-size: .68rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: .1em; margin-bottom: .5rem;
+  }
+  .summary-item ul { list-style: none; display: flex; flex-direction: column; gap: .3rem; }
+  .summary-item ul li { font-size: .8rem; color: #cbd5e1; }
+  .summary-item ul li::before { content: '← '; color: var(--muted); }
+
+  /* ── ACTORS ── */
+  .actors-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  @media(max-width:600px) { .actors-grid { grid-template-columns: 1fr; } }
+
+  /* ── RETURN CHART ── */
+  .returns-bars {
+    display: flex; gap: .6rem; align-items: flex-end;
+    height: 130px; padding: .5rem 0;
+    margin: .5rem 0;
+  }
+  .ret-bar-wrap { display: flex; flex-direction: column; align-items: center; gap: .3rem; flex: 1; }
+  .ret-bar {
+    width: 100%; border-radius: 6px 6px 0 0;
+    transition: height .5s;
+  }
+  .ret-label { font-size: .65rem; color: var(--muted); text-align: center; }
+
+  /* SCROLL ANIMATION */
+  .section { opacity: 0; transform: translateY(24px); transition: opacity .5s, transform .5s; }
+  .section.visible { opacity: 1; transform: translateY(0); }
+
+  /* FOOTER */
+  .footer {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: .8rem;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">📚 MIS – Chapter 1 – الليكتشر الأول – الجزء الثاني</div>
+  <h1>Management Information Systems</h1>
+  <p class="hero-sub">Information Systems in Global Business Today · كل حاجة هتحتاجها في الامتحان</p>
+</div>
+
+<!-- NAV -->
+<nav class="nav-bar">
+  <a href="#org" class="nav-pill" data-c="org">🏢 Organizational</a>
+  <a href="#mgmt" class="nav-pill" data-c="mgmt">👔 Management</a>
+  <a href="#tech" class="nav-pill" data-c="tech">💻 Technology</a>
+  <a href="#biz" class="nav-pill" data-c="biz">💰 Business Perspective</a>
+  <a href="#chain" class="nav-pill" data-c="chain">🔗 Value Chain</a>
+  <a href="#invest" class="nav-pill" data-c="invest">📊 IT Investment</a>
+  <a href="#comp" class="nav-pill" data-c="comp">💎 Complementary Assets</a>
+  <a href="#approach" class="nav-pill" data-c="approach">🧠 Approaches</a>
+  <a href="#socio" class="nav-pill" data-c="socio">⚖️ Sociotechnical</a>
+  <a href="#exam" class="nav-pill" data-c="exam">🎯 أسئلة الامتحان</a>
+</nav>
+
+<div class="container">
+
+  <!-- ════════════ SECTION 1: ORGANIZATIONAL ════════════ -->
+  <section class="section theme-blue" id="org">
+    <div class="section-header">
+      <div class="section-icon">🏢</div>
+      <div>
+        <h2>Organizational Dimension</h2>
+        <div class="subtitle">البُعد التنظيمي – الشركة من الداخل</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p style="font-size:.88rem;color:#94a3b8;margin-bottom:1.3rem;line-height:1.7;">
+        البُعد التنظيمي بيتكلم عن الشركة نفسها: هيكلها، طريقة شغلها، وثقافتها. كل عنصر من دول بيأثر على كيفية تصميم واستخدام السيستم.
+      </p>
+
+      <div class="grid-2" style="margin-bottom:1.3rem;">
+
+        <!-- Separation of Business Functions -->
+        <div class="card">
+          <div class="card-icon">🔀</div>
+          <h3 style="color:#93c5fd;">1️⃣ Separation of Business Functions</h3>
+          <p style="margin-bottom:.8rem;">الشركة بتتقسم لأقسام مختلفة، وكل قسم ليه شغل مختلف، والسيستم لازم يخدم كل قسم.</p>
+          <div>
+            <span class="tag tag-blue">🛒 Sales & Marketing</span>
+            <span class="tag tag-purple">👨‍💼 HR</span>
+            <span class="tag tag-green">💰 Finance & Accounting</span>
+            <span class="tag tag-amber">🏭 Manufacturing & Production</span>
+          </div>
+          <div style="margin-top:.9rem;">
+            <ul class="nice-list">
+              <li><span class="bullet bullet-blue"></span>Sales & Marketing: بيع، تسويق، جذب عملاء</li>
+              <li><span class="bullet bullet-purple"></span>Human Resources: توظيف، تدريب، إدارة موظفين</li>
+              <li><span class="bullet bullet-green"></span>Finance & Accounting: حسابات، فلوس، ميزانية</li>
+              <li><span class="bullet bullet-amber"></span>Manufacturing & Production: تصنيع المنتجات والإنتاج</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          <!-- Unique Business Processes -->
+          <div class="card">
+            <div class="card-icon">⚙️</div>
+            <h3 style="color:#93c5fd;">2️⃣ Unique Business Processes</h3>
+            <p>كل شركة ليها طريقة شغل خاصة بيها. أمازون غير جوميا، كل واحدة ليها نظامها. السيستم لازم يتصمم على حسب الشركة.</p>
+          </div>
+
+          <!-- Unique Business Culture -->
+          <div class="card">
+            <div class="card-icon">🌐</div>
+            <h3 style="color:#93c5fd;">3️⃣ Unique Business Culture</h3>
+            <p>ثقافة الشركة: طريقة التعامل، القوانين، أسلوب الإدارة.</p>
+            <div style="margin-top:.6rem;display:flex;gap:.5rem;flex-wrap:wrap;">
+              <div style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:8px;padding:.4rem .7rem;font-size:.75rem;">👔 رسمية جداً</div>
+              <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:8px;padding:.4rem .7rem;font-size:.75rem;">😎 مرنة وكاجوال</div>
+            </div>
+          </div>
+
+          <!-- Organizational Politics -->
+          <div class="card">
+            <div class="card-icon">⚔️</div>
+            <h3 style="color:#93c5fd;">4️⃣ Organizational Politics</h3>
+            <p>صراعات جوه الشركة – قسم عايز سيستم معين، قسم تاني رافض. ده بيأثر على تنفيذ السيستم.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="alert alert-info">
+        <span class="alert-icon">💡</span>
+        <div class="alert-text">
+          <strong>الفكرة الأساسية:</strong>
+          كل قسم ليه شغل مختلف، والسيستم لازم يخدم كل قسم. طريقة الشغل وثقافة الشركة بتأثر على تصميم السيستم.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ SECTION 2: MANAGEMENT ════════════ -->
+  <section class="section theme-purple" id="mgmt">
+    <div class="section-header">
+      <div class="section-icon">👔</div>
+      <div>
+        <h2>Management Dimension</h2>
+        <div class="subtitle">البُعد الإداري – دور المديرين</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p style="font-size:.88rem;color:#94a3b8;margin-bottom:1.3rem;line-height:1.7;">
+        المديرين مش بس بيستخدموا السيستم، هم اللي بيحددوا استراتيجية الشركة ويحلوا المشاكل ويبتكروا حاجات جديدة.
+      </p>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-icon">🎯</div>
+          <h3 style="color:#c4b5fd;">1️⃣ تحديد الاستراتيجية</h3>
+          <p>المديرين بيحطوا خطة الشركة وبيردوا على التحديات التجارية. بيحددوا الاتجاه اللي هتمشي فيه الشركة.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔧</div>
+          <h3 style="color:#c4b5fd;">2️⃣ حل المشاكل والتحديات</h3>
+          <p>بيتعاملوا مع: السوق، المنافسين، الأزمات. ودي مسؤوليتهم اليومية كمديرين.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🎨</div>
+          <h3 style="color:#c4b5fd;">3️⃣ الابتكار والإبداع</h3>
+          <p>لازم يكونوا Creative: يعملوا منتجات جديدة، خدمات جديدة، وأحياناً يغيروا الشركة نفسها.</p>
+          <div style="margin-top:.7rem;background:rgba(139,92,246,0.1);border-radius:8px;padding:.6rem .8rem;font-size:.78rem;color:#c4b5fd;">
+            🔥 مثال: شركة تقرر تتحول من Offline لـ Online → ده قرار إداري كبير
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ SECTION 3: TECHNOLOGY ════════════ -->
+  <section class="section theme-green" id="tech">
+    <div class="section-header">
+      <div class="section-icon">💻</div>
+      <div>
+        <h2>Technology Dimension</h2>
+        <div class="subtitle">البُعد التكنولوجي – الجزء التقني</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="grid-2" style="margin-bottom:1.2rem;">
+        <div class="card">
+          <div class="card-icon">🖥️</div>
+          <h3 style="color:#6ee7b7;">1️⃣ Hardware & Software</h3>
+          <ul class="nice-list" style="margin-top:.5rem;">
+            <li><span class="bullet bullet-green"></span>Hardware: الأجهزة المادية – سيرفرات، كمبيوترات</li>
+            <li><span class="bullet bullet-green"></span>Software: البرامج والتطبيقات</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-icon">🗄️</div>
+          <h3 style="color:#6ee7b7;">2️⃣ Data Management Technology</h3>
+          <ul class="nice-list" style="margin-top:.5rem;">
+            <li><span class="bullet bullet-green"></span>تخزين البيانات في Databases</li>
+            <li><span class="bullet bullet-green"></span>تنظيمها وإدارتها بشكل منظم</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-icon">🌐</div>
+          <h3 style="color:#6ee7b7;">3️⃣ Networking & Telecommunications</h3>
+          <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.6rem;">
+            <span class="tag tag-green">🌍 Networks</span>
+            <span class="tag tag-green">🌐 Internet</span>
+            <span class="tag tag-blue">🔒 Intranet</span>
+            <span class="tag tag-amber">🤝 Extranet</span>
+            <span class="tag tag-purple">🕸️ World Wide Web</span>
+          </div>
+          <div style="margin-top:.7rem;font-size:.78rem;color:#94a3b8;line-height:1.6;">
+            Intranet = شبكة داخلية للشركة<br>
+            Extranet = شبكة مع شركاء خارجيين
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🏗️</div>
+          <h3 style="color:#6ee7b7;">4️⃣ IT Infrastructure</h3>
+          <p>الأساس اللي السيستم مبني عليه – زي "أرضية البيت".</p>
+          <div style="margin-top:.7rem;">
+            <span class="tag tag-green">سيرفرات</span>
+            <span class="tag tag-blue">قواعد بيانات</span>
+            <span class="tag tag-amber">شبكة</span>
+          </div>
+          <p style="margin-top:.5rem;font-size:.78rem;color:#94a3b8;">Provides the platform that the system is built on</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ SECTION 4: BUSINESS PERSPECTIVE ════════════ -->
+  <section class="section theme-amber" id="biz">
+    <div class="section-header">
+      <div class="section-icon">💰</div>
+      <div>
+        <h2>Business Perspective on Information Systems</h2>
+        <div class="subtitle">منظور البيزنس – الهدف النهائي هو القيمة</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p style="font-size:.88rem;color:#94a3b8;margin-bottom:1.2rem;line-height:1.7;">
+        Information system is an instrument for creating value – السيستم أداة لخلق القيمة. الشركات بتستثمر في التكنولوجيا علشان تحقق نتائج ملموسة.
+      </p>
+      <div class="grid-3">
+        <div class="card" style="border-color:rgba(245,158,11,0.3);">
+          <div class="card-icon">📈</div>
+          <h3 style="color:#fcd34d;">Productivity Increases</h3>
+          <p>الإنتاجية تزيد – الموظفين يعملوا أكتر في وقت أقل</p>
+        </div>
+        <div class="card" style="border-color:rgba(245,158,11,0.3);">
+          <div class="card-icon">💵</div>
+          <h3 style="color:#fcd34d;">Revenue Increases</h3>
+          <p>الإيرادات تزيد – مبيعات أكتر وعملاء أكتر</p>
+        </div>
+        <div class="card" style="border-color:rgba(245,158,11,0.3);">
+          <div class="card-icon">🏆</div>
+          <h3 style="color:#fcd34d;">Superior Long-term Strategic Positioning</h3>
+          <p>مكانة استراتيجية أقوى في السوق على المدى الطويل</p>
+        </div>
+      </div>
+      <div class="alert alert-success" style="margin-top:1.2rem;">
+        <span class="alert-icon">🎯</span>
+        <div class="alert-text">
+          <strong>الخلاصة:</strong>
+          قيمة السيستم = على قد ما بيساعد في قرارات أحسن وربح أكتر. Business perspective calls attention to the organizational and managerial nature of information systems.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ SECTION 5: VALUE CHAIN ════════════ -->
+  <section class="section theme-blue" id="chain">
+    <div class="section-header">
+      <div class="section-icon">🔗</div>
+      <div>
+        <h2>The Business Information Value Chain</h2>
+        <div class="subtitle">سلسلة القيمة – من البيانات للأرباح</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p style="font-size:.88rem;color:#94a3b8;margin-bottom:1.3rem;line-height:1.7;">
+        Raw data acquired and transformed through stages that add value. The value of information system is determined by the extent to which it leads to better decisions, greater efficiency, and higher profits.
+      </p>
+
+      <!-- Chain Diagram -->
+      <div class="chain-wrap">
+        <div class="chain">
+          <div class="chain-step c1">
+            <div class="chain-box">
+              <div class="step-num">المرحلة 1</div>
+              <div class="step-icon">🥩</div>
+              <div class="step-title">Raw Data Collection & Storage</div>
+              <div class="step-desc">جمع وتخزين البيانات الخام من العملاء، المبيعات، السوق</div>
+            </div>
+          </div>
+          <div class="chain-step c2">
+            <div class="chain-box">
+              <div class="step-num">المرحلة 2</div>
+              <div class="step-icon">⚙️</div>
+              <div class="step-title">Transformation into Business Systems</div>
+              <div class="step-desc">تحليل وتنظيم البيانات وتخزينها في Database</div>
+            </div>
+          </div>
+          <div class="chain-step c3">
+            <div class="chain-box">
+              <div class="step-num">المرحلة 3</div>
+              <div class="step-icon">📡</div>
+              <div class="step-title">Dissemination</div>
+              <div class="step-desc">توزيع المعلومات على المديرين والموظفين</div>
+            </div>
+          </div>
+          <div class="chain-step c4">
+            <div class="chain-box">
+              <div class="step-num">المرحلة 4</div>
+              <div class="step-icon">🧠</div>
+              <div class="step-title">Modeling & Decision Making</div>
+              <div class="step-desc">المدير يستخدم المعلومات: يزود إنتاج، يقلل تكلفة</div>
+            </div>
+          </div>
+          <div class="chain-step c5">
+            <div class="chain-box">
+              <div class="step-num">النتيجة</div>
+              <div class="step-icon">💰</div>
+              <div class="step-title">Firm Profitability & Strategic Position</div>
+              <div class="step-desc">أرباح تزيد والشركة تبقى أقوى في السوق</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formula -->
+      <div style="text-align:center;margin:1.5rem 0;padding:1rem;background:linear-gradient(135deg,rgba(59,130,246,0.1),rgba(139,92,246,0.1));border-radius:14px;border:1px solid rgba(59,130,246,0.2);">
+        <div style="font-size:1rem;font-weight:800;color:#e2e8f0;letter-spacing:.05em;">
+          Data → Processing → Decision Making → Profit
+        </div>
+        <div style="font-size:.78rem;color:var(--muted);margin-top:.4rem;">البيانات ← المعالجة ← اتخاذ القرار ← الربح</div>
+      </div>
+
+      <!-- Management Activities -->
+      <div class="divider" style="margin:1.2rem 0;">دور الإدارة في السلسلة</div>
+      <div class="grid-3">
+        <div class="card" style="text-align:center;">
+          <div style="font-size:1.5rem;">📋</div>
+          <h3 style="color:#93c5fd;margin-top:.4rem;">Planning</h3>
+          <p>التخطيط المستقبلي</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:1.5rem;">🤝</div>
+          <h3 style="color:#93c5fd;margin-top:.4rem;">Coordinating</h3>
+          <p>التنسيق بين الأقسام</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:1.5rem;">👁️</div>
+          <h3 style="color:#93c5fd;margin-top:.4rem;">Controlling</h3>
+          <p>الرقابة والمتابعة</p>
+        </div>
+      </div>
+
+      <!-- Also includes Supply Chain, Enterprise, Customer, Knowledge -->
+      <div style="margin-top:1.2rem;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;">
+        <div style="font-size:.82rem;font-weight:700;color:#93c5fd;margin-bottom:.6rem;">📌 Business Processes في Value Chain تشمل:</div>
+        <div style="display:flex;flex-wrap:wrap;gap:.5rem;">
+          <span class="tag tag-blue">Supply Chain Management</span>
+          <span class="tag tag-purple">Enterprise Management</span>
+          <span class="tag tag-green">Customer Management</span>
+          <span class="tag tag-amber">Knowledge Management</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ SECTION 6: IT INVESTMENT ════════════ -->
+  <section class="section theme-red" id="invest">
+    <div class="section-header">
+      <div class="section-icon">📊</div>
+      <div>
+        <h2>IT Investment & Returns</h2>
+        <div class="subtitle">الاستثمار في IT – مش دايمًا ناجح!</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <div class="alert alert-danger" style="margin-bottom:1.3rem;">
+        <span class="alert-icon">⚠️</span>
+        <div class="alert-text">
+          <strong>نقطة خطيرة جداً في الامتحان!</strong>
+          Investing in information technology does NOT guarantee good returns. مش كل شركة تشتري سيستم هتكسب فلوس. في اختلاف كبير بين الشركات (Considerable Variation).
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:1.2rem;">
+        <div class="card">
+          <div class="card-icon">📉</div>
+          <h3 style="color:#fca5a5;">ليه بعض الاستثمارات بتفشل؟</h3>
+          <ul class="nice-list" style="margin-top:.7rem;">
+            <li><span class="bullet" style="background:#ef4444;"></span>Business Model غلط أو مش مناسب</li>
+            <li><span class="bullet" style="background:#ef4444;"></span>مفيش Complementary Assets</li>
+            <li><span class="bullet" style="background:#ef4444;"></span>الإدارة مش داعمة للسيستم</li>
+            <li><span class="bullet" style="background:#ef4444;"></span>الموظفين مش متدربين</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-icon">📈</div>
+          <h3 style="color:#6ee7b7;">الاستثمار بيكسب لما:</h3>
+          <ul class="nice-list" style="margin-top:.7rem;">
+            <li><span class="bullet" style="background:#10b981;"></span>Business Model مناسب وصح</li>
+            <li><span class="bullet" style="background:#10b981;"></span>Complementary Assets موجودة</li>
+            <li><span class="bullet" style="background:#10b981;"></span>الإدارة والموظفين داعمين</li>
+            <li><span class="bullet" style="background:#10b981;"></span>بيئة شغل مناسبة</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bar Chart Illustration -->
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:1.2rem;">
+        <div style="font-size:.82rem;font-weight:700;color:#fca5a5;margin-bottom:.8rem;">📊 Figure 1.8: Variation in Returns on IT Investment</div>
+        <div class="returns-bars" id="returnsBars"></div>
+        <div style="font-size:.75rem;color:var(--muted);text-align:center;margin-top:.3rem;">
+          رغم إن المتوسط أعلى من استثمارات تانية، في اختلاف كبير بين الشركات
+        </div>
+      </div>
+
+      <div style="margin-top:1.2rem;background:linear-gradient(135deg,rgba(239,68,68,0.08),rgba(245,158,11,0.06));border:1px solid rgba(239,68,68,0.2);border-radius:12px;padding:1rem 1.2rem;text-align:center;">
+        <div style="font-size:1.1rem;font-weight:900;color:#fca5a5;">IT Investment ≠ Guaranteed Success</div>
+        <div style="font-size:.8rem;color:var(--muted);margin-top:.3rem;">الاستثمار في IT لا يضمن النجاح تلقائياً</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════ SECTION 7: COMPLEMENTARY ASSETS ════════════ -->
+  <section class="section theme-amber" id="comp">
+    <div class="section-header">
+      <div class="section-icon">💎</div>
+      <div>
+        <h2>Complementary Assets</h2>
+        <div class="subtitle">الأصول التكميلية – لازمة علشان السيستم ينجح</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p style="font-size:.88rem;color:#94a3b8;margin-bottom:1.2rem;line-height:1.7;">
+        Assets required to derive value from a primary investment. Firms supporting technology investments with investment in complementary assets receive superior returns. السيستم لوحده مش كفاية!
+      </p>
+
+      <div class="alert alert-info" style="margin-bottom:1.3rem;">
+        <span class="alert-icon">🔥</span>
+        <div class="alert-text">
+          <strong>مثال بسيط:</strong>
+          اشتريت سيستم بـ 1 مليون 💻 – لكن مفيش تدريب ❌ والإدارة ضعيفة ❌ → السيستم هيفشل تماماً. السيستم لوحده = مش كفاية.
+        </div>
+      </div>
+
+      <div class="grid-3">
+
+        <!-- Organizational Assets -->
+        <div class="card" style="border-color:rgba(245,158,11,0.3);">
+          <div style="font-size:2rem;text-align:center;margin-bottom:.6rem;">🏗️</div>
+          <h3 style="color:#fcd34d;text-align:center;margin-bottom:.8rem;">1️⃣ Organizational Assets</h3>
+          <ul class="nice-list">
+            <li><span class="bullet bullet-amber"></span><strong>Appropriate Business Model:</strong> طريقة الشركة في كسب الفلوس – لازم تكون مناسبة</li>
+            <li><span class="bullet bullet-amber"></span><strong>Efficient Business Processes:</strong> إجراءات عمل فعالة وسليمة</li>
+          </ul>
+        </div>
+
+        <!-- Managerial Assets -->
+        <div class="card" style="border-color:rgba(245,158,11,0.3);">
+          <div style="font-size:2rem;text-align:center;margin-bottom:.6rem;">👔</div>
+          <h3 style="color:#fcd34d;text-align:center;margin-bottom:.8rem;">2️⃣ Managerial Assets</h3>
+          <ul class="nice-list">
+            <li><span class="bullet bullet-amber"></span><strong>Incentives for Management Innovation:</strong> تشجيع الابتكار</li>
+            <li><span class="bullet bullet-amber"></span><strong>Teamwork & Collaborative Environments:</strong> بيئة عمل تعاونية</li>
+          </ul>
+        </div>
+
+        <!-- Social Assets -->
+        <div class="card" style="border-color:rgba(245,158,11,0.3);">
+          <div style="font-size:2rem;text-align:center;margin-bottom:.6rem;">🌍</div>
+          <h3 style="color:#fcd34d;text-align:center;margin-bottom:.8rem;">3️⃣ Social Assets</h3>
+          <ul class="nice-list">
+            <li><span class="bullet bullet-amber"></span><strong>Internet & Telecommunications Infrastructure:</strong> البنية التحتية</li>
+            <li><span class="bullet bullet-amber"></span><strong>Technology Standards:</strong> معايير التكنولوجيا</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Success Example -->
+      <div style="margin-top:1.3rem;background:var(--card2);border:1px solid rgba(16,185,129,0.3);border-radius:14px;padding:1.2rem;">
+        <div style="font-size:.85rem;font-weight:700;color:#6ee7b7;margin-bottom:.8rem;">✅ مثال نجاح يجمع كل حاجة:</div>
+        <div style="display:flex;flex-wrap:wrap;gap:.7rem;align-items:center;">
+          <div style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:8px;padding:.5rem .9rem;font-size:.8rem;">💻 سيستم قوي</div>
+          <div style="color:var(--muted);">+</div>
+          <div style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);border-radius:8px;padding:.5rem .9rem;font-size:.8rem;">👨‍💻 تدريب للموظفين</div>
+          <div style="color:var(--muted);">+</div>
+          <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:8px;padding:.5rem .9rem;font-size:.8rem;">👔 إدارة كويسة</div>
+          <div style="color:var(--muted);">+</div>
+          <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:.5rem .9rem;font-size:.8rem;">🌍 بيئة شغل صح</div>
+          <div style="color:var(--muted);">=</div>
+          <div style="background:rgba(16,185,129,0.2);border:1px solid rgba(16,185,129,0.4);border-radius:8px;padding:.5rem .9rem;font-size:.85rem;font-weight:700;color:#6ee7b7;">💰 أرباح عالية</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════ SECTION 8: CONTEMPORARY APPROACHES ════════════ -->
+  <section class="section theme-purple" id="approach">
+    <div class="section-header">
+      <div class="section-icon">🧠</div>
+      <div>
+        <h2>Contemporary Approaches to Information Systems</h2>
+        <div class="subtitle">طرق مختلفة لفهم ودراسة الـ IS</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p style="font-size:.88rem;color:#94a3b8;margin-bottom:1.3rem;line-height:1.7;">
+        The study of information systems deals with issues and insights contributed from technical and behavioral disciplines. الـ IS مش مجرد كمبيوتر – فيه نوعين من التفكير.
+      </p>
+
+      <!-- Approach Diagram -->
+      <div class="approach-diagram" style="margin-bottom:1.3rem;">
+        <!-- Technical -->
+        <div class="approach-side" style="border-color:rgba(59,130,246,0.3);">
+          <div style="font-size:1.3rem;font-weight:900;color:#93c5fd;margin-bottom:.8rem;text-align:center;">🔵 Technical Approach</div>
+          <p style="font-size:.82rem;color:#94a3b8;margin-bottom:.9rem;text-align:center;">يركز على التكنولوجيا والحسابات والنماذج الرياضية</p>
+          <div style="display:flex;flex-direction:column;gap:.7rem;">
+            <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:10px;padding:.8rem;">
+              <div style="font-size:.8rem;font-weight:700;color:#93c5fd;">💻 Computer Science</div>
+              <div style="font-size:.74rem;color:var(--muted);margin-top:.2rem;">برمجة، Software، Systems</div>
+            </div>
+            <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:10px;padding:.8rem;">
+              <div style="font-size:.8rem;font-weight:700;color:#93c5fd;">📊 Operations Research</div>
+              <div style="font-size:.74rem;color:var(--muted);margin-top:.2rem;">حل مشاكل باستخدام رياضيات + Optimization</div>
+            </div>
+            <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:10px;padding:.8rem;">
+              <div style="font-size:.8rem;font-weight:700;color:#93c5fd;">📈 Management Science</div>
+              <div style="font-size:.74rem;color:var(--muted);margin-top:.2rem;">استخدام نماذج لتحسين القرار</div>
+            </div>
+          </div>
+          <div style="margin-top:.8rem;background:rgba(59,130,246,0.05);border-radius:8px;padding:.6rem;font-size:.76rem;color:#93c5fd;text-align:center;">
+            🔥 مثال: حساب أفضل طريقة لتوصيل الطلبات باستخدام Algorithms
+          </div>
+        </div>
+
+        <!-- Center -->
+        <div class="approach-center">
+          <div class="mis-circle">MIS</div>
+          <div style="font-size:1.5rem;">⚖️</div>
+          <div class="fit-badge">لازم نستخدم<br>الاتنين مع بعض</div>
+        </div>
+
+        <!-- Behavioral -->
+        <div class="approach-side" style="border-color:rgba(16,185,129,0.3);">
+          <div style="font-size:1.3rem;font-weight:900;color:#6ee7b7;margin-bottom:.8rem;text-align:center;">🟢 Behavioral Approach</div>
+          <p style="font-size:.82rem;color:#94a3b8;margin-bottom:.9rem;text-align:center;">يركز على الناس والسلوك والتفاعل مع السيستم</p>
+          <div style="display:flex;flex-direction:column;gap:.7rem;">
+            <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:.8rem;">
+              <div style="font-size:.8rem;font-weight:700;color:#6ee7b7;">🧠 Psychology</div>
+              <div style="font-size:.74rem;color:var(--muted);margin-top:.2rem;">الناس بتفكر إزاي، ليه تستخدم السيستم أو لأ</div>
+            </div>
+            <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:.8rem;">
+              <div style="font-size:.8rem;font-weight:700;color:#6ee7b7;">💰 Economics</div>
+              <div style="font-size:.74rem;color:var(--muted);margin-top:.2rem;">تأثير السيستم على الفلوس – التكلفة والعائد</div>
+            </div>
+            <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:.8rem;">
+              <div style="font-size:.8rem;font-weight:700;color:#6ee7b7;">👥 Sociology</div>
+              <div style="font-size:.74rem;color:var(--muted);margin-top:.2rem;">تأثير السيستم على المجتمع والشغل</div>
+            </div>
+          </div>
+          <div style="margin-top:.8rem;background:rgba(16,185,129,0.05);border-radius:8px;padding:.6rem;font-size:.76rem;color:#6ee7b7;text-align:center;">
+            🔥 مثال: سيستم ممتاز لكن الموظفين مش فاهمينه → فشل ❌
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparison Table -->
+      <div style="overflow-x:auto;margin-bottom:1.2rem;">
+        <table class="cmp-table">
+          <tr>
+            <th>الجانب</th>
+            <th style="color:#93c5fd;">🔵 Technical</th>
+            <th style="color:#6ee7b7;">🟢 Behavioral</th>
+          </tr>
+          <tr>
+            <td>التركيز</td>
+            <td>تكنولوجيا</td>
+            <td>ناس</td>
+          </tr>
+          <tr>
+            <td>الأدوات</td>
+            <td>أرقام ومعادلات</td>
+            <td>سلوك وتفاعل</td>
+          </tr>
+          <tr>
+            <td>المجالات</td>
+            <td>Computer Science, Operations Research, Management Science</td>
+            <td>Psychology, Economics, Sociology</td>
+          </tr>
+          <tr>
+            <td>المشكلة لو وحده</td>
+            <td>الناس مش هتفهم</td>
+            <td>مفيش سيستم قوي</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- MIS Definition -->
+      <div style="background:linear-gradient(135deg,rgba(139,92,246,0.1),rgba(59,130,246,0.1));border:1px solid rgba(139,92,246,0.3);border-radius:14px;padding:1.2rem;">
+        <div style="font-size:.9rem;font-weight:800;color:#c4b5fd;margin-bottom:.5rem;">📌 يعني إيه Management Information Systems (MIS)؟</div>
+        <p style="font-size:.84rem;color:#cbd5e1;line-height:1.7;">
+          MIS هو مجال بيجمع بين Computer Science، Management Science، Operations Research بالإضافة إلى البُعد السلوكي (Behavioral Issues). بيعالج مسائل زي: Strategic Business Integration، Implementation، والمشاكل التنظيمية.
+        </p>
+        <div style="margin-top:.8rem;display:flex;flex-wrap:wrap;gap:.4rem;">
+          <span class="tag tag-blue">Computer Science</span>
+          <span class="tag tag-purple">Management Science</span>
+          <span class="tag tag-green">Operations Research</span>
+          <span class="tag tag-amber">Behavioral Issues</span>
+          <span class="tag tag-red">Strategic Integration</span>
+        </div>
+      </div>
+
+      <!-- 4 Main Actors -->
+      <div style="margin-top:1.3rem;">
+        <div class="divider" style="margin-bottom:1rem;">👥 Four Main Actors (أهم 4 أطراف في السيستم)</div>
+        <div class="actors-grid">
+          <div class="card">
+            <div class="card-icon">🏭</div>
+            <h3 style="color:#c4b5fd;">1️⃣ Suppliers</h3>
+            <p>اللي بيقدموا Hardware وSoftware – دول الموردين اللي بيبنوا الأدوات</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🏢</div>
+            <h3 style="color:#c4b5fd;">2️⃣ Business Firms</h3>
+            <p>الشركات اللي بتستخدم السيستم – زي شركات، بنوك، مصانع</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">👔</div>
+            <h3 style="color:#c4b5fd;">3️⃣ Managers & Employees</h3>
+            <p>المديرين والموظفين – دول اللي بيستخدموا السيستم يومياً في شغلهم</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🌍</div>
+            <h3 style="color:#c4b5fd;">4️⃣ Firm's Environment</h3>
+            <p>البيئة الخارجية: قوانين ⚖️، مجتمع، ثقافة – كل ده بيأثر على السيستم</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════ SECTION 9: SOCIOTECHNICAL ════════════ -->
+  <section class="section theme-green" id="socio">
+    <div class="section-header">
+      <div class="section-icon">⚖️</div>
+      <div>
+        <h2>Sociotechnical Approach</h2>
+        <div class="subtitle">التوازن بين التكنولوجيا والناس – نهج الكتاب</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p style="font-size:.88rem;color:#94a3b8;margin-bottom:1.3rem;line-height:1.7;">
+        Optimal organizational performance achieved by jointly optimizing both social and technical systems used in production. Helps avoid purely technological approach. ده النهج اللي بيعتمده الكتاب.
+      </p>
+
+      <!-- Sociotechnical Diagram -->
+      <div class="socio-diagram" style="margin-bottom:1.3rem;">
+        <div class="socio-box tech">
+          <div style="font-size:2.5rem;">💻</div>
+          <h3>TECHNOLOGY</h3>
+          <p style="font-size:.8rem;color:var(--muted);">سيستم قوي ومناسب</p>
+          <div style="margin-top:.8rem;">
+            <div style="font-size:.72rem;color:var(--muted);">Alternative 1</div>
+            <div style="font-size:.72rem;color:var(--muted);">Alternative 2</div>
+            <div style="font-size:.72rem;color:var(--muted);">Alternative 3</div>
+          </div>
+        </div>
+
+        <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:.5rem;">
+          <div style="font-size:1.8rem;">⇌</div>
+          <div class="fit-badge">Mutual Adjustment<br>حتى نوصل لـ<br>Satisfactory Fit</div>
+          <div style="font-size:1.2rem;">⇌</div>
+        </div>
+
+        <div class="socio-box org">
+          <div style="font-size:2.5rem;">👥</div>
+          <h3>ORGANIZATION</h3>
+          <p style="font-size:.8rem;color:var(--muted);">تنظيم وناس مناسبين</p>
+          <div style="margin-top:.8rem;">
+            <div style="font-size:.72rem;color:var(--muted);">Alternative 1</div>
+            <div style="font-size:.72rem;color:var(--muted);">Alternative 2</div>
+            <div style="font-size:.72rem;color:var(--muted);">Alternative 3</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center;background:linear-gradient(135deg,rgba(59,130,246,0.1),rgba(16,185,129,0.1));border:1px solid rgba(16,185,129,0.3);border-radius:12px;padding:1rem;margin-bottom:1.2rem;">
+        <div style="font-size:.85rem;color:#6ee7b7;font-weight:700;">Final Design = Technology + Organization يتظبطوا مع بعض</div>
+        <div style="font-size:.76rem;color:var(--muted);margin-top:.3rem;">In a sociotechnical perspective, performance is optimized when technology and organization mutually adjust to each other until a satisfactory fit is obtained</div>
+      </div>
+
+      <!-- Failure vs Success -->
+      <div class="grid-2">
+        <div class="card" style="border-color:rgba(239,68,68,0.3);">
+          <div style="font-size:1.4rem;margin-bottom:.5rem;">❌</div>
+          <h3 style="color:#fca5a5;">حالة فشل</h3>
+          <ul class="nice-list" style="margin-top:.5rem;">
+            <li><span class="bullet" style="background:#ef4444;"></span>سيستم معقد جداً</li>
+            <li><span class="bullet" style="background:#ef4444;"></span>موظفين مش فاهمينه</li>
+            <li><span class="bullet" style="background:#ef4444;"></span>نتيجة: فشل ❌</li>
+          </ul>
+        </div>
+        <div class="card" style="border-color:rgba(16,185,129,0.3);">
+          <div style="font-size:1.4rem;margin-bottom:.5rem;">✅</div>
+          <h3 style="color:#6ee7b7;">حالة نجاح</h3>
+          <ul class="nice-list" style="margin-top:.5rem;">
+            <li><span class="bullet" style="background:#10b981;"></span>سيستم مناسب</li>
+            <li><span class="bullet" style="background:#10b981;"></span>تدريب كويس وتنظيم مظبوط</li>
+            <li><span class="bullet" style="background:#10b981;"></span>نتيجة: نجاح 💰</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Why Important -->
+      <div style="margin-top:1.2rem;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;">
+        <div style="font-size:.85rem;font-weight:700;color:#6ee7b7;margin-bottom:.6rem;">⚖️ ليه Sociotechnical مهم؟</div>
+        <div class="grid-3" style="gap:.6rem;">
+          <div style="text-align:center;padding:.6rem;background:rgba(239,68,68,0.08);border-radius:8px;font-size:.76rem;">❌ لو ركزت على التكنولوجيا بس<br><span style="color:var(--muted);">الناس هتتلخبط والسيستم يفشل</span></div>
+          <div style="text-align:center;padding:.6rem;background:rgba(245,158,11,0.08);border-radius:8px;font-size:.76rem;">⚖️ الحل: توازن بين الاتنين<br><span style="color:var(--muted);">Sociotechnical Approach</span></div>
+          <div style="text-align:center;padding:.6rem;background:rgba(239,68,68,0.08);border-radius:8px;font-size:.76rem;">❌ لو ركزت على الناس بس<br><span style="color:var(--muted);">مفيش سيستم قوي</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ MEGA SUMMARY ════════════ -->
+  <section class="section" style="border-color:rgba(255,255,255,0.1);">
+    <div class="section-header" style="background:linear-gradient(135deg,rgba(59,130,246,0.08),rgba(139,92,246,0.08));">
+      <div class="section-icon" style="background:rgba(255,255,255,0.08);">📌</div>
+      <div>
+        <h2 style="color:#e2e8f0;">خلاصة الشابتر كله</h2>
+        <div class="subtitle">كل حاجة تحتاجها في دماغك للامتحان</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="s-label" style="color:#93c5fd;">🏢 Organizational Dimension</div>
+          <ul>
+            <li>Separation of Business Functions</li>
+            <li>Sales & Marketing</li>
+            <li>HR</li>
+            <li>Finance & Accounting</li>
+            <li>Manufacturing & Production</li>
+            <li>Unique Business Processes</li>
+            <li>Unique Business Culture</li>
+            <li>Organizational Politics</li>
+          </ul>
+        </div>
+        <div class="summary-item">
+          <div class="s-label" style="color:#c4b5fd;">👔 Management Dimension</div>
+          <ul>
+            <li>Strategy Setting</li>
+            <li>Problem Solving</li>
+            <li>Creativity & Innovation</li>
+            <li>New Products & Services</li>
+            <li>Re-creating the Organization</li>
+          </ul>
+        </div>
+        <div class="summary-item">
+          <div class="s-label" style="color:#6ee7b7;">💻 Technology Dimension</div>
+          <ul>
+            <li>Hardware & Software</li>
+            <li>Data Management</li>
+            <li>Networks & Internet</li>
+            <li>Intranet / Extranet</li>
+            <li>IT Infrastructure</li>
+          </ul>
+        </div>
+        <div class="summary-item">
+          <div class="s-label" style="color:#fcd34d;">💰 Business Perspective</div>
+          <ul>
+            <li>IS = Instrument for Value</li>
+            <li>Productivity Increases</li>
+            <li>Revenue Increases</li>
+            <li>Strategic Positioning</li>
+          </ul>
+        </div>
+        <div class="summary-item">
+          <div class="s-label" style="color:#93c5fd;">🔗 Value Chain</div>
+          <ul>
+            <li>Data Collection & Storage</li>
+            <li>Transformation</li>
+            <li>Dissemination</li>
+            <li>Modeling & Decision Making</li>
+            <li>Firm Profitability</li>
+          </ul>
+        </div>
+        <div class="summary-item">
+          <div class="s-label" style="color:#fca5a5;">📊 IT Investment</div>
+          <ul>
+            <li>IT ≠ Guaranteed Success</li>
+            <li>Considerable Variation</li>
+            <li>Right Business Model Needed</li>
+            <li>Complementary Assets Needed</li>
+          </ul>
+        </div>
+        <div class="summary-item">
+          <div class="s-label" style="color:#fcd34d;">💎 Complementary Assets</div>
+          <ul>
+            <li>Organizational: Business Model, Processes</li>
+            <li>Managerial: Innovation, Teamwork</li>
+            <li>Social: Internet, Standards</li>
+          </ul>
+        </div>
+        <div class="summary-item">
+          <div class="s-label" style="color:#c4b5fd;">🧠 Approaches</div>
+          <ul>
+            <li>Technical: CS, OR, Management Science</li>
+            <li>Behavioral: Psychology, Economics, Sociology</li>
+            <li>MIS combines both</li>
+            <li>4 Actors: Suppliers, Firms, Employees, Environment</li>
+          </ul>
+        </div>
+        <div class="summary-item">
+          <div class="s-label" style="color:#6ee7b7;">⚖️ Sociotechnical</div>
+          <ul>
+            <li>Optimize Technology + Organization</li>
+            <li>Mutual Adjustment</li>
+            <li>Satisfactory Fit</li>
+            <li>Avoid purely tech approach</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Ultimate Formula -->
+      <div style="margin-top:1.5rem;text-align:center;padding:1.5rem;background:linear-gradient(135deg,rgba(59,130,246,0.1),rgba(139,92,246,0.1),rgba(16,185,129,0.08));border:1px solid rgba(139,92,246,0.3);border-radius:16px;">
+        <div style="font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.15em;margin-bottom:.6rem;">الصيغة الذهبية</div>
+        <div style="font-size:1.1rem;font-weight:900;color:#e2e8f0;">
+          MIS = Technology 💻 + People 👥 + Management 👔
+        </div>
+        <div style="font-size:.8rem;color:var(--muted);margin-top:.4rem;">
+          Data → Information → Decision → Profit
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ EXAM QUESTIONS ════════════ -->
+  <div class="exam-section" id="exam">
+    <div class="exam-header">
+      <span style="font-size:1.5rem;">🎯</span>
+      <h2>أسئلة الامتحان المتوقعة – اضغط على السؤال للإجابة</h2>
+    </div>
+    <div class="exam-body">
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="q-text">❓ What are the three dimensions of information systems? <span>اضغط للإجابة ▼</span></div>
+        <div class="a-text">👉 Organization – Management – Technology. كل بُعد بيعالج جانب مختلف من السيستم.</div>
+      </div>
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="q-text">❓ What is IT infrastructure? <span>اضغط للإجابة ▼</span></div>
+        <div class="a-text">👉 IT Infrastructure هي الأساس (Platform) اللي السيستم مبني عليه – زي السيرفرات، قواعد البيانات، والشبكة.</div>
+      </div>
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="q-text">❓ What is the Business Information Value Chain? <span>اضغط للإجابة ▼</span></div>
+        <div class="a-text">👉 Process of turning raw data into valuable information through stages: Data Collection → Transformation → Dissemination → Decision Making → Firm Profitability. قيمة السيستم بتتحدد بمدى مساهمته في قرارات أحسن وأرباح أكتر.</div>
+      </div>
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="q-text">❓ Why may IT investment fail to produce returns? <span>اضغط للإجابة ▼</span></div>
+        <div class="a-text">👉 Lack of complementary assets. Investing in IT does not guarantee good returns – there is considerable variation across firms depending on: 1) Adopting the right business model 2) Investing in complementary assets (organizational and management capital).</div>
+      </div>
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="q-text">❓ What are complementary assets? <span>اضغط للإجابة ▼</span></div>
+        <div class="a-text">👉 Assets required to derive value from a primary investment. Firms that support technology investments with complementary assets receive superior returns.</div>
+      </div>
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="q-text">❓ What are the three types of complementary assets? <span>اضغط للإجابة ▼</span></div>
+        <div class="a-text">👉 1) Organizational Assets: Appropriate business model + Efficient business processes. 2) Managerial Assets: Incentives for innovation + Teamwork and collaborative environments. 3) Social Assets: Internet and telecommunications infrastructure + Technology standards.</div>
+      </div>
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="q-text">❓ What are the two contemporary approaches to information systems? <span>اضغط للإجابة ▼</span></div>
+        <div class="a-text">👉 Technical Approach: Emphasizes mathematically based models (Computer Science, Management Science, Operations Research). Behavioral Approach: Focuses on behavioral issues like strategic business integration, implementation (Psychology, Economics, Sociology).</div>
+      </div>
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="q-text">❓ What are the four main actors in MIS? <span>اضغط للإجابة ▼</span></div>
+        <div class="a-text">👉 1) Suppliers of hardware and software 2) Business firms 3) Managers and employees 4) Firm's environment (legal, social, cultural context).</div>
+      </div>
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="q-text">❓ What is the sociotechnical approach? <span>اضغط للإجابة ▼</span></div>
+        <div class="a-text">👉 Optimal organizational performance is achieved by jointly optimizing both social and technical systems. Technology and organization must mutually adjust to each other until a satisfactory fit is obtained. Helps avoid purely technological approach.</div>
+      </div>
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="q-text">❓ What is MIS? <span>اضغط للإجابة ▼</span></div>
+        <div class="a-text">👉 Management Information Systems combines computer science, management science, operations research (technical) with practical orientation and behavioral issues. يعالج كيفية استخدام التكنولوجيا في خدمة القرارات الإدارية.</div>
+      </div>
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="q-text">❓ What is the difference between Intranet and Extranet? <span>اضغط للإجابة ▼</span></div>
+        <div class="a-text">👉 Intranet = شبكة داخلية خاصة بالشركة (موظفين فقط). Extranet = شبكة مع شركاء خارجيين (Suppliers, Partners). Internet = الشبكة العامة المفتوحة للجميع.</div>
+      </div>
+      <div class="exam-q" onclick="this.classList.toggle('open')">
+        <div class="q-text">❓ What does Business Perspective call attention to? <span>اضغط للإجابة ▼</span></div>
+        <div class="a-text">👉 Calls attention to the organizational and managerial nature of information systems. يعني السيستم مش مجرد أداة تقنية، هو أداة لخلق قيمة (Value) عن طريق قرارات أحسن وكفاءة أعلى وأرباح أكبر.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  MIS – Chapter 1: Information Systems in Global Business Today · Pearson Education
+</div>
+
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.section, .exam-section').forEach(el => observer.observe(el));
+
+// Nav active
+const navPills = document.querySelectorAll('.nav-pill');
+const sections = document.querySelectorAll('[id]');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) cur = s.id;
+  });
+  navPills.forEach(p => {
+    p.classList.remove('active');
+    if (p.getAttribute('href') === '#' + cur) p.classList.add('active');
+  });
+});
+
+// Returns Bar Chart
+const data = [
+  { label: 'شركة A', h: 40, color: '#ef4444' },
+  { label: 'شركة B', h: 55, color: '#f59e0b' },
+  { label: 'شركة C', h: 90, color: '#10b981' },
+  { label: 'شركة D', h: 70, color: '#3b82f6' },
+  { label: 'شركة E', h: 30, color: '#ef4444' },
+  { label: 'شركة F', h: 110, color: '#10b981' },
+  { label: 'شركة G', h: 50, color: '#f59e0b' },
+  { label: 'شركة H', h: 85, color: '#3b82f6' },
+];
+const barsEl = document.getElementById('returnsBars');
+data.forEach(d => {
+  const wrap = document.createElement('div');
+  wrap.className = 'ret-bar-wrap';
+  const bar = document.createElement('div');
+  bar.className = 'ret-bar';
+  bar.style.cssText = `height:${d.h}px;background:${d.color};opacity:0.75;`;
+  const lbl = document.createElement('div');
+  lbl.className = 'ret-label';
+  lbl.textContent = d.label;
+  wrap.appendChild(bar); wrap.appendChild(lbl);
+  barsEl.appendChild(wrap);
+});
+</script>
+</body>
+</html>
