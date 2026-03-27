@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIS Chapter 2 — Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --card: #1a1a26;
+    --border: #2a2a40;
+    --accent: #6c63ff;
+    --accent2: #ff6b6b;
+    --green: #4ade80;
+    --red: #f87171;
+    --text: #e8e8f0;
+    --muted: #8888aa;
+    --gold: #fbbf24;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    padding: 0 0 80px;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 40px 24px 32px;
+    text-align: center;
+    border-bottom: 2px solid var(--accent);
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(108,99,255,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  header h1 {
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: #fff;
+  }
+  header h1 span { color: var(--accent); }
+  header p { color: var(--muted); margin-top: 8px; font-family: 'Space Mono', monospace; font-size: 0.82rem; }
+
+  /* PROGRESS BAR */
+  #progress-bar-wrap {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 24px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  #progress-bar-outer {
+    flex: 1; height: 8px; background: var(--border); border-radius: 99px; overflow: hidden;
+  }
+  #progress-bar-inner {
+    height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 99px; transition: width 0.4s ease;
+  }
+  #progress-label {
+    font-family: 'Space Mono', monospace; font-size: 0.78rem; color: var(--muted); white-space: nowrap;
+  }
+  #score-badge {
+    font-family: 'Space Mono', monospace; font-size: 0.78rem;
+    background: var(--card); border: 1px solid var(--border);
+    padding: 3px 10px; border-radius: 99px; color: var(--gold);
+    white-space: nowrap;
+  }
+
+  /* QUESTIONS */
+  #quiz-container { max-width: 800px; margin: 0 auto; padding: 32px 16px 0; }
+
+  .q-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 22px 18px;
+    margin-bottom: 22px;
+    transition: border-color 0.25s;
+    position: relative;
+  }
+  .q-block.answered-correct { border-color: var(--green); }
+  .q-block.answered-wrong { border-color: var(--red); }
+
+  .q-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; color: var(--accent);
+    letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .q-text {
+    font-size: 1rem; font-weight: 700; line-height: 1.55;
+    margin-bottom: 16px; color: #fff;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 9px; }
+  .opt {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 9px;
+    padding: 11px 14px;
+    cursor: pointer;
+    transition: border-color 0.18s, background 0.18s;
+    user-select: none;
+  }
+  .opt:hover:not(.disabled) { border-color: var(--accent); background: #1e1e30; }
+  .opt-letter {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem; font-weight: 700;
+    color: var(--accent);
+    min-width: 20px;
+    margin-top: 1px;
+  }
+  .opt-text { font-size: 0.92rem; line-height: 1.45; }
+  .opt.correct { border-color: var(--green); background: rgba(74,222,128,0.08); }
+  .opt.correct .opt-letter { color: var(--green); }
+  .opt.wrong { border-color: var(--red); background: rgba(248,113,113,0.08); }
+  .opt.wrong .opt-letter { color: var(--red); }
+  .opt.disabled { cursor: default; }
+
+  .feedback {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    font-family: 'Space Mono', monospace;
+    padding: 8px 12px;
+    border-radius: 7px;
+    display: none;
+  }
+  .feedback.correct { display: block; background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.25); }
+  .feedback.wrong { display: block; background: rgba(248,113,113,0.1); color: var(--red); border: 1px solid rgba(248,113,113,0.25); }
+
+  /* RESULTS */
+  #result-panel {
+    display: none;
+    max-width: 800px; margin: 32px auto; padding: 0 16px;
+  }
+  #result-inner {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border: 2px solid var(--accent);
+    border-radius: 20px;
+    padding: 40px 32px;
+    text-align: center;
+  }
+  #result-inner h2 { font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 8px; }
+  #result-score { font-size: 3.5rem; font-weight: 800; color: var(--gold); margin: 16px 0 4px; }
+  #result-percent { font-size: 1.1rem; color: var(--muted); font-family: 'Space Mono', monospace; }
+  #result-msg { margin-top: 18px; font-size: 1rem; color: var(--text); }
+  #restart-btn {
+    margin-top: 28px;
+    background: var(--accent);
+    color: #fff; font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: 1rem;
+    border: none; border-radius: 10px;
+    padding: 13px 36px; cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  #restart-btn:hover { background: #5a52e0; transform: translateY(-2px); }
+
+  /* SUBMIT BTN */
+  #submit-btn {
+    display: block;
+    margin: 32px auto 0;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.1rem;
+    border: none; border-radius: 12px;
+    padding: 15px 50px; cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    letter-spacing: 0.5px;
+  }
+  #submit-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>MIS <span>Chapter 2</span> — Quiz</h1>
+  <p>Global E-business and Collaboration · 75 Questions · Select one answer per question</p>
+</header>
+
+<div id="progress-bar-wrap">
+  <div id="progress-bar-outer"><div id="progress-bar-inner"></div></div>
+  <span id="progress-label">0 / 75 answered</span>
+  <span id="score-badge">Score: 0</span>
+</div>
+
+<div id="quiz-container"></div>
+<button id="submit-btn">Submit All Answers</button>
+
+<div id="result-panel">
+  <div id="result-inner">
+    <h2>Quiz Complete!</h2>
+    <div id="result-score">0 / 75</div>
+    <div id="result-percent">0%</div>
+    <div id="result-msg"></div>
+    <button id="restart-btn">Try Again</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  // ── BUSINESS PROCESSES ──────────────────────────────────────────────
+  {
+    q: "Business processes are best defined as:",
+    opts: ["A. Software programs that run on servers","B. Flows of material, information, and knowledge as sets of activities","C. Financial reports produced by accountants","D. Hardware devices connecting departments"],
+    a: 1
+  },
+  {
+    q: "Which of the following is TRUE about business processes?",
+    opts: ["A. They are always tied to a single functional area","B. They can be either assets or liabilities to a firm","C. They never cross functional boundaries","D. They are always automated"],
+    a: 1
+  },
+  {
+    q: "Which is an example of a Manufacturing and Production business process?",
+    opts: ["A. Identifying customers","B. Creating financial statements","C. Assembling the product","D. Hiring employees"],
+    a: 2
+  },
+  {
+    q: "Which functional area is responsible for the business process of 'identifying customers'?",
+    opts: ["A. Finance and Accounting","B. Human Resources","C. Manufacturing and Production","D. Sales and Marketing"],
+    a: 3
+  },
+  {
+    q: "Creating financial statements is a business process belonging to which functional area?",
+    opts: ["A. Sales and Marketing","B. Finance and Accounting","C. Human Resources","D. Manufacturing and Production"],
+    a: 1
+  },
+  {
+    q: "Hiring employees is a business process associated with:",
+    opts: ["A. Finance and Accounting","B. Sales and Marketing","C. Human Resources","D. IT Department"],
+    a: 2
+  },
+  {
+    q: "The order fulfillment process requires close coordination among which functions?",
+    opts: ["A. IT, HR, and Legal","B. Sales, Accounting, and Manufacturing","C. Finance, Operations, and Purchasing","D. Marketing, Logistics, and HR"],
+    a: 1
+  },
+  {
+    q: "How does IT enhance business processes by 'automating steps that were manual'?",
+    opts: ["A. Enabling new business models","B. Replacing sequential steps with parallel steps","C. Increasing efficiency of existing processes","D. Eliminating delays in decision making"],
+    a: 2
+  },
+  {
+    q: "Replacing sequential steps with parallel steps is an example of IT:",
+    opts: ["A. Increasing efficiency of existing processes","B. Enabling entirely new processes","C. Supporting traditional business models","D. Reducing product variety"],
+    a: 1
+  },
+  {
+    q: "Which of the following is NOT a way information technology enhances business processes?",
+    opts: ["A. Automating manual steps","B. Enabling entirely new processes","C. Replacing employees permanently","D. Eliminating delays in decision making"],
+    a: 2
+  },
+
+  // ── TPS ─────────────────────────────────────────────────────────────
+  {
+    q: "Transaction Processing Systems (TPS) primarily serve:",
+    opts: ["A. Senior executives","B. Middle managers","C. Operational managers and staff","D. External customers"],
+    a: 2
+  },
+  {
+    q: "Which of the following best describes a Transaction Processing System?",
+    opts: ["A. Supports non-routine, senior-level decisions","B. Performs and records daily routine transactions necessary to conduct business","C. Provides long-range strategic planning tools","D. Analyzes unstructured external market data"],
+    a: 1
+  },
+  {
+    q: "Which is an example of a TPS application?",
+    opts: ["A. Digital executive dashboard","B. Voyage-estimating DSS","C. Payroll processing system","D. Enterprise social networking"],
+    a: 2
+  },
+  {
+    q: "A payroll TPS captures which type of data as input?",
+    opts: ["A. Strategic planning documents","B. Employee payment transaction data such as a time card","C. Customer satisfaction surveys","D. Competitor pricing data"],
+    a: 1
+  },
+  {
+    q: "TPS serve which kind of goals?",
+    opts: ["A. Non-routine and unstructured","B. Predefined and structured","C. Creative and innovative","D. Long-term and strategic"],
+    a: 1
+  },
+  {
+    q: "Outputs of a payroll TPS include:",
+    opts: ["A. Strategic plans and annual budgets","B. Online and hard-copy reports for management and employee paychecks","C. Customer relationship reports","D. Supply chain forecasts"],
+    a: 1
+  },
+
+  // ── MIS ─────────────────────────────────────────────────────────────
+  {
+    q: "Management Information Systems (MIS) primarily serve:",
+    opts: ["A. Operational staff","B. Middle management","C. Senior executives","D. External stakeholders"],
+    a: 1
+  },
+  {
+    q: "MIS obtain their data primarily from:",
+    opts: ["A. External competitors","B. The internet","C. Transaction Processing Systems (TPS)","D. Executive Support Systems (ESS)"],
+    a: 2
+  },
+  {
+    q: "MIS typically provide answers to:",
+    opts: ["A. Highly unstructured creative problems","B. Routine questions with predefined procedures for answering them","C. Non-routine strategic decisions requiring judgment","D. Real-time stock market analysis"],
+    a: 1
+  },
+  {
+    q: "Which characteristic is associated with MIS?",
+    opts: ["A. High analytic capability","B. Support for non-routine decisions","C. Little analytic capability","D. Focus on external environment data"],
+    a: 2
+  },
+  {
+    q: "An MIS report would typically show:",
+    opts: ["A. Unstructured external market trends","B. Summarized annual sales data","C. Real-time inventory forecasting models","D. Employee performance appraisals"],
+    a: 1
+  },
+
+  // ── DSS ─────────────────────────────────────────────────────────────
+  {
+    q: "Decision Support Systems (DSS) are designed to support:",
+    opts: ["A. Routine, highly structured decisions","B. Non-routine decision making","C. Payroll processing","D. Basic transaction recording"],
+    a: 1
+  },
+  {
+    q: "DSS serve which level of management?",
+    opts: ["A. Operational staff","B. Senior executives only","C. Middle management","D. External partners"],
+    a: 2
+  },
+  {
+    q: "Which is an example of a question a DSS might help answer?",
+    opts: ["A. How many employees do we have?","B. What are last month's payroll figures?","C. What is the impact on production if December sales doubled?","D. Who is our top salesperson this quarter?"],
+    a: 2
+  },
+  {
+    q: "A model-driven DSS example from the slides is:",
+    opts: ["A. A payroll system","B. An HR hiring portal","C. A voyage-estimating system","D. An executive digital dashboard"],
+    a: 2
+  },
+  {
+    q: "Intrawest's marketing analysis systems are an example of a:",
+    opts: ["A. Model-driven DSS","B. Data-driven DSS","C. Transaction Processing System","D. Executive Support System"],
+    a: 1
+  },
+  {
+    q: "DSS may use which sources of data?",
+    opts: ["A. Only internal TPS data","B. Only external information","C. External information as well as TPS and MIS data","D. Only marketing surveys"],
+    a: 2
+  },
+  {
+    q: "The voyage-estimating DSS described in the slides is used for:",
+    opts: ["A. Tracking employee attendance","B. Developing bids on shipping contracts","C. Managing customer relationships","D. Processing sales orders"],
+    a: 1
+  },
+
+  // ── ESS ─────────────────────────────────────────────────────────────
+  {
+    q: "Executive Support Systems (ESS) support which level of management?",
+    opts: ["A. Operational staff","B. Middle management","C. Senior management","D. IT department"],
+    a: 2
+  },
+  {
+    q: "ESS address which type of decisions?",
+    opts: ["A. Routine, structured transactions","B. Non-routine decisions requiring judgment, evaluation, and insight","C. Daily operational scheduling","D. Predefined payroll calculations"],
+    a: 1
+  },
+  {
+    q: "An example of an ESS output mentioned in the slides is:",
+    opts: ["A. A payroll report","B. A shipping manifest","C. A digital dashboard with a real-time view of financial performance","D. An employee time card"],
+    a: 2
+  },
+  {
+    q: "ESS incorporate data from which sources?",
+    opts: ["A. Only internal TPS data","B. Only external events","C. External events (e.g., new tax laws) as well as summarized MIS and DSS data","D. Customer surveys only"],
+    a: 2
+  },
+  {
+    q: "Which metric would you expect to see on an executive digital dashboard?",
+    opts: ["A. Individual employee time cards","B. Raw sales orders","C. Working capital, accounts receivable, cash flow, and inventory","D. Supplier shipment schedules"],
+    a: 2
+  },
+
+  // ── BI ──────────────────────────────────────────────────────────────
+  {
+    q: "Business intelligence refers to:",
+    opts: ["A. The annual IQ testing of managers","B. Data and software tools for organizing and analyzing data to improve decisions","C. Competitor espionage tools","D. IT infrastructure hardware"],
+    a: 1
+  },
+  {
+    q: "Which systems are classified as Business Intelligence systems?",
+    opts: ["A. TPS only","B. MIS, DSS, and ESS","C. Supply chain and CRM systems","D. Intranets and extranets"],
+    a: 1
+  },
+
+  // ── ENTERPRISE APPLICATIONS ─────────────────────────────────────────
+  {
+    q: "Enterprise applications are characterized by:",
+    opts: ["A. Serving only one functional area","B. Spanning functional areas and executing business processes across the firm","C. Replacing all human decision making","D. Being used only by IT staff"],
+    a: 1
+  },
+  {
+    q: "How many major enterprise applications are identified in the slides?",
+    opts: ["A. Two","B. Three","C. Four","D. Five"],
+    a: 2
+  },
+  {
+    q: "Which of the following is NOT one of the four major enterprise applications?",
+    opts: ["A. Enterprise systems","B. Supply chain management systems","C. Payroll processing systems","D. Customer relationship management systems"],
+    a: 2
+  },
+  {
+    q: "Enterprise systems solve the problem of:",
+    opts: ["A. Lack of internet connectivity","B. Fragmented data across different firm functions","C. Too many managers","D. Outdated hardware"],
+    a: 1
+  },
+  {
+    q: "Enterprise systems store data in:",
+    opts: ["A. Multiple distributed databases, one per department","B. A single central data repository","C. Cloud-only storage","D. Paper-based records"],
+    a: 1
+  },
+  {
+    q: "Supply Chain Management (SCM) systems manage:",
+    opts: ["A. The firm's relationships with customers","B. Employee performance reviews","C. The firm's relationships with suppliers","D. Executive decision-making tools"],
+    a: 2
+  },
+  {
+    q: "The goal of Supply Chain Management systems is to deliver the right amount of products with:",
+    opts: ["A. The most employees and highest cost","B. The least time and lowest cost","C. The most suppliers and fastest speed","D. The highest inventory levels"],
+    a: 1
+  },
+  {
+    q: "SCM systems share information about which of the following?",
+    opts: ["A. Employee salaries","B. Strategic planning documents","C. Orders, production, inventory levels, and delivery of products","D. Customer satisfaction scores"],
+    a: 2
+  },
+  {
+    q: "Customer Relationship Management (CRM) systems provide information to coordinate all business processes dealing with:",
+    opts: ["A. Suppliers and raw materials","B. Customers — sales, marketing, and customer service","C. IT infrastructure","D. Government regulations"],
+    a: 1
+  },
+  {
+    q: "CRM systems help firms identify, attract, and retain:",
+    opts: ["A. The most talented employees","B. The most innovative products","C. The most profitable customers","D. The cheapest suppliers"],
+    a: 2
+  },
+  {
+    q: "Knowledge Management Systems (KMS) support processes for:",
+    opts: ["A. Processing payroll","B. Tracking shipments","C. Capturing and applying knowledge and expertise within the firm","D. Managing customer complaints"],
+    a: 2
+  },
+  {
+    q: "KMS collect internal knowledge and experience to make it available to:",
+    opts: ["A. Competitors","B. Government agencies","C. Employees","D. Shareholders"],
+    a: 2
+  },
+  {
+    q: "An intranet is defined as:",
+    opts: ["A. A public website for selling products","B. An internal company website accessible only by employees","C. A website accessible by vendors and suppliers","D. A global B2B trading platform"],
+    a: 1
+  },
+  {
+    q: "An extranet is a company website accessible externally by:",
+    opts: ["A. The general public","B. Government agencies only","C. Vendors and suppliers only","D. All internet users"],
+    a: 2
+  },
+  {
+    q: "Extranets are often used to coordinate:",
+    opts: ["A. Employee payroll","B. Supply chain activities","C. Customer billing","D. Executive dashboards"],
+    a: 1
+  },
+
+  // ── E-BUSINESS / E-COMMERCE / E-GOVERNMENT ─────────────────────────
+  {
+    q: "E-business is defined as:",
+    opts: ["A. Only buying and selling goods online","B. The use of digital technology and the Internet to drive major business processes","C. Government use of the internet for citizen services","D. Social media marketing campaigns"],
+    a: 1
+  },
+  {
+    q: "E-commerce is a subset of e-business focused on:",
+    opts: ["A. Using internet technology for government services","B. Internal employee collaboration tools","C. Buying and selling goods and services through the Internet","D. Enterprise resource planning"],
+    a: 2
+  },
+  {
+    q: "E-government refers to:",
+    opts: ["A. Online shopping portals","B. Social media platforms","C. Using internet technology to deliver information and services to citizens, employees, and businesses","D. Enterprise cloud storage"],
+    a: 2
+  },
+
+  // ── COLLABORATION ───────────────────────────────────────────────────
+  {
+    q: "Which of the following is a reason for the growing importance of collaboration in business?",
+    opts: ["A. Declining use of technology","B. Emphasis on individual work over teamwork","C. Changing nature of work and growth of 'interaction jobs'","D. Reduced global competition"],
+    a: 2
+  },
+  {
+    q: "The term 'interaction jobs' refers to:",
+    opts: ["A. Factory assembly workers","B. Professional work that depends on collaboration and communication","C. Customer service call centers","D. Software debugging roles"],
+    a: 1
+  },
+  {
+    q: "Social business involves using social networking platforms to:",
+    opts: ["A. Replace all existing enterprise systems","B. Engage employees, customers, and suppliers to deepen interactions and expedite information sharing","C. Store financial transaction data","D. Monitor employee productivity"],
+    a: 1
+  },
+  {
+    q: "Social business requires information transparency, which means:",
+    opts: ["A. All data is encrypted","B. Driving the exchange of information without intervention from executives or others","C. Publishing only positive business results","D. Restricting access to sensitive data"],
+    a: 1
+  },
+  {
+    q: "Which of the following is a business benefit of collaboration and teamwork?",
+    opts: ["A. Increased employee autonomy only","B. Reduced need for communication","C. Improved productivity, quality, innovation, and customer service","D. Higher operational costs"],
+    a: 2
+  },
+  {
+    q: "For collaboration to succeed, which two elements are required alongside technology?",
+    opts: ["A. Hardware and software","B. Appropriate organizational structure and culture","C. Financial budgets and legal contracts","D. Government approval and industry standards"],
+    a: 1
+  },
+  {
+    q: "A 'command and control' organization is characterized by:",
+    opts: ["A. High value placed on teamwork","B. Employee participation in decisions","C. No value placed on teamwork or lower-level decision participation","D. Flat organizational hierarchy"],
+    a: 2
+  },
+  {
+    q: "In a collaborative business culture, the manager's primary purpose is to:",
+    opts: ["A. Issue orders and monitor compliance","B. Build teams","C. Approve all decisions personally","D. Reduce headcount"],
+    a: 1
+  },
+  {
+    q: "Which of the following is a tool for collaboration and teamwork listed in the slides?",
+    opts: ["A. ATM machines","B. Barcode scanners","C. Wikis","D. Point-of-sale terminals"],
+    a: 2
+  },
+  {
+    q: "Microsoft SharePoint is categorized as a:",
+    opts: ["A. Transaction Processing System","B. Collaboration and social business platform","C. Customer Relationship Management system","D. Payroll application"],
+    a: 1
+  },
+  {
+    q: "Telepresence systems are an example of:",
+    opts: ["A. Supply chain management tools","B. Virtual meeting systems","C. Knowledge management systems","D. Payroll automation"],
+    a: 1
+  },
+  {
+    q: "In the Time/Space Collaboration Tool Matrix, video conferencing is classified as:",
+    opts: ["A. Same time / same place","B. Different time / same place","C. Same time / different place","D. Different time / different place"],
+    a: 2
+  },
+  {
+    q: "Email is classified in the Time/Space Matrix as:",
+    opts: ["A. Synchronous / co-located","B. Asynchronous / remote (different time / different place)","C. Synchronous / remote","D. Asynchronous / co-located"],
+    a: 1
+  },
+  {
+    q: "Decision rooms with shared displays are an example of which Time/Space category?",
+    opts: ["A. Different time / different place","B. Same time / different place","C. Same time / same place (co-located / synchronous)","D. Different time / same place"],
+    a: 2
+  },
+  {
+    q: "Shift work groupware and project management tools fit which Time/Space category?",
+    opts: ["A. Same time / same place","B. Different time / same place (co-located / asynchronous)","C. Same time / different place","D. Different time / different place"],
+    a: 1
+  },
+  {
+    q: "Wikis, group calendars, and version control belong to which Time/Space category?",
+    opts: ["A. Synchronous / co-located","B. Synchronous / remote","C. Asynchronous / remote (different time / different place)","D. Asynchronous / co-located"],
+    a: 2
+  },
+  {
+    q: "The two dimensions used in the Time/Space Collaboration Tool Matrix are:",
+    opts: ["A. Cost and speed","B. Space (location) and Time","C. Security and scalability","D. User count and data volume"],
+    a: 1
+  },
+  {
+    q: "Which step comes FIRST when evaluating collaboration software tools?",
+    opts: ["A. Evaluate product vendors","B. Analyze available products' cost and benefits","C. Identify what your firm's collaboration challenges are","D. Consult users for implementation issues"],
+    a: 2
+  },
+
+  // ── ENTERPRISE SOCIAL NETWORKING ────────────────────────────────────
+  {
+    q: "Which of the following is a capability of enterprise social networking software?",
+    opts: ["A. Processing payroll transactions","B. Profiles, content sharing, feeds, groups, tagging, and permissions","C. Generating financial statements","D. Managing inventory levels"],
+    a: 1
+  },
+  {
+    q: "Tagging and social bookmarking are features of:",
+    opts: ["A. TPS systems","B. Enterprise social networking software","C. SCM systems","D. ESS dashboards"],
+    a: 1
+  },
+
+  // ── IS FUNCTION IN BUSINESS ─────────────────────────────────────────
+  {
+    q: "The Information Systems department is often headed by the:",
+    opts: ["A. Chief Financial Officer (CFO)","B. Chief Information Officer (CIO)","C. Chief Executive Officer (CEO)","D. Chief Marketing Officer (CMO)"],
+    a: 1
+  },
+  {
+    q: "Which senior position is responsible for security in the IS department?",
+    opts: ["A. CIO","B. CPO","C. CSO — Chief Security Officer","D. CKO"],
+    a: 2
+  },
+  {
+    q: "The Chief Knowledge Officer (CKO) is responsible for:",
+    opts: ["A. Financial auditing","B. Managing and applying organizational knowledge","C. Overseeing network hardware","D. Recruiting IT staff"],
+    a: 1
+  },
+  {
+    q: "End users in the context of information systems are:",
+    opts: ["A. IT programmers who build systems","B. External customers buying products","C. Representatives of other departments for whom applications are developed","D. Government regulators"],
+    a: 2
+  },
+  {
+    q: "End users are increasingly playing a role in:",
+    opts: ["A. Hardware procurement","B. System design and development","C. Server maintenance","D. Network security"],
+    a: 1
+  },
+  {
+    q: "IT Governance refers to:",
+    opts: ["A. Government regulation of the internet","B. Strategies and policies for using IT in the organization, including decision rights and accountability","C. Security protocols for data encryption","D. Cloud computing service agreements"],
+    a: 1
+  },
+  {
+    q: "The organization of the information systems function can be:",
+    opts: ["A. Only centralized","B. Only decentralized","C. Centralized, decentralized, or other arrangements","D. Only outsourced"],
+    a: 2
+  }
+];
+
+// ── State ────────────────────────────────────────────────────────────────
+let answers = new Array(questions.length).fill(null); // index of selected option
+let submitted = false;
+let score = 0;
+
+// ── Render ───────────────────────────────────────────────────────────────
+const container = document.getElementById('quiz-container');
+
+questions.forEach((q, qi) => {
+  const block = document.createElement('div');
+  block.className = 'q-block';
+  block.id = `q-${qi}`;
+
+  block.innerHTML = `
+    <div class="q-num">Question ${qi + 1} / ${questions.length}</div>
+    <div class="q-text">${q.q}</div>
+    <div class="options" id="opts-${qi}">
+      ${q.opts.map((o, oi) => `
+        <div class="opt" data-qi="${qi}" data-oi="${oi}">
+          <span class="opt-letter">${String.fromCharCode(65+oi)}.</span>
+          <span class="opt-text">${o}</span>
+        </div>
+      `).join('')}
+    </div>
+    <div class="feedback" id="fb-${qi}"></div>
+  `;
+  container.appendChild(block);
+});
+
+// ── Option click ─────────────────────────────────────────────────────────
+container.addEventListener('click', e => {
+  if (submitted) return;
+  const opt = e.target.closest('.opt');
+  if (!opt) return;
+  const qi = +opt.dataset.qi;
+  const oi = +opt.dataset.oi;
+
+  // Deselect previous
+  document.querySelectorAll(`#opts-${qi} .opt`).forEach(el => {
+    el.style.borderColor = '';
+    el.style.background = '';
+    el.querySelector('.opt-letter').style.color = '';
+  });
+
+  answers[qi] = oi;
+  opt.style.borderColor = 'var(--accent)';
+  opt.style.background = 'rgba(108,99,255,0.12)';
+  opt.querySelector('.opt-letter').style.color = 'var(--accent)';
+
+  updateProgress();
+});
+
+function updateProgress() {
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('progress-bar-inner').style.width = `${(answered/questions.length)*100}%`;
+  document.getElementById('progress-label').textContent = `${answered} / ${questions.length} answered`;
+}
+
+// ── Submit ───────────────────────────────────────────────────────────────
+document.getElementById('submit-btn').addEventListener('click', () => {
+  const unanswered = answers.filter(a => a === null).length;
+  if (unanswered > 0) {
+    const proceed = confirm(`You have ${unanswered} unanswered question(s). Submit anyway?`);
+    if (!proceed) return;
+  }
+  submitted = true;
+  score = 0;
+  document.getElementById('submit-btn').style.display = 'none';
+
+  questions.forEach((q, qi) => {
+    const block = document.getElementById(`q-${qi}`);
+    const fb = document.getElementById(`fb-${qi}`);
+    const opts = document.querySelectorAll(`#opts-${qi} .opt`);
+
+    opts.forEach(el => {
+      el.classList.add('disabled');
+      el.style.borderColor = '';
+      el.style.background = '';
+      el.querySelector('.opt-letter').style.color = '';
+    });
+
+    const chosen = answers[qi];
+    const correct = q.a;
+
+    // Mark correct option green
+    opts[correct].classList.add('correct');
+
+    if (chosen === null) {
+      fb.className = 'feedback wrong';
+      fb.textContent = `⚠ Not answered. Correct answer: ${String.fromCharCode(65+correct)}`;
+      block.classList.add('answered-wrong');
+    } else if (chosen === correct) {
+      score++;
+      opts[chosen].classList.add('correct');
+      fb.className = 'feedback correct';
+      fb.textContent = '✓ Correct!';
+      block.classList.add('answered-correct');
+    } else {
+      opts[chosen].classList.add('wrong');
+      fb.className = 'feedback wrong';
+      fb.textContent = `✗ Wrong. Correct answer: ${String.fromCharCode(65+correct)}`;
+      block.classList.add('answered-wrong');
+    }
+  });
+
+  const pct = Math.round((score/questions.length)*100);
+  document.getElementById('score-badge').textContent = `Score: ${score}`;
+  document.getElementById('result-score').textContent = `${score} / ${questions.length}`;
+  document.getElementById('result-percent').textContent = `${pct}%`;
+  let msg = '';
+  if (pct >= 90) msg = '🏆 Excellent! You are fully prepared for this exam.';
+  else if (pct >= 75) msg = '👍 Good job! Review the questions you missed.';
+  else if (pct >= 60) msg = '📚 Decent start. Focus on the highlighted wrong answers.';
+  else msg = '💪 Keep studying! Go back and review the chapter carefully.';
+  document.getElementById('result-msg').textContent = msg;
+
+  const panel = document.getElementById('result-panel');
+  panel.style.display = 'block';
+  panel.scrollIntoView({ behavior: 'smooth' });
+});
+
+// ── Restart ──────────────────────────────────────────────────────────────
+document.getElementById('restart-btn').addEventListener('click', () => {
+  location.reload();
+});
+</script>
+</body>
+</html>
