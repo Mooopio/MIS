@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIS – Chapter 2: Global E-business and Collaboration</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080d18;
+    --surface: #0f1624;
+    --surface2: #162032;
+    --surface3: #1c2a40;
+    --border: #1e3050;
+    --accent: #38bdf8;
+    --accent2: #818cf8;
+    --accent3: #34d399;
+    --accent4: #fb923c;
+    --accent5: #f472b6;
+    --accent6: #facc15;
+    --danger: #f87171;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --text-dim: #4a6080;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Cairo', 'Tajawal', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* BG Effects */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 15% 15%, rgba(56,189,248,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 85% 75%, rgba(129,140,248,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 35% at 50% 45%, rgba(52,211,153,0.04) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 1120px; margin: 0 auto; padding: 0 20px 100px; }
+
+  /* ── HERO ── */
+  .hero { text-align: center; padding: 64px 20px 44px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg, rgba(56,189,248,0.15), rgba(129,140,248,0.15));
+    border: 1px solid rgba(56,189,248,0.35);
+    border-radius: 50px; padding: 6px 22px;
+    font-size: 0.75rem; font-weight: 700; color: var(--accent);
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 22px;
+    animation: slideDown 0.6s ease both;
+  }
+  .hero h1 {
+    font-size: clamp(1.9rem, 5vw, 3.1rem); font-weight: 900; line-height: 1.2;
+    animation: slideDown 0.65s 0.1s ease both;
+  }
+  .hero h1 .gr {
+    background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero-sub { margin-top: 14px; color: var(--text-muted); font-size: 1rem; animation: slideDown 0.65s 0.2s ease both; }
+  .hero-chips { margin-top: 22px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; animation: slideDown 0.65s 0.3s ease both; }
+  .chip { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 5px 14px; font-size: 0.8rem; color: var(--text-muted); }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;
+    margin: 32px 0 44px; animation: slideDown 0.65s 0.35s ease both;
+  }
+  .tbtn {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 9px 16px; font-family: inherit; font-size: 0.85rem; font-weight: 700;
+    color: var(--text-muted); cursor: pointer; transition: all 0.22s;
+    white-space: nowrap;
+  }
+  .tbtn:hover, .tbtn.on {
+    background: linear-gradient(135deg, rgba(56,189,248,0.18), rgba(129,140,248,0.12));
+    border-color: var(--accent); color: var(--text);
+  }
+
+  /* ── SECTIONS ── */
+  .sec { display: none; animation: fadeUp 0.38s ease both; }
+  .sec.on { display: block; }
+
+  /* ── TITLES ── */
+  .st {
+    font-size: 1.55rem; font-weight: 900; margin-bottom: 26px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .st-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;
+  }
+  .st2 { font-size: 1.05rem; font-weight: 800; margin: 28px 0 16px; display: flex; align-items: center; gap: 10px; }
+  .st2-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── GRIDS ── */
+  .g2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-bottom: 20px; }
+  .g3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .g4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 14px; margin-bottom: 20px; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 22px; transition: transform 0.22s, border-color 0.22s, box-shadow 0.22s;
+    position: relative; overflow: hidden;
+  }
+  .card::before { content: ''; position: absolute; inset: 0; border-radius: 16px; opacity: 0; transition: opacity 0.22s; }
+  .card:hover { transform: translateY(-3px); }
+  .card:hover::before { opacity: 1; }
+
+  .c-sky { border-color: rgba(56,189,248,0.25); }
+  .c-sky::before { background: radial-gradient(ellipse at top right, rgba(56,189,248,0.07), transparent 65%); }
+  .c-sky:hover { border-color: var(--accent); box-shadow: 0 8px 30px rgba(56,189,248,0.12); }
+
+  .c-ind { border-color: rgba(129,140,248,0.25); }
+  .c-ind::before { background: radial-gradient(ellipse at top right, rgba(129,140,248,0.07), transparent 65%); }
+  .c-ind:hover { border-color: var(--accent2); box-shadow: 0 8px 30px rgba(129,140,248,0.12); }
+
+  .c-em { border-color: rgba(52,211,153,0.25); }
+  .c-em::before { background: radial-gradient(ellipse at top right, rgba(52,211,153,0.07), transparent 65%); }
+  .c-em:hover { border-color: var(--accent3); box-shadow: 0 8px 30px rgba(52,211,153,0.12); }
+
+  .c-or { border-color: rgba(251,146,60,0.25); }
+  .c-or::before { background: radial-gradient(ellipse at top right, rgba(251,146,60,0.07), transparent 65%); }
+  .c-or:hover { border-color: var(--accent4); box-shadow: 0 8px 30px rgba(251,146,60,0.12); }
+
+  .c-pk { border-color: rgba(244,114,182,0.25); }
+  .c-pk::before { background: radial-gradient(ellipse at top right, rgba(244,114,182,0.07), transparent 65%); }
+  .c-pk:hover { border-color: var(--accent5); box-shadow: 0 8px 30px rgba(244,114,182,0.12); }
+
+  .c-ye { border-color: rgba(250,204,21,0.25); }
+  .c-ye::before { background: radial-gradient(ellipse at top right, rgba(250,204,21,0.07), transparent 65%); }
+  .c-ye:hover { border-color: var(--accent6); box-shadow: 0 8px 30px rgba(250,204,21,0.12); }
+
+  .c-red { border-color: rgba(248,113,113,0.25); }
+  .c-red::before { background: radial-gradient(ellipse at top right, rgba(248,113,113,0.07), transparent 65%); }
+  .c-red:hover { border-color: var(--danger); box-shadow: 0 8px 30px rgba(248,113,113,0.12); }
+
+  .ch { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .ci { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; flex-shrink: 0; }
+  .bg-sky { background: rgba(56,189,248,0.12); }
+  .bg-ind { background: rgba(129,140,248,0.12); }
+  .bg-em { background: rgba(52,211,153,0.12); }
+  .bg-or { background: rgba(251,146,60,0.12); }
+  .bg-pk { background: rgba(244,114,182,0.12); }
+  .bg-ye { background: rgba(250,204,21,0.12); }
+  .bg-red { background: rgba(248,113,113,0.12); }
+
+  .card h3 { font-size: 0.97rem; font-weight: 800; line-height: 1.4; }
+  .card p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.75; }
+  .card ul { padding-right: 18px; margin-top: 10px; }
+  .card li { font-size: 0.87rem; color: var(--text-muted); margin-bottom: 5px; line-height: 1.6; }
+
+  /* ── HIGHLIGHT BOXES ── */
+  .hb {
+    border-radius: 13px; padding: 18px 22px; margin: 16px 0;
+    border-right: 4px solid; position: relative;
+  }
+  .hb-sky { background: rgba(56,189,248,0.07); border-color: var(--accent); }
+  .hb-ind { background: rgba(129,140,248,0.07); border-color: var(--accent2); }
+  .hb-em { background: rgba(52,211,153,0.07); border-color: var(--accent3); }
+  .hb-or { background: rgba(251,146,60,0.07); border-color: var(--accent4); }
+  .hb-pk { background: rgba(244,114,182,0.07); border-color: var(--accent5); }
+  .hb-ye { background: rgba(250,204,21,0.07); border-color: var(--accent6); }
+  .hb-red { background: rgba(248,113,113,0.07); border-color: var(--danger); }
+  .hb h4 { font-size: 0.93rem; font-weight: 800; margin-bottom: 8px; }
+  .hb p, .hb li { font-size: 0.88rem; color: var(--text-muted); line-height: 1.75; }
+  .hb ul { padding-right: 18px; }
+  .hb li { margin-bottom: 4px; }
+
+  /* ── FLOW ── */
+  .flow { display: flex; align-items: stretch; gap: 0; flex-wrap: wrap; justify-content: center; margin: 26px 0; }
+  .fstep {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 14px;
+    padding: 16px 18px; text-align: center; min-width: 110px; flex: 0 0 auto;
+  }
+  .fstep .fem { font-size: 1.5rem; display: block; margin-bottom: 6px; }
+  .fstep strong { font-size: 0.95rem; display: block; }
+  .fstep span { font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 3px; }
+  .farr { font-size: 1.3rem; color: var(--accent); padding: 0 4px; display: flex; align-items: center; }
+
+  /* ── SYSTEM CARDS (big numbered) ── */
+  .sys-list { display: flex; flex-direction: column; gap: 16px; margin: 20px 0; }
+  .sys-item {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 22px; display: flex; gap: 18px; align-items: flex-start;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .sys-item:hover { transform: translateX(-4px); }
+  .sys-num {
+    min-width: 48px; height: 48px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; font-weight: 900; flex-shrink: 0;
+  }
+  .sys-item h4 { font-size: 1rem; font-weight: 800; margin-bottom: 6px; }
+  .sys-item p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; }
+  .sys-item ul { padding-right: 18px; margin-top: 8px; }
+  .sys-item li { font-size: 0.86rem; color: var(--text-muted); margin-bottom: 5px; }
+  .tag {
+    display: inline-block; margin: 6px 4px 0 0;
+    border-radius: 6px; padding: 2px 10px; font-size: 0.74rem; font-weight: 700;
+  }
+  .t-sky { background: rgba(56,189,248,0.12); color: var(--accent); border: 1px solid rgba(56,189,248,0.3); }
+  .t-ind { background: rgba(129,140,248,0.12); color: var(--accent2); border: 1px solid rgba(129,140,248,0.3); }
+  .t-em { background: rgba(52,211,153,0.12); color: var(--accent3); border: 1px solid rgba(52,211,153,0.3); }
+  .t-or { background: rgba(251,146,60,0.12); color: var(--accent4); border: 1px solid rgba(251,146,60,0.3); }
+  .t-pk { background: rgba(244,114,182,0.12); color: var(--accent5); border: 1px solid rgba(244,114,182,0.3); }
+  .t-ye { background: rgba(250,204,21,0.12); color: var(--accent6); border: 1px solid rgba(250,204,21,0.3); }
+  .t-red { background: rgba(248,113,113,0.12); color: var(--danger); border: 1px solid rgba(248,113,113,0.3); }
+
+  /* ── TABLE ── */
+  .tbl { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 0.88rem; }
+  .tbl th { background: var(--surface2); padding: 13px 16px; text-align: right; font-weight: 800; border-bottom: 2px solid var(--border); }
+  .tbl td { padding: 11px 16px; border-bottom: 1px solid var(--border); color: var(--text-muted); vertical-align: top; }
+  .tbl tr:hover td { background: rgba(56,189,248,0.03); }
+  .tbl .lc { color: var(--text); font-weight: 700; }
+
+  /* ── COMPARISON CARDS ── */
+  .cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 18px 0; }
+  @media(max-width:560px){ .cmp { grid-template-columns: 1fr; } }
+
+  /* ── PROCESS FLOW (Figure 2-1 inspired) ── */
+  .proc-flow {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 22px 0;
+  }
+  .proc-dept {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 18px 16px;
+  }
+  .proc-dept-title {
+    font-size: 0.85rem; font-weight: 800; padding: 6px 12px; border-radius: 8px; margin-bottom: 14px; text-align: center;
+  }
+  .proc-step {
+    background: var(--surface3); border: 1px solid var(--border); border-radius: 8px;
+    padding: 9px 12px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .proc-step:last-child { margin-bottom: 0; }
+  .ps-arrow { font-size: 0.7rem; color: var(--text-dim); }
+  @media(max-width:600px){ .proc-flow { grid-template-columns: 1fr; } }
+
+  /* ── ENTERPRISE ARCH (Figure 2-6 inspired) ── */
+  .ent-arch { margin: 22px 0; }
+  .ent-center {
+    background: linear-gradient(135deg, rgba(56,189,248,0.12), rgba(129,140,248,0.12));
+    border: 1px solid rgba(56,189,248,0.35); border-radius: 16px; padding: 22px; text-align: center; margin-bottom: 16px;
+  }
+  .ent-center h3 { font-size: 1.1rem; font-weight: 900; margin-bottom: 6px; }
+  .ent-outer { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .ent-node {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 14px;
+    font-size: 0.85rem; text-align: center;
+  }
+  .ent-node strong { display: block; font-size: 0.9rem; margin-bottom: 4px; }
+  .ent-node p { font-size: 0.78rem; color: var(--text-muted); }
+
+  /* ── DSS DIAGRAM (Figure 2-5 inspired) ── */
+  .dss-diagram {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 16px; padding: 22px; margin: 18px 0;
+  }
+  .dss-inputs { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 18px; }
+  .dss-in {
+    background: var(--surface3); border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 14px; font-size: 0.8rem; color: var(--text-muted); text-align: center; min-width: 120px;
+  }
+  .dss-in strong { display: block; color: var(--text); font-size: 0.82rem; margin-bottom: 2px; }
+  .dss-core {
+    background: linear-gradient(135deg, rgba(129,140,248,0.15), rgba(56,189,248,0.1));
+    border: 1px solid rgba(129,140,248,0.4); border-radius: 12px; padding: 16px; text-align: center; margin: 0 auto 18px; max-width: 300px;
+  }
+  .dss-core h4 { font-size: 0.95rem; font-weight: 800; margin-bottom: 4px; }
+  .dss-core p { font-size: 0.8rem; color: var(--text-muted); }
+  .dss-outputs { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+
+  /* ── QUIZ ── */
+  .qcard { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 26px; margin-bottom: 14px; }
+  .qq { font-size: 0.98rem; font-weight: 800; margin-bottom: 16px; line-height: 1.55; }
+  .qopts { display: flex; flex-direction: column; gap: 9px; }
+  .qopt {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 10px;
+    padding: 11px 16px; cursor: pointer; font-family: inherit; font-size: 0.88rem;
+    color: var(--text); text-align: right; transition: all 0.2s; width: 100%;
+  }
+  .qopt:hover { border-color: var(--accent); background: rgba(56,189,248,0.07); }
+  .qopt.ok { background: rgba(52,211,153,0.12); border-color: var(--accent3); color: #6ee7b7; }
+  .qopt.no { background: rgba(248,113,113,0.12); border-color: var(--danger); color: #fca5a5; }
+  .qfb { margin-top: 12px; padding: 12px 16px; border-radius: 10px; font-size: 0.86rem; line-height: 1.65; display: none; }
+  .qfb.show { display: block; }
+  .qfb.ok { background: rgba(52,211,153,0.09); border: 1px solid rgba(52,211,153,0.3); color: #6ee7b7; }
+  .qfb.no { background: rgba(248,113,113,0.09); border: 1px solid rgba(248,113,113,0.3); color: #fca5a5; }
+  .qnxt {
+    margin-top: 12px; display: none;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none; border-radius: 10px; padding: 9px 20px;
+    font-family: inherit; font-size: 0.88rem; font-weight: 800; color: #fff; cursor: pointer; transition: opacity 0.2s;
+  }
+  .qnxt:hover { opacity: 0.82; }
+  .qnxt.show { display: inline-block; }
+
+  /* ── SCORE ── */
+  .scorebar {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 14px;
+    padding: 18px 24px; margin: 22px 0; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  }
+  .sn { font-size: 2.4rem; font-weight: 900; line-height: 1; }
+  .sl { color: var(--text-muted); font-size: 0.87rem; }
+  .pt { flex: 1; min-width: 120px; background: var(--border); border-radius: 99px; height: 8px; overflow: hidden; }
+  .pf { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--accent), var(--accent3)); transition: width 0.5s; }
+  .rbtn {
+    background: var(--surface3); border: 1px solid var(--border); border-radius: 8px;
+    padding: 7px 16px; font-family: inherit; font-size: 0.83rem; color: var(--text-muted); cursor: pointer; transition: border-color 0.2s;
+  }
+  .rbtn:hover { border-color: var(--accent); color: var(--text); }
+
+  /* ── CHECKLIST ── */
+  .cl { list-style: none; margin: 14px 0; }
+  .cl li { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; line-height: 1.65; }
+  .cl li:last-child { border: none; }
+  .cli { font-size: 0.95rem; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── DEF BOX ── */
+  .def {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 20px; margin: 14px 0; font-size: 0.9rem; color: var(--text-muted); line-height: 1.75;
+  }
+  .def strong { color: var(--text); }
+  .def .eq { display: block; margin-top: 10px; font-size: 1rem; font-weight: 900; color: var(--accent2); text-align: center; letter-spacing: 1px; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes slideDown { from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">📚 MIS – Management Information Systems</div>
+    <h1>Chapter 2<br><span class="gr">Global E-business and Collaboration</span></h1>
+    <p class="hero-sub">كل حاجة في الشابتر التاني – Business Processes + أنواع السيستمز + Enterprise Applications 💪</p>
+    <div class="hero-chips">
+      <span class="chip">📖 Laudon &amp; Laudon – 2014</span>
+      <span class="chip">🎓 5 Learning Objectives</span>
+      <span class="chip">⚠️ Exam Ready</span>
+      <span class="chip">🔄 TPS · MIS · DSS · ESS</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tbtn on" onclick="showTab('overview')">🏠 نظرة عامة</button>
+    <button class="tbtn" onclick="showTab('processes')">🔄 Business Processes</button>
+    <button class="tbtn" onclick="showTab('tps')">⚙️ TPS</button>
+    <button class="tbtn" onclick="showTab('mis-dss')">📊 MIS &amp; DSS</button>
+    <button class="tbtn" onclick="showTab('ess')">👑 ESS</button>
+    <button class="tbtn" onclick="showTab('enterprise')">🏗️ Enterprise Apps</button>
+    <button class="tbtn" onclick="showTab('collab')">🤝 Collaboration</button>
+    <button class="tbtn" onclick="showTab('concepts')">💡 مفاهيم</button>
+    <button class="tbtn" onclick="showTab('quiz')">🧠 اختبر نفسك</button>
+    <button class="tbtn" onclick="showTab('summary')">📋 ملخص</button>
+  </div>
+
+  <!-- ══════════════════════════════ TAB: OVERVIEW ══════════════════════════════ -->
+  <div id="tab-overview" class="sec on">
+    <div class="st"><div class="st-icon bg-sky">🏠</div> نظرة عامة على الشابتر</div>
+
+    <div class="hb hb-sky" style="margin-bottom:26px;">
+      <h4>💡 الفكرة الرئيسية</h4>
+      <p>الشابتر ده بيشرح إزاي الشركات بتشتغل أونلاين (<strong style="color:var(--text);">E-business</strong>) وبتتعاون مع بعض (<strong style="color:var(--text);">Collaboration</strong>). بيغطي أنواع السيستمز المختلفة اللي بتخدم كل مستوى في الشركة، وإزاي Enterprise Applications بتربط كل حاجة ببعض.</p>
+    </div>
+
+    <div class="st2"><div class="st2-dot" style="background:var(--accent);"></div> Learning Objectives</div>
+
+    <div class="sys-list">
+      <div class="sys-item" style="border-color:rgba(56,189,248,0.3);">
+        <div class="sys-num bg-sky" style="color:var(--accent);">1</div>
+        <div>
+          <h4>Business Processes &amp; their relationship to IS</h4>
+          <p>تعريف Business Process وإزاي IT بتحسنها عن طريق الـ Automation والـ Parallel processing وتقليل التأخير.</p>
+          <span class="tag t-sky">Business Processes</span>
+        </div>
+      </div>
+      <div class="sys-item" style="border-color:rgba(129,140,248,0.3);">
+        <div class="sys-num bg-ind" style="color:var(--accent2);">2</div>
+        <div>
+          <h4>Systems serving various levels of management</h4>
+          <p>كل Level في الشركة ليه سيستم مختلف: TPS للمستوى التشغيلي، MIS وDSS للمستوى الأوسط، ESS للإدارة العليا. وكيف السيستمز دي مرتبطة ببعض.</p>
+          <span class="tag t-ind">TPS · MIS · DSS · ESS</span>
+        </div>
+      </div>
+      <div class="sys-item" style="border-color:rgba(52,211,153,0.3);">
+        <div class="sys-num bg-em" style="color:var(--accent3);">3</div>
+        <div>
+          <h4>Enterprise Applications &amp; organizational performance</h4>
+          <p>سيستمز ضخمة بتربط الشركة كلها: ERP, SCM, CRM, KMS. بتشغّل Processes عبر كل الأقسام وكل المستويات.</p>
+          <span class="tag t-em">ERP · SCM · CRM · KMS</span>
+        </div>
+      </div>
+      <div class="sys-item" style="border-color:rgba(251,146,60,0.3);">
+        <div class="sys-num bg-or" style="color:var(--accent4);">4</div>
+        <div>
+          <h4>Collaboration &amp; Teamwork supported by technology</h4>
+          <p>ليه التعاون والعمل الجماعي مهم في البيزنس الحديث، وإزاي التكنولوجيا بتدعم الـ Collaboration بين الناس في أي مكان.</p>
+          <span class="tag t-or">Collaboration</span>
+        </div>
+      </div>
+      <div class="sys-item" style="border-color:rgba(244,114,182,0.3);">
+        <div class="sys-num bg-pk" style="color:var(--accent5);">5</div>
+        <div>
+          <h4>Role of the Information Systems function in a business</h4>
+          <p>دور قسم IS في الشركة – المسؤوليات، الهيكل الوظيفي، والعلاقة بين IT وبقية الأقسام.</p>
+          <span class="tag t-pk">IS Function</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ TAB: BUSINESS PROCESSES ══════════════════════════════ -->
+  <div id="tab-processes" class="sec">
+    <div class="st"><div class="st-icon bg-em">🔄</div> Business Processes &amp; Information Systems</div>
+
+    <div class="def">
+      <strong>Business Process:</strong> مجموعة خطوات (Set of Activities/Steps) منظمة علشان تحقق هدف معين في الشركة. تشمل تدفق المواد والمعلومات والمعرفة.
+      <span class="eq">Flows of Material + Information + Knowledge</span>
+    </div>
+
+    <div class="hb hb-sky">
+      <h4>💡 الفكرة الجوهرية</h4>
+      <p>الشركات يمكن النظر إليها كـ <strong style="color:var(--text);">collection of business processes</strong>. الشركة مش مبنى – هي شغل ماشي في خطوات. وهذه الـ Processes ممكن تكون <strong style="color:var(--accent3);">Asset (ميزة ✅)</strong> لو كانت سريعة ومنظمة، أو <strong style="color:var(--danger);">Liability (عبء ❌)</strong> لو كانت بطيئة ومعقدة.</p>
+    </div>
+
+    <div class="st2"><div class="st2-dot" style="background:var(--accent3);"></div> أنواع Business Processes</div>
+
+    <div class="g2">
+      <div class="card c-sky">
+        <div class="ch"><div class="ci bg-sky">🏭</div><h3>Functional Processes (حسب الأقسام)</h3></div>
+        <p>كل قسم له processes خاصة بيه:</p>
+        <ul>
+          <li>🏭 <strong>Manufacturing &amp; Production:</strong> تجميع المنتج – Assembling the product</li>
+          <li>🛒 <strong>Sales &amp; Marketing:</strong> تحديد العملاء – Identifying customers</li>
+          <li>💰 <strong>Finance &amp; Accounting:</strong> إنشاء القوائم المالية – Creating financial statements</li>
+          <li>👨‍💼 <strong>Human Resources:</strong> تعيين الموظفين – Hiring employees</li>
+        </ul>
+      </div>
+      <div class="card c-ind">
+        <div class="ch"><div class="ci bg-ind">🔀</div><h3>Cross-Functional Processes ⚠️ مهم</h3></div>
+        <p>Processes بتعدي على أكتر من قسم. مش قسم واحد بيعملها لوحده – لازم تعاون بين الأقسام.</p>
+        <div class="hb hb-ind" style="margin-top:12px;">
+          <h4>🔥 مثال: طلب أونلاين</h4>
+          <p>Sales يستقبل الطلب → Accounting تتأكد من الائتمان → Manufacturing تصنع → Shipping توصّل. كل الأقسام شاركت في Process واحدة.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Figure 2-1 -->
+    <div class="st2"><div class="st2-dot" style="background:var(--accent4);"></div> Figure 2-1 – Fulfilling a Customer Order (طلب العميل كامل)</div>
+    <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:16px;">يوضح إزاي تنفيذ طلب عميل واحد يحتاج تنسيق محكم بين 3 أقسام مختلفة (Sales + Accounting + Manufacturing &amp; Production). ده مثال كلاسيك على Cross-functional process.</p>
+
+    <div class="proc-flow">
+      <div class="proc-dept">
+        <div class="proc-dept-title" style="background:rgba(56,189,248,0.15);color:var(--accent);">🛒 Sales</div>
+        <div class="proc-step">📝 Generate order<br><span style="font-size:0.75rem;color:var(--accent3);">إنشاء الطلب</span></div>
+        <div style="text-align:center;font-size:0.9rem;color:var(--text-dim);">↓</div>
+        <div class="proc-step">📤 Submit order<br><span style="font-size:0.75rem;color:var(--accent3);">إرسال الطلب</span></div>
+      </div>
+      <div class="proc-dept">
+        <div class="proc-dept-title" style="background:rgba(250,204,21,0.12);color:var(--accent6);">💰 Accounting</div>
+        <div class="proc-step">🔍 Check credit<br><span style="font-size:0.75rem;color:var(--accent3);">التحقق من الائتمان</span></div>
+        <div style="text-align:center;font-size:0.9rem;color:var(--text-dim);">↓</div>
+        <div class="proc-step">✅ Approve credit<br><span style="font-size:0.75rem;color:var(--accent3);">الموافقة</span></div>
+        <div style="text-align:center;font-size:0.9rem;color:var(--text-dim);">↓</div>
+        <div class="proc-step">🧾 Generate invoice<br><span style="font-size:0.75rem;color:var(--accent3);">إصدار الفاتورة</span></div>
+      </div>
+      <div class="proc-dept">
+        <div class="proc-dept-title" style="background:rgba(52,211,153,0.12);color:var(--accent3);">🏭 Manufacturing &amp; Production</div>
+        <div class="proc-step">🔧 Assemble product<br><span style="font-size:0.75rem;color:var(--accent3);">تجميع المنتج</span></div>
+        <div style="text-align:center;font-size:0.9rem;color:var(--text-dim);">↓</div>
+        <div class="proc-step">🚚 Ship product<br><span style="font-size:0.75rem;color:var(--accent3);">شحن المنتج</span></div>
+      </div>
+    </div>
+    <p style="font-size:0.8rem;color:var(--text-dim);text-align:center;margin-top:-8px;margin-bottom:20px;">Fulfilling a customer order involves a complex set of steps that requires close coordination of the sales, accounting, and manufacturing functions.</p>
+
+    <!-- IT & Business Processes -->
+    <div class="st2"><div class="st2-dot" style="background:var(--accent2);"></div> كيف IT تحسّن Business Processes؟</div>
+    <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:14px;">Information technology enhances business processes in two main ways:</p>
+
+    <div class="g2">
+      <div class="card c-sky">
+        <div class="ch"><div class="ci bg-sky">⚡</div><h3>1. Increasing efficiency of existing processes</h3></div>
+        <p>زيادة كفاءة الـ Processes الموجودة عن طريق:</p>
+        <div class="hb hb-sky" style="margin-top:12px;">
+          <h4>Automating steps that were manual</h4>
+          <p>تحويل الخطوات اليدوية لـ أوتوماتيك. مثال: بدل موظف يكتب الطلب يدويًا → السيستم يسجله تلقائي.</p>
+        </div>
+      </div>
+      <div class="card c-ind">
+        <div class="ch"><div class="ci bg-ind">🚀</div><h3>2. Enabling entirely new processes</h3></div>
+        <p>تمكين Processes جديدة كليًا عن طريق:</p>
+        <ul>
+          <li>تغيير تدفق المعلومات (Change flow of information)</li>
+          <li>استبدال الخطوات التسلسلية بخطوات متوازية (Replace sequential steps with parallel steps)</li>
+          <li>إزالة التأخير في اتخاذ القرار (Eliminate delays in decision making)</li>
+          <li>دعم نماذج أعمال جديدة (Support new business models)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cmp">
+      <div class="hb hb-red" style="margin:0;">
+        <h4>❌ Sequential (تسلسلي – بطيء 🐢)</h4>
+        <p>خطوة ورا خطوة. الخطوة التانية مش بتبدأ إلا لما الأولى تخلص. يسبب تأخير كبير في التنفيذ.</p>
+      </div>
+      <div class="hb hb-em" style="margin:0;">
+        <h4>✅ Parallel (متوازي – سريع ⚡)</h4>
+        <p>أكتر من خطوة بتتم في نفس الوقت. IT بتخلي ده ممكن. نتيجة: تنفيذ أسرع بكتير وتوفير في الوقت.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ TAB: TPS ══════════════════════════════ -->
+  <div id="tab-tps" class="sec">
+    <div class="st"><div class="st-icon bg-or">⚙️</div> Transaction Processing Systems (TPS)</div>
+
+    <div class="def">
+      <strong>TPS (Transaction Processing Systems):</strong> سيستم بيسجل وبيعالج العمليات اليومية الروتينية اللازمة لإدارة الشركة. بيخدم الـ Operational Managers والموظفين. بيتعامل مع قرارات Structured (محددة سلفًا).
+      <span class="eq">Daily Transactions = Core of Any Business</span>
+    </div>
+
+    <div class="g2">
+      <div class="card c-or">
+        <div class="ch"><div class="ci bg-or">🎯</div><h3>يخدم مين؟</h3></div>
+        <ul>
+          <li>Operational Managers (مديرو العمليات)</li>
+          <li>Operational Staff (الموظفين التشغيليين)</li>
+        </ul>
+        <div class="hb hb-or" style="margin-top:12px;">
+          <h4>نوع القرارات:</h4>
+          <p><strong>Structured Decisions</strong> = قرارات محددة بقواعد واضحة مسبقًا. مثال: الموظف اشتغل 8 ساعات → راتب محدد.</p>
+        </div>
+      </div>
+      <div class="card c-ye">
+        <div class="ch"><div class="ci bg-ye">📋</div><h3>أمثلة على TPS</h3></div>
+        <ul>
+          <li>Sales order entry – تسجيل الطلبات</li>
+          <li>Payroll – الرواتب والمرتبات</li>
+          <li>Shipping – الشحن والتوصيل</li>
+          <li>Inventory tracking – متابعة المخزن</li>
+          <li>Hotel reservation systems</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Figure 2-2: Payroll TPS -->
+    <div class="st2"><div class="st2-dot" style="background:var(--accent4);"></div> Figure 2-2 – A Payroll TPS (مثال عملي كامل)</div>
+    <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:16px;">A TPS for payroll processing captures employee payment transaction data (such as a time card). System outputs include online and hard-copy reports for management and employee paychecks.</p>
+
+    <div class="card c-or" style="margin-bottom:20px;">
+      <div class="flow">
+        <div class="fstep" style="border-color:rgba(56,189,248,0.35);">
+          <span class="fem">👤</span>
+          <strong>Employee Data</strong>
+          <span>بيانات الموظف</span>
+        </div>
+        <div class="farr">→</div>
+        <div class="fstep" style="border-color:rgba(129,140,248,0.35);">
+          <span class="fem">⚙️</span>
+          <strong>Payroll System</strong>
+          <span>نظام الرواتب</span>
+        </div>
+        <div class="farr">→</div>
+        <div class="fstep" style="border-color:rgba(52,211,153,0.35);">
+          <span class="fem">📊</span>
+          <strong>Management Reports</strong>
+          <span>تقارير الإدارة</span>
+        </div>
+      </div>
+      <div class="g3" style="margin-top:16px;">
+        <div class="hb hb-sky" style="margin:0;">
+          <h4>📥 Input (المدخلات)</h4>
+          <ul>
+            <li>Employee Number (رقم الموظف)</li>
+            <li>Name (الاسم)</li>
+            <li>Address (العنوان)</li>
+            <li>Pay Rate (معدل الأجر)</li>
+            <li>Time Card Data (بطاقة الوقت)</li>
+          </ul>
+        </div>
+        <div class="hb hb-ind" style="margin:0;">
+          <h4>⚙️ Processing (المعالجة)</h4>
+          <ul>
+            <li>حساب Gross Pay (الراتب الإجمالي)</li>
+            <li>خصم Federal Tax (ضريبة فيدرالية)</li>
+            <li>خصم FICA</li>
+            <li>خصم Medicare</li>
+            <li>خصم State Tax</li>
+            <li>حساب Net Pay (الصافي)</li>
+          </ul>
+        </div>
+        <div class="hb hb-em" style="margin:0;">
+          <h4>📤 Output (المخرجات)</h4>
+          <ul>
+            <li>Employee Paychecks (شيكات الرواتب) 💰</li>
+            <li>Management Reports (تقارير الإدارة)</li>
+            <li>Online Queries (استعلامات إلكترونية)</li>
+            <li>Data to General Ledger (دفتر الأستاذ)</li>
+            <li>Data to Government Agencies (الجهات الحكومية)</li>
+            <li>Messages to employees</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="g2">
+      <div class="hb hb-em">
+        <h4>✅ مميزات TPS</h4>
+        <ul>
+          <li>يتيح للمديرين متابعة حالة العمليات اللحظية</li>
+          <li>يتابع العلاقات مع البيئة الخارجية</li>
+          <li>يعالج أهداف محددة ومنظمة (Structured Goals)</li>
+          <li>يوفر البيانات الأساسية لكل السيستمز الأخرى (MIS, DSS)</li>
+        </ul>
+      </div>
+      <div class="hb hb-red">
+        <h4>⚠️ نقطة مهمة في الامتحان</h4>
+        <p>TPS هو <strong style="color:var(--text);">أساس</strong> أي شركة. من غيره مفيش تنظيم ومفيش بيانات. كل السيستمز التانية (MIS, DSS) بتعتمد على بياناته.</p>
+        <p style="margin-top:8px;">TPS = يخدم <strong style="color:var(--accent4);">Operational Level</strong> ويتعامل مع <strong style="color:var(--accent4);">Routine/Structured Decisions</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ TAB: MIS & DSS ══════════════════════════════ -->
+  <div id="tab-mis-dss" class="sec">
+    <div class="st"><div class="st-icon bg-sky">📊</div> MIS &amp; DSS &amp; Business Intelligence</div>
+
+    <!-- Business Intelligence -->
+    <div class="hb hb-ind" style="margin-bottom:22px;">
+      <h4>💡 Business Intelligence – مفهوم شامل</h4>
+      <p>Data and software tools for organizing and analyzing data – used to help managers and users make improved decisions. يشمل: MIS + DSS + ESS.</p>
+    </div>
+
+    <!-- MIS -->
+    <div class="st2"><div class="st2-dot" style="background:var(--accent);"></div> 1. Management Information Systems (MIS)</div>
+
+    <div class="def">
+      <strong>MIS:</strong> سيستم بيخدم الـ Middle Management عن طريق توفير تقارير عن أداء الشركة الحالي، مبنية على بيانات من TPS. بيجاوب على أسئلة روتينية بإجراءات محددة مسبقًا. عنده قدرة تحليلية محدودة.
+    </div>
+
+    <div class="g2">
+      <div class="card c-sky">
+        <div class="ch"><div class="ci bg-sky">👔</div><h3>يخدم مين؟</h3></div>
+        <p>Middle Management – المديرين في المستوى الأوسط.</p>
+        <div class="hb hb-sky" style="margin-top:12px;">
+          <h4>نوع القرارات:</h4>
+          <p><strong>Routine Decisions</strong> = قرارات متكررة ومعروفة مسبقًا. مثال: كام بيعنا الشهر ده؟</p>
+        </div>
+      </div>
+      <div class="card c-ind">
+        <div class="ch"><div class="ci bg-ind">📈</div><h3>أنواع التقارير</h3></div>
+        <ul>
+          <li>تقارير دورية (يومية / أسبوعية / شهرية)</li>
+          <li>ملخصات الأداء</li>
+          <li>مقارنة بين الفروع أو المنتجات</li>
+          <li>Actual vs. Planned (المقارنة مع المخطط)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Figure 2-3 -->
+    <div class="st2"><div class="st2-dot" style="background:var(--accent4);"></div> Figure 2-3 – How MIS Obtains Data from TPS</div>
+    <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:16px;">Three TPS supply summarized transaction data to the MIS reporting system at the end of the time period. Managers gain access to the organizational data through the MIS, which provides them with the appropriate reports.</p>
+
+    <div class="card c-sky" style="margin-bottom:20px;">
+      <div class="flow">
+        <div style="display:flex;flex-direction:column;gap:8px;flex:0 0 auto;">
+          <div class="fstep" style="min-width:160px;border-color:rgba(251,146,60,0.4);">
+            <span class="fem">🛒</span>
+            <strong>Order Processing System</strong>
+            <span>Sales Data</span>
+          </div>
+          <div class="fstep" style="min-width:160px;border-color:rgba(251,146,60,0.4);">
+            <span class="fem">🏭</span>
+            <strong>Materials Resource Planning</strong>
+            <span>Unit Product Cost Data</span>
+          </div>
+          <div class="fstep" style="min-width:160px;border-color:rgba(251,146,60,0.4);">
+            <span class="fem">📒</span>
+            <strong>General Ledger System</strong>
+            <span>Expense Data / Accounting Files</span>
+          </div>
+        </div>
+        <div class="farr" style="font-size:1.6rem;">→</div>
+        <div class="fstep" style="border-color:rgba(56,189,248,0.5);background:rgba(56,189,248,0.06);min-width:130px;">
+          <span class="fem">📊</span>
+          <strong>MIS</strong>
+          <span>MIS Files</span>
+        </div>
+        <div class="farr" style="font-size:1.6rem;">→</div>
+        <div style="display:flex;flex-direction:column;gap:8px;flex:0 0 auto;">
+          <div class="fstep" style="min-width:140px;border-color:rgba(52,211,153,0.4);">
+            <span class="fem">📋</span>
+            <strong>Reports</strong>
+            <span>للمديرين</span>
+          </div>
+          <div class="fstep" style="min-width:140px;border-color:rgba(52,211,153,0.4);">
+            <span class="fem">🖥️</span>
+            <strong>Online Displays &amp; Dashboards</strong>
+            <span>عرض مباشر</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Figure 2-4 -->
+    <div class="st2"><div class="st2-dot" style="background:var(--accent3);"></div> Figure 2-4 – Sample MIS Report</div>
+    <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:14px;">This report, showing summarized annual sales data, was produced by the MIS. يوضح المبيعات الفعلية مقابل المخططة لكل منطقة ولكل منتج.</p>
+
+    <div style="overflow-x:auto;">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>Product Code</th>
+            <th>Product Description</th>
+            <th>Sales Region</th>
+            <th>Actual Sales</th>
+            <th>Planned Sales</th>
+            <th>Actual vs Planned</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="lc" rowspan="4">4469</td>
+            <td rowspan="4">Carpet Cleaner</td>
+            <td>Northeast</td>
+            <td>4,066,700</td>
+            <td>4,800,000</td>
+            <td style="color:var(--danger);">0.85 ↓</td>
+          </tr>
+          <tr>
+            <td>South</td>
+            <td>3,778,112</td>
+            <td>3,750,000</td>
+            <td style="color:var(--accent3);">1.01 ↑</td>
+          </tr>
+          <tr>
+            <td>Midwest</td>
+            <td>4,867,001</td>
+            <td>4,600,000</td>
+            <td style="color:var(--accent3);">1.06 ↑</td>
+          </tr>
+          <tr>
+            <td>West</td>
+            <td>4,003,440</td>
+            <td>4,400,000</td>
+            <td style="color:var(--danger);">0.91 ↓</td>
+          </tr>
+          <tr>
+            <td class="lc" colspan="2" style="font-weight:800;">TOTAL (4469)</td>
+            <td></td>
+            <td style="font-weight:800;">16,715,253</td>
+            <td style="font-weight:800;">17,550,000</td>
+            <td style="color:var(--danger);font-weight:800;">0.95 ↓</td>
+          </tr>
+          <tr>
+            <td class="lc" rowspan="4">5674</td>
+            <td rowspan="4">Room Freshener</td>
+            <td>Northeast</td>
+            <td>3,676,700</td>
+            <td>3,900,000</td>
+            <td style="color:var(--danger);">0.94 ↓</td>
+          </tr>
+          <tr>
+            <td>South</td>
+            <td>5,608,112</td>
+            <td>4,700,000</td>
+            <td style="color:var(--accent3);">1.19 ↑</td>
+          </tr>
+          <tr>
+            <td>Midwest</td>
+            <td>4,711,001</td>
+            <td>4,200,000</td>
+            <td style="color:var(--accent3);">1.12 ↑</td>
+          </tr>
+          <tr>
+            <td>West</td>
+            <td>4,563,440</td>
+            <td>4,900,000</td>
+            <td style="color:var(--danger);">0.93 ↓</td>
+          </tr>
+          <tr>
+            <td class="lc" colspan="2" style="font-weight:800;">TOTAL (5674)</td>
+            <td></td>
+            <td style="font-weight:800;">18,559,253</td>
+            <td style="font-weight:800;">17,700,000</td>
+            <td style="color:var(--accent3);font-weight:800;">1.05 ↑</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:0.78rem;color:var(--text-dim);text-align:center;">Consolidated Consumer Products Corporation – Sales by Product and Sales Region: 2013</p>
+
+    <!-- DSS -->
+    <div class="st2" style="margin-top:32px;"><div class="st2-dot" style="background:var(--accent2);"></div> 2. Decision Support Systems (DSS)</div>
+
+    <div class="def">
+      <strong>DSS (Decision Support Systems):</strong> سيستم بيخدم الـ Middle Management ويدعم اتخاذ <strong>قرارات غير روتينية (Non-routine)</strong>. بيستخدم بيانات خارجية بالإضافة لبيانات TPS/MIS. يعتمد على نماذج تحليلية (Analytical Models).
+      <span class="eq">DSS = Support Non-Routine Decision Making</span>
+    </div>
+
+    <div class="g2">
+      <div class="card c-ind">
+        <div class="ch"><div class="ci bg-ind">🔬</div><h3>Non-Routine Decisions يعني إيه؟</h3></div>
+        <p>قرارات جديدة ومعقدة مفيش لها حل جاهز ومحدد. المدير محتاج يحلل وياخد قرار.</p>
+        <div class="hb hb-ind" style="margin-top:12px;">
+          <h4>🔥 مثال:</h4>
+          <p>لو المبيعات زادت فجأة في ديسمبر → ماذا سيحدث لجدول الإنتاج؟ (What is the impact on production schedule if December sales doubled?)</p>
+        </div>
+      </div>
+      <div class="card c-em">
+        <div class="ch"><div class="ci bg-em">📊</div><h3>مصادر البيانات في DSS</h3></div>
+        <ul>
+          <li>بيانات من TPS (العمليات اليومية)</li>
+          <li>بيانات من MIS (التقارير)</li>
+          <li>بيانات خارجية (External Information)</li>
+          <li>نماذج تحليلية (Analytical Models Database)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Types of DSS -->
+    <div class="st2"><div class="st2-dot" style="background:var(--accent5);"></div> أنواع DSS</div>
+    <div class="g2">
+      <div class="card c-ind">
+        <div class="ch"><div class="ci bg-ind">📐</div><h3>1. Model-Driven DSS</h3></div>
+        <p>يعتمد على معادلات ونماذج رياضية لمحاكاة مواقف مختلفة.</p>
+        <div class="hb hb-ind" style="margin-top:12px;">
+          <h4>🚢 مثال: Voyage-Estimating DSS (Figure 2-5)</h4>
+          <p>يساعد المديرين يحددوا سعر عروض عقود الشحن. يستخدم PC قوي، يُستخدم يوميًا للمزايدة على عقود الشحن.</p>
+        </div>
+      </div>
+      <div class="card c-pk">
+        <div class="ch"><div class="ci bg-pk">📦</div><h3>2. Data-Driven DSS</h3></div>
+        <p>يعتمد على تحليل قواعد بيانات ضخمة لاستخلاص أنماط وقرارات.</p>
+        <div class="hb hb-pk" style="margin-top:12px;">
+          <h4>🏔️ مثال: Intrawest's Marketing Analysis Systems</h4>
+          <p>تحليل بيانات تسويقية ضخمة لفهم سلوك العملاء واتخاذ قرارات تسويقية.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Figure 2-5: Voyage DSS -->
+    <div class="st2"><div class="st2-dot" style="background:var(--accent4);"></div> Figure 2-5 – Voyage-Estimating Decision Support System</div>
+    <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:14px;">This DSS operates on a powerful PC. It is used daily by managers who must develop bids on shipping contracts.</p>
+
+    <div class="dss-diagram">
+      <div class="dss-inputs">
+        <div class="dss-in"><strong>🚢 Ship File</strong>e.g., speed, capacity (سرعة وسعة السفينة)</div>
+        <div class="dss-in"><strong>📍 Port Distance Restrictions File</strong>المسافات بين الموانئ وقيودها</div>
+        <div class="dss-in"><strong>⛽ Fuel Consumption Cost File</strong>تكاليف الوقود</div>
+        <div class="dss-in"><strong>📜 Ship Charter Hire History Cost File</strong>تاريخ أسعار الإيجار</div>
+        <div class="dss-in"><strong>🏗️ Port Expense File</strong>مصروفات الموانئ</div>
+      </div>
+      <div style="text-align:center;font-size:1.4rem;color:var(--accent2);margin:-8px 0 8px;">↓</div>
+      <div class="dss-core">
+        <div style="font-size:1.5rem;margin-bottom:6px;">🧮</div>
+        <h4>Analytical Models Database</h4>
+        <p>قاعدة بيانات النماذج التحليلية</p>
+      </div>
+      <div style="text-align:center;font-size:1.4rem;color:var(--accent2);margin:-8px 0 8px;">↓</div>
+      <div class="dss-outputs">
+        <div class="dss-in"><strong>🖥️ Online Queries</strong>استعلامات مباشرة</div>
+        <div class="dss-in"><strong>📊 Bid Recommendations</strong>توصيات العطاءات</div>
+      </div>
+    </div>
+
+    <!-- MIS vs DSS comparison -->
+    <div class="st2"><div class="st2-dot" style="background:var(--danger);"></div> الفرق بين MIS و DSS ⚠️ مهم جدًا في الامتحان</div>
+    <div style="overflow-x:auto;">
+      <table class="tbl">
+        <thead>
+          <tr><th>وجه المقارنة</th><th>MIS 🟦</th><th>DSS 🟩</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="lc">يخدم مين؟</td><td>Middle Management</td><td>Middle Management</td></tr>
+          <tr><td class="lc">نوع القرار</td><td>Routine (روتيني – متكرر)</td><td>Non-routine (غير روتيني – جديد)</td></tr>
+          <tr><td class="lc">مصدر البيانات</td><td>TPS بشكل أساسي</td><td>TPS + MIS + External Data</td></tr>
+          <tr><td class="lc">الإخراج</td><td>تقارير مجدولة (Scheduled Reports)</td><td>تحليل وسيناريوهات (Analysis &amp; What-if)</td></tr>
+          <tr><td class="lc">قدرة التحليل</td><td>محدودة (Little Analytic Capability)</td><td>عالية (Strong Analytic Models)</td></tr>
+          <tr><td class="lc">مثال</td><td>تقرير المبيعات الشهري</td><td>تأثير مضاعفة المبيعات على الإنتاج</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ TAB: ESS ══════════════════════════════ -->
+  <div id="tab-ess" class="sec">
+    <div class="st"><div class="st-icon bg-ye">👑</div> Executive Support Systems (ESS)</div>
+
+    <div class="def">
+      <strong>ESS (Executive Support Systems):</strong> سيستم بيخدم الـ <strong>Senior Management</strong> (الإدارة العليا). بيدعم القرارات الاستراتيجية الكبيرة اللي محتاجة Judgment (حكم) وEvaluation (تقييم) وInsight (بصيرة). يستخدم بيانات داخلية وخارجية.
+      <span class="eq">ESS = Strategic Non-Routine Decisions + Judgment + Insight</span>
+    </div>
+
+    <div class="g2">
+      <div class="card c-ye">
+        <div class="ch"><div class="ci bg-ye">👑</div><h3>يخدم مين؟</h3></div>
+        <p>Senior Management – الإدارة العليا (CEO, CFO, Board of Directors).</p>
+        <div class="hb hb-ye" style="margin-top:12px;">
+          <h4>نوع القرارات:</h4>
+          <p><strong>Non-Routine + Strategic</strong> = قرارات كبيرة محتاجة خبرة وحكم. مثال: هل نفتح فرع في دولة جديدة؟ هل نغير الاستراتيجية؟</p>
+        </div>
+      </div>
+      <div class="card c-or">
+        <div class="ch"><div class="ci bg-or">🌐</div><h3>مصادر بيانات ESS</h3></div>
+        <ul>
+          <li>بيانات من MIS و DSS</li>
+          <li>بيانات خارجية (External Data):</li>
+          <li>&nbsp;&nbsp;– قوانين ضريبية جديدة (new tax laws)</li>
+          <li>&nbsp;&nbsp;– بيانات المنافسين (competitors data)</li>
+          <li>&nbsp;&nbsp;– تغيرات السوق</li>
+          <li>&nbsp;&nbsp;– الأخبار الاقتصادية</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="st2"><div class="st2-dot" style="background:var(--accent6);"></div> Digital Dashboard – المثال الأساسي لـ ESS</div>
+    <div class="hb hb-ye">
+      <h4>🔥 مثال: Digital Dashboard مع Real-time View لأداء الشركة</h4>
+      <p>لوحة تحكم رقمية تعرض للمدير التنفيذي:</p>
+    </div>
+
+    <div class="g4" style="margin-top:14px;">
+      <div class="card c-sky"><div style="font-size:1.4rem;text-align:center;margin-bottom:8px;">💰</div><h3 style="text-align:center;font-size:0.88rem;">Working Capital</h3><p style="text-align:center;font-size:0.8rem;">رأس المال العامل</p></div>
+      <div class="card c-ind"><div style="font-size:1.4rem;text-align:center;margin-bottom:8px;">📬</div><h3 style="text-align:center;font-size:0.88rem;">Accounts Receivable</h3><p style="text-align:center;font-size:0.8rem;">المبالغ المستحقة للشركة</p></div>
+      <div class="card c-or"><div style="font-size:1.4rem;text-align:center;margin-bottom:8px;">📤</div><h3 style="text-align:center;font-size:0.88rem;">Accounts Payable</h3><p style="text-align:center;font-size:0.8rem;">المبالغ المستحقة على الشركة</p></div>
+      <div class="card c-em"><div style="font-size:1.4rem;text-align:center;margin-bottom:8px;">💵</div><h3 style="text-align:center;font-size:0.88rem;">Cash Flow</h3><p style="text-align:center;font-size:0.8rem;">التدفق النقدي</p></div>
+      <div class="card c-pk"><div style="font-size:1.4rem;text-align:center;margin-bottom:8px;">📦</div><h3 style="text-align:center;font-size:0.88rem;">Inventory</h3><p style="text-align:center;font-size:0.8rem;">المخزون</p></div>
+    </div>
+
+    <!-- Summary comparison ALL 4 systems -->
+    <div class="st2" style="margin-top:28px;"><div class="st2-dot" style="background:var(--danger);"></div> مقارنة كاملة بين الأنظمة الأربعة ⚠️ امتحان</div>
+    <div style="overflow-x:auto;">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>System</th>
+            <th>يخدم مين؟</th>
+            <th>نوع القرار</th>
+            <th>نوع المعلومات</th>
+            <th>مثال</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="lc" style="color:var(--accent4);">TPS</td>
+            <td>Operational Managers &amp; Staff</td>
+            <td>Routine / Structured</td>
+            <td>Transactions يومية</td>
+            <td>Payroll, Sales Orders, Shipping</td>
+          </tr>
+          <tr>
+            <td class="lc" style="color:var(--accent);">MIS</td>
+            <td>Middle Management</td>
+            <td>Routine</td>
+            <td>تقارير من TPS</td>
+            <td>تقرير مبيعات شهري</td>
+          </tr>
+          <tr>
+            <td class="lc" style="color:var(--accent3);">DSS</td>
+            <td>Middle Management</td>
+            <td>Non-routine</td>
+            <td>TPS + MIS + External</td>
+            <td>Voyage-Estimating, What-if Analysis</td>
+          </tr>
+          <tr>
+            <td class="lc" style="color:var(--accent6);">ESS</td>
+            <td>Senior Management</td>
+            <td>Strategic / Non-routine</td>
+            <td>MIS + DSS + External</td>
+            <td>Digital Dashboard, Market Trends</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="hb hb-sky" style="margin-top:16px;">
+      <h4>🔗 كيف ترتبط الأنظمة ببعض؟</h4>
+      <p>TPS بيجمع البيانات اليومية → MIS بياخدها ويعمل تقارير → DSS بيحلل ويدعم القرارات المعقدة → ESS بيعطي الصورة الاستراتيجية الكاملة للإدارة العليا. كل نظام يعتمد على النظام اللي تحته.</p>
+      <div class="flow" style="margin-top:14px;">
+        <div class="fstep" style="border-color:rgba(251,146,60,0.4);"><span class="fem">⚙️</span><strong>TPS</strong><span>بيانات يومية</span></div>
+        <div class="farr">→</div>
+        <div class="fstep" style="border-color:rgba(56,189,248,0.4);"><span class="fem">📊</span><strong>MIS</strong><span>تقارير</span></div>
+        <div class="farr">→</div>
+        <div class="fstep" style="border-color:rgba(52,211,153,0.4);"><span class="fem">🔬</span><strong>DSS</strong><span>تحليل</span></div>
+        <div class="farr">→</div>
+        <div class="fstep" style="border-color:rgba(250,204,21,0.4);"><span class="fem">👑</span><strong>ESS</strong><span>استراتيجية</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ TAB: ENTERPRISE ══════════════════════════════ -->
+  <div id="tab-enterprise" class="sec">
+    <div class="st"><div class="st-icon bg-ind">🏗️</div> Enterprise Applications</div>
+
+    <div class="def">
+      <strong>Enterprise Applications:</strong> سيستمز ضخمة بتربط الشركة كلها ببعض. بتشغّل Business Processes عبر كل الأقسام الوظيفية وكل مستويات الإدارة. ممكن تمتد لبرا الشركة (الموردين والعملاء). أربعة أنواع رئيسية.
+      <span class="eq">Enterprise Systems = Systems for linking the entire enterprise</span>
+    </div>
+
+    <div class="hb hb-ind" style="margin-bottom:20px;">
+      <h4>💡 الفكرة الجوهرية</h4>
+      <p>بدل كل قسم يشتغل لوحده بسيستم منفصل → كله يبقى System واحد متكامل. يتجاوز الحدود الوظيفية ويشمل كل المستويات. Enterprise Applications automate processes that span multiple business functions and organizational levels.</p>
+    </div>
+
+    <!-- Figure 2-6 -->
+    <div class="st2"><div class="st2-dot" style="background:var(--accent4);"></div> Figure 2-6 – Enterprise Application Architecture</div>
+    <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:16px;">Enterprise applications automate processes that span multiple business functions and organizational levels and may extend outside the organization.</p>
+
+    <div class="ent-arch">
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;margin-bottom:16px;">
+        <div class="card c-or" style="text-align:center;">
+          <div style="font-size:1.5rem;">🏭</div>
+          <h3 style="margin-top:8px;font-size:0.9rem;">Suppliers &amp; Business Partners</h3>
+          <p>الموردين وشركاء العمل</p>
+        </div>
+        <div style="font-size:1.8rem;color:var(--accent2);text-align:center;">⇆</div>
+        <div class="card c-em" style="text-align:center;">
+          <div style="font-size:1.5rem;">🛒</div>
+          <h3 style="margin-top:8px;font-size:0.9rem;">Customers &amp; Distributors</h3>
+          <p>العملاء والموزعين</p>
+        </div>
+      </div>
+
+      <div style="background:linear-gradient(135deg,rgba(56,189,248,0.08),rgba(129,140,248,0.08));border:1px solid rgba(56,189,248,0.3);border-radius:16px;padding:20px;margin-bottom:14px;">
+        <div style="text-align:center;font-size:0.85rem;font-weight:800;color:var(--accent);margin-bottom:16px;letter-spacing:1px;">FUNCTIONAL AREAS</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:16px;">
+          <span class="tag t-sky">🛒 Sales &amp; Marketing</span>
+          <span class="tag t-or">🏭 Manufacturing &amp; Production</span>
+          <span class="tag t-ye">💰 Finance &amp; Accounting</span>
+          <span class="tag t-em">👨‍💼 Human Resources</span>
+        </div>
+        <div class="g2" style="margin-bottom:0;">
+          <div style="background:var(--surface2);border:1px solid rgba(56,189,248,0.3);border-radius:12px;padding:14px;text-align:center;">
+            <div style="font-size:1.3rem;margin-bottom:6px;">⚙️</div>
+            <strong style="font-size:0.9rem;">Enterprise Systems (ERP)</strong>
+            <p style="font-size:0.78rem;color:var(--text-muted);margin-top:4px;">يربط كل العمليات الداخلية</p>
+          </div>
+          <div style="background:var(--surface2);border:1px solid rgba(52,211,153,0.3);border-radius:12px;padding:14px;text-align:center;">
+            <div style="font-size:1.3rem;margin-bottom:6px;">🔗</div>
+            <strong style="font-size:0.9rem;">Supply Chain Management</strong>
+            <p style="font-size:0.78rem;color:var(--text-muted);margin-top:4px;">يربط مع الموردين</p>
+          </div>
+          <div style="background:var(--surface2);border:1px solid rgba(244,114,182,0.3);border-radius:12px;padding:14px;text-align:center;">
+            <div style="font-size:1.3rem;margin-bottom:6px;">🤝</div>
+            <strong style="font-size:0.9rem;">Customer Relationship Mgmt</strong>
+            <p style="font-size:0.78rem;color:var(--text-muted);margin-top:4px;">يربط مع العملاء</p>
+          </div>
+          <div style="background:var(--surface2);border:1px solid rgba(250,204,21,0.3);border-radius:12px;padding:14px;text-align:center;">
+            <div style="font-size:1.3rem;margin-bottom:6px;">🧠</div>
+            <strong style="font-size:0.9rem;">Knowledge Management</strong>
+            <p style="font-size:0.78rem;color:var(--text-muted);margin-top:4px;">يدير المعرفة والخبرة</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 Enterprise Apps detail -->
+    <div class="st2"><div class="st2-dot" style="background:var(--accent2);"></div> الأنواع الأربعة بالتفصيل</div>
+
+    <div class="sys-list">
+      <div class="sys-item" style="border-color:rgba(56,189,248,0.35);">
+        <div class="sys-num bg-sky" style="color:var(--accent);">1</div>
+        <div>
+          <h4>Enterprise Systems (ERP – Enterprise Resource Planning)</h4>
+          <p>سيستم واحد شامل لكل الشركة. بيجمع كل الأقسام في Database واحدة مشتركة. بيربط كل العمليات الداخلية. بيزيل الحواجز بين الأقسام.</p>
+          <div class="hb hb-sky" style="margin-top:12px;">
+            <h4>🔥 مثال عملي:</h4>
+            <p>لما البيع يتم في Sales → المخزن يتحدث تلقائي في Inventory → Finance تسجل الإيراد تلقائي. كله بسيستم واحد متكامل بدون تدخل يدوي.</p>
+          </div>
+          <span class="tag t-sky">Cross-Functional</span><span class="tag t-ind">Real-time Data</span>
+        </div>
+      </div>
+
+      <div class="sys-item" style="border-color:rgba(52,211,153,0.35);">
+        <div class="sys-num bg-em" style="color:var(--accent3);">2</div>
+        <div>
+          <h4>Supply Chain Management Systems (SCM)</h4>
+          <p>نظام إدارة سلسلة التوريد. بيربط الشركة بالموردين والموزعين. بيتحكم في تدفق المواد والبيانات عبر سلسلة التوريد كلها.</p>
+          <div class="hb hb-em" style="margin-top:12px;">
+            <h4>🎯 الهدف:</h4>
+            <p>تقليل التكلفة + تسريع الشغل + ضمان توفر المواد في الوقت المناسب. بيربط: الموردين → المصنع → التوزيع → العملاء.</p>
+          </div>
+          <span class="tag t-em">Suppliers → Factory → Distribution</span>
+        </div>
+      </div>
+
+      <div class="sys-item" style="border-color:rgba(244,114,182,0.35);">
+        <div class="sys-num bg-pk" style="color:var(--accent5);">3</div>
+        <div>
+          <h4>Customer Relationship Management Systems (CRM)</h4>
+          <p>نظام إدارة علاقات العملاء. بيتابع كل تعاملات الشركة مع العملاء. بيساعد الشركة تفهم احتياجات العملاء وتقدم خدمة أفضل.</p>
+          <div class="hb hb-pk" style="margin-top:12px;">
+            <h4>🎯 الهدف:</h4>
+            <p>رضا العميل 😎 + زيادة المبيعات + الاحتفاظ بالعملاء الحاليين. بيجمع بيانات العملاء من كل نقاط الاتصال.</p>
+          </div>
+          <span class="tag t-pk">Customer Satisfaction</span><span class="tag t-or">Increased Revenue</span>
+        </div>
+      </div>
+
+      <div class="sys-item" style="border-color:rgba(250,204,21,0.35);">
+        <div class="sys-num bg-ye" style="color:var(--accent6);">4</div>
+        <div>
+          <h4>Knowledge Management Systems (KMS)</h4>
+          <p>نظام إدارة المعرفة. بيجمع ويخزن ويوزع المعرفة والخبرة في الشركة. بيساعد الموظفين يستفيدوا من خبرات بعض.</p>
+          <div class="hb hb-ye" style="margin-top:12px;">
+            <h4>🎯 الهدف:</h4>
+            <p>تحسين أداء الشركة باستخدام المعرفة المتراكمة. منع ضياع الخبرة عند رحيل موظف متمرس.</p>
+          </div>
+          <span class="tag t-ye">Knowledge Sharing</span><span class="tag t-em">Better Performance</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hb hb-sky" style="margin-top:8px;">
+      <h4>💣 مثال Cross-Functional كامل مع ERP:</h4>
+      <p>طلب أونلاين من عميل:<br>
+      Sales يستقبل الطلب (CRM) → يتحقق من المخزن (ERP) → Finance تعالج الدفع (ERP) → Warehouse تحضّر الطلب (ERP) → Shipping توصله (SCM). كله سيستم واحد متكامل.</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ TAB: COLLABORATION ══════════════════════════════ -->
+  <div id="tab-collab" class="sec">
+    <div class="st"><div class="st-icon bg-em">🤝</div> Collaboration, Teamwork &amp; IS Function</div>
+
+    <div class="def">
+      <strong>E-business:</strong> استخدام التكنولوجيا الرقمية والإنترنت لتنفيذ العمليات التجارية الرئيسية في الشركة – ليس فقط البيع والشراء.<br><br>
+      <strong>E-commerce:</strong> الجزء من E-business المتعلق بشراء وبيع السلع والخدمات إلكترونيًا.<br><br>
+      <strong>Collaboration:</strong> العمل مع الآخرين لتحقيق أهداف مشتركة وواضحة.
+    </div>
+
+    <div class="g2">
+      <div class="card c-em">
+        <div class="ch"><div class="ci bg-em">🌐</div><h3>Global E-business</h3></div>
+        <p>الشركات دلوقتي بتشتغل عالميًا عبر الإنترنت. العمليات التجارية بتتم رقميًا عبر شبكات عالمية. ده أدى لزيادة التجارة الدولية وخفض التكاليف.</p>
+      </div>
+      <div class="card c-sky">
+        <div class="ch"><div class="ci bg-sky">🤝</div><h3>ليه Collaboration مهم؟</h3></div>
+        <ul>
+          <li>الشغل بقى معقد أكتر من إن شخص واحد يعمله</li>
+          <li>الفرق بتقدم منتجات وخدمات أفضل</li>
+          <li>الابتكار بيحتاج تبادل أفكار</li>
+          <li>الشركات الموزعة جغرافيًا محتاجة تتعاون</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="st2"><div class="st2-dot" style="background:var(--accent5);"></div> دور قسم IS في الشركة (IS Function)</div>
+
+    <div class="g3">
+      <div class="card c-sky">
+        <div class="ci bg-sky" style="margin-bottom:12px;font-size:1.3rem;">💻</div>
+        <h3>IT Infrastructure</h3>
+        <p style="margin-top:8px;">توفير الأجهزة والبرامج والشبكات اللازمة لتشغيل IS في الشركة.</p>
+      </div>
+      <div class="card c-ind">
+        <div class="ci bg-ind" style="margin-bottom:12px;font-size:1.3rem;">🔧</div>
+        <h3>IS Services</h3>
+        <p style="margin-top:8px;">تطوير وصيانة وتشغيل السيستمز الموجودة في الشركة.</p>
+      </div>
+      <div class="card c-em">
+        <div class="ci bg-em" style="margin-bottom:12px;font-size:1.3rem;">🤝</div>
+        <h3>Collaboration Support</h3>
+        <p style="margin-top:8px;">توفير الأدوات التي تدعم التعاون والتواصل بين الموظفين في أي مكان.</p>
+      </div>
+    </div>
+
+    <div class="st2"><div class="st2-dot" style="background:var(--accent4);"></div> الوظائف الرئيسية في قسم IS</div>
+    <div class="g2">
+      <div class="hb hb-or">
+        <h4>👨‍💼 Chief Information Officer (CIO)</h4>
+        <p>كبير مسؤولي المعلومات. مسؤول عن استراتيجية IT في الشركة. بيتخذ قرارات الاستثمار في التكنولوجيا.</p>
+      </div>
+      <div class="hb hb-sky">
+        <h4>👨‍💻 IS Department</h4>
+        <p>قسم IS بيضم: Programmers (مبرمجين) + Systems Analysts (محللي سيستمز) + IS Managers (مديري IS) + End Users (المستخدمين النهائيين).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ TAB: CONCEPTS ══════════════════════════════ -->
+  <div id="tab-concepts" class="sec">
+    <div class="st"><div class="st-icon bg-pk">💡</div> مفاهيم أساسية وأسئلة الامتحان</div>
+
+    <div class="sys-list">
+      <div class="sys-item" style="border-color:rgba(248,113,113,0.4);">
+        <div class="sys-num bg-red" style="color:var(--danger);">Q</div>
+        <div>
+          <h4>What is a business process?</h4>
+          <p><strong style="color:var(--accent3);">A:</strong> A set of logically related activities for achieving a specific business goal. Includes flows of material, information, and knowledge. May be tied to a specific functional area or be cross-functional. Businesses can be seen as a collection of business processes. Business processes may be assets (if efficient) or liabilities (if slow or complex).</p>
+          <span class="tag t-sky">Business Process</span>
+        </div>
+      </div>
+      <div class="sys-item" style="border-color:rgba(248,113,113,0.4);">
+        <div class="sys-num bg-red" style="color:var(--danger);">Q</div>
+        <div>
+          <h4>What is TPS and what does it do?</h4>
+          <p><strong style="color:var(--accent3);">A:</strong> Transaction Processing System – يخدم Operational Managers. يسجل ويعالج العمليات اليومية الروتينية. أمثلة: Payroll, Sales order entry, Shipping. يتعامل مع Structured predefined decisions. يتيح للمديرين متابعة حالة العمليات والعلاقات مع البيئة الخارجية.</p>
+          <span class="tag t-or">TPS</span>
+        </div>
+      </div>
+      <div class="sys-item" style="border-color:rgba(248,113,113,0.4);">
+        <div class="sys-num bg-red" style="color:var(--danger);">Q</div>
+        <div>
+          <h4>What is MIS?</h4>
+          <p><strong style="color:var(--accent3);">A:</strong> Management Information System – يخدم Middle Management. يوفر تقارير عن أداء الشركة بناءً على بيانات TPS. يجيب على أسئلة روتينية بإجراءات محددة مسبقًا. عنده قدرة تحليلية محدودة (Little analytic capability).</p>
+          <span class="tag t-sky">MIS</span>
+        </div>
+      </div>
+      <div class="sys-item" style="border-color:rgba(248,113,113,0.4);">
+        <div class="sys-num bg-red" style="color:var(--danger);">Q</div>
+        <div>
+          <h4>What is DSS?</h4>
+          <p><strong style="color:var(--accent3);">A:</strong> Decision Support System – يخدم Middle Management. يدعم قرارات غير روتينية. قد يستخدم بيانات خارجية بالإضافة لبيانات TPS/MIS. نوعان: Model-Driven DSS (Voyage-Estimating) وData-Driven DSS (Intrawest marketing).</p>
+          <span class="tag t-em">DSS</span>
+        </div>
+      </div>
+      <div class="sys-item" style="border-color:rgba(248,113,113,0.4);">
+        <div class="sys-num bg-red" style="color:var(--danger);">Q</div>
+        <div>
+          <h4>What is ESS?</h4>
+          <p><strong style="color:var(--accent3);">A:</strong> Executive Support System – يخدم Senior Management. يدعم قرارات استراتيجية غير روتينية تحتاج Judgment وEvaluation وInsight. يستخدم بيانات خارجية (قوانين جديدة، منافسين) وبيانات داخلية من MIS وDSS. مثال: Digital Dashboard بـ real-time view للأداء المالي.</p>
+          <span class="tag t-ye">ESS</span>
+        </div>
+      </div>
+      <div class="sys-item" style="border-color:rgba(248,113,113,0.4);">
+        <div class="sys-num bg-red" style="color:var(--danger);">Q</div>
+        <div>
+          <h4>What is an Enterprise Application? Name the four types.</h4>
+          <p><strong style="color:var(--accent3);">A:</strong> Systems for linking the entire enterprise. تشغّل Business Processes عبر كل الأقسام والمستويات. ممكن تمتد لبرا الشركة. الأنواع الأربعة: (1) Enterprise Systems (ERP) – تربط الأقسام الداخلية. (2) Supply Chain Management (SCM) – تربط الموردين. (3) Customer Relationship Management (CRM) – تدير علاقات العملاء. (4) Knowledge Management Systems (KMS) – تدير المعرفة.</p>
+          <span class="tag t-ind">Enterprise Applications</span>
+        </div>
+      </div>
+      <div class="sys-item" style="border-color:rgba(248,113,113,0.4);">
+        <div class="sys-num bg-red" style="color:var(--danger);">Q</div>
+        <div>
+          <h4>How does IT improve business processes?</h4>
+          <p><strong style="color:var(--accent3);">A:</strong> (1) Increasing efficiency of existing processes by automating manual steps. (2) Enabling entirely new processes: changing flow of information, replacing sequential steps with parallel steps, eliminating delays in decision making, supporting new business models.</p>
+          <span class="tag t-em">IT &amp; Processes</span>
+        </div>
+      </div>
+      <div class="sys-item" style="border-color:rgba(248,113,113,0.4);">
+        <div class="sys-num bg-red" style="color:var(--danger);">Q</div>
+        <div>
+          <h4>What is Business Intelligence?</h4>
+          <p><strong style="color:var(--accent3);">A:</strong> Data and software tools for organizing and analyzing data to help managers and users make improved decisions. يشمل MIS وDSS وESS كأدوات Business Intelligence.</p>
+          <span class="tag t-sky">Business Intelligence</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ TAB: QUIZ ══════════════════════════════ -->
+  <div id="tab-quiz" class="sec">
+    <div class="st"><div class="st-icon bg-ind">🧠</div> اختبر نفسك – Chapter 2</div>
+
+    <div class="scorebar" id="sbar" style="display:none;">
+      <div><div class="sn" id="snum">0</div><div class="sl">/ <span id="stot">12</span> إجابات صح</div></div>
+      <div class="pt"><div class="pf" id="sfill" style="width:0%"></div></div>
+      <button class="rbtn" onclick="resetQ()">🔄 إعادة</button>
+    </div>
+    <div id="qwrap"></div>
+  </div>
+
+  <!-- ══════════════════════════════ TAB: SUMMARY ══════════════════════════════ -->
+  <div id="tab-summary" class="sec">
+    <div class="st"><div class="st-icon bg-em">📋</div> الملخص النهائي</div>
+
+    <div class="hb hb-ye" style="margin-bottom:24px;">
+      <h4>⭐ أهم حاجة في الشابتر ده</h4>
+      <p>الشركات = مجموعة Business Processes. كل مستوى في الشركة ليه سيستم مختلف (TPS → MIS → DSS → ESS). Enterprise Applications بتربط كل حاجة ببعض.</p>
+    </div>
+
+    <div class="g2">
+      <div>
+        <div class="card c-or" style="margin-bottom:16px;">
+          <div class="ch"><div class="ci bg-or">🔄</div><h3>Business Processes</h3></div>
+          <ul class="cl" style="margin:12px 0 0;">
+            <li><span class="cli">📋</span>Set of activities to achieve a goal</li>
+            <li><span class="cli">🏭</span>Functional: Manufacturing, Sales, Finance, HR</li>
+            <li><span class="cli">🔀</span>Cross-Functional: يعدي على أكتر من قسم</li>
+            <li><span class="cli">✅</span>Asset (منظمة سريعة) أو Liability (بطيئة)</li>
+            <li><span class="cli">⚡</span>IT: Automation + Parallel Processing</li>
+          </ul>
+        </div>
+
+        <div class="card c-sky" style="margin-bottom:16px;">
+          <div class="ch"><div class="ci bg-sky">📊</div><h3>أنواع السيستمز الأربعة</h3></div>
+          <ul class="cl" style="margin:12px 0 0;">
+            <li><span class="cli">⚙️</span><strong>TPS</strong> – Operational – Routine – يومي</li>
+            <li><span class="cli">📊</span><strong>MIS</strong> – Middle – Routine – تقارير</li>
+            <li><span class="cli">🔬</span><strong>DSS</strong> – Middle – Non-routine – تحليل</li>
+            <li><span class="cli">👑</span><strong>ESS</strong> – Senior – Strategic – Dashboard</li>
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <div class="card c-ind" style="margin-bottom:16px;">
+          <div class="ch"><div class="ci bg-ind">🏗️</div><h3>Enterprise Applications الأربعة</h3></div>
+          <ul class="cl" style="margin:12px 0 0;">
+            <li><span class="cli">⚙️</span><strong>ERP</strong> – يربط كل الأقسام الداخلية</li>
+            <li><span class="cli">🔗</span><strong>SCM</strong> – يربط الموردين وسلسلة التوريد</li>
+            <li><span class="cli">🤝</span><strong>CRM</strong> – يدير علاقات العملاء</li>
+            <li><span class="cli">🧠</span><strong>KMS</strong> – يدير المعرفة والخبرة</li>
+          </ul>
+        </div>
+
+        <div class="card c-em" style="margin-bottom:16px;">
+          <div class="ch"><div class="ci bg-em">🔑</div><h3>أمثلة الامتحان – احفظهم</h3></div>
+          <ul class="cl" style="margin:12px 0 0;">
+            <li><span class="cli">🏪</span>Payroll System → TPS مثال</li>
+            <li><span class="cli">📋</span>Sales Report Monthly → MIS مثال</li>
+            <li><span class="cli">🚢</span>Voyage-Estimating → Model-Driven DSS</li>
+            <li><span class="cli">🏔️</span>Intrawest Marketing → Data-Driven DSS</li>
+            <li><span class="cli">📊</span>Digital Dashboard → ESS مثال</li>
+            <li><span class="cli">🛒</span>Customer order process → Cross-Functional</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card c-ye" style="margin-top:8px;">
+      <div class="ch"><div class="ci bg-ye">🔥</div><h3>Figure 2-1 كامل – احفظ الترتيب</h3></div>
+      <div class="proc-flow" style="margin-top:14px;">
+        <div class="proc-dept">
+          <div class="proc-dept-title" style="background:rgba(56,189,248,0.15);color:var(--accent);">🛒 Sales</div>
+          <div class="proc-step">Generate order</div>
+          <div class="proc-step">Submit order</div>
+        </div>
+        <div class="proc-dept">
+          <div class="proc-dept-title" style="background:rgba(250,204,21,0.12);color:var(--accent6);">💰 Accounting</div>
+          <div class="proc-step">Check credit</div>
+          <div class="proc-step">Approve credit</div>
+          <div class="proc-step">Generate invoice</div>
+        </div>
+        <div class="proc-dept">
+          <div class="proc-dept-title" style="background:rgba(52,211,153,0.12);color:var(--accent3);">🏭 Mfg &amp; Production</div>
+          <div class="proc-step">Assemble product</div>
+          <div class="proc-step">Ship product</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+// ── TABS ──
+function showTab(id) {
+  document.querySelectorAll('.sec').forEach(s => s.classList.remove('on'));
+  document.querySelectorAll('.tbtn').forEach(b => b.classList.remove('on'));
+  document.getElementById('tab-' + id).classList.add('on');
+  event.currentTarget.classList.add('on');
+}
+
+// ── QUIZ DATA ──
+const qs = [
+  {
+    q: "ما هو الـ Business Process؟",
+    o: ["برنامج كمبيوتر لإدارة العمل", "مجموعة خطوات منظمة لتحقيق هدف معين في الشركة", "نظام إدارة قواعد البيانات", "نوع من أنواع Enterprise Applications"],
+    a: 1, e: "Business Process = Set of logically related activities for achieving a specific business goal. يشمل تدفق المواد والمعلومات والمعرفة. الشركة = مجموعة business processes."
+  },
+  {
+    q: "في Figure 2-1 (طلب العميل)، ما هو ترتيب الخطوات الصحيح؟",
+    o: ["Accounting → Sales → Manufacturing", "Manufacturing → Sales → Accounting", "Sales (Generate order) → Accounting (Check credit, Generate invoice) → Manufacturing (Assemble, Ship)", "Sales → Manufacturing → Accounting"],
+    a: 2, e: "الترتيب الصحيح: Sales: Generate order → Submit order. ثم Accounting: Check credit → Approve credit → Generate invoice. ثم Manufacturing & Production: Assemble product → Ship product."
+  },
+  {
+    q: "كيف تحسّن IT الـ Business Processes بطريقة Sequential إلى Parallel؟",
+    o: ["تجعل الخطوات أطول", "تستبدل الخطوات المتتالية (الواحدة تلو الأخرى) بخطوات تتم في نفس الوقت", "تلغي عدد من الخطوات كليًا", "تحول الـ Manual work إلى Automated فقط"],
+    a: 1, e: "Replace sequential steps with parallel steps = تحويل الخطوات التسلسلية (خطوة ورا خطوة – بطيء 🐢) لخطوات متوازية تتم في نفس الوقت (سريع ⚡). ده أحد أهم طرق IT لتحسين الـ Processes."
+  },
+  {
+    q: "TPS تخدم أي مستوى في الشركة وتتعامل مع أي نوع من القرارات؟",
+    o: ["Senior Management + Strategic Decisions", "Middle Management + Non-routine Decisions", "Operational Managers & Staff + Routine/Structured Decisions", "All levels + All types of decisions"],
+    a: 2, e: "TPS (Transaction Processing Systems) تخدم Operational Managers & Staff. تتعامل مع Routine Structured Decisions (قرارات محددة سلفًا). تسجل العمليات اليومية. أمثلة: Payroll, Sales orders, Shipping."
+  },
+  {
+    q: "في Figure 2-2 (Payroll TPS)، ما هي مخرجات (Outputs) النظام؟",
+    o: ["بيانات الموظف فقط", "Employee Paychecks + Management Reports + Data to Government Agencies + Online Queries", "أوامر الشراء فقط", "تقارير المبيعات فقط"],
+    a: 1, e: "مخرجات Payroll TPS: Employee Paychecks (شيكات الرواتب) + Management Reports + Online Queries + Data to General Ledger + Data to Government Agencies + Messages to employees."
+  },
+  {
+    q: "ما الفرق الرئيسي بين MIS وDSS؟",
+    o: ["MIS للإدارة العليا وDSS للمستوى التشغيلي", "MIS يتعامل مع Routine decisions والتقارير، بينما DSS يتعامل مع Non-routine decisions والتحليل", "هما نفس الشيء بأسماء مختلفة", "MIS يستخدم External data وDSS يستخدم Internal data فقط"],
+    a: 1, e: "MIS = Middle Management + Routine decisions + تقارير من TPS + قدرة تحليلية محدودة. DSS = Middle Management + Non-routine decisions + TPS/MIS/External data + نماذج تحليلية قوية. كلاهما يخدم Middle Management لكن نوع القرارات مختلف."
+  },
+  {
+    q: "Voyage-Estimating System هو مثال على أي نوع من DSS؟",
+    o: ["Data-Driven DSS", "Model-Driven DSS", "Executive Support System", "Transaction Processing System"],
+    a: 1, e: "Voyage-Estimating DSS هو Model-Driven DSS. يستخدم analytical models لحساب تكلفة رحلات الشحن ومساعدة المديرين في تحديد أسعار عقود الشحن. يعمل على PC قوي ويُستخدم يوميًا."
+  },
+  {
+    q: "ما الذي يميز ESS عن باقي الأنظمة؟",
+    o: ["يخدم Operational level فقط", "يستخدم Internal data فقط", "يخدم Senior Management ويدعم Strategic Non-routine decisions تحتاج Judgment وInsight، ويدمج بيانات خارجية", "يتعامل مع Routine transactions فقط"],
+    a: 2, e: "ESS يخدم Senior Management. يدعم Non-routine Strategic decisions تحتاج Judgment وEvaluation وInsight. يدمج بيانات خارجية (قوانين جديدة، بيانات منافسين) مع بيانات من MIS وDSS. مثال: Digital Dashboard بـ real-time view."
+  },
+  {
+    q: "ما هي الأنواع الأربعة للـ Enterprise Applications؟",
+    o: ["TPS, MIS, DSS, ESS", "Enterprise Systems, SCM, CRM, KMS", "Hardware, Software, Networks, Data", "Sales, Finance, HR, Production"],
+    a: 1, e: "الأنواع الأربعة: (1) Enterprise Systems (ERP) – يربط الأقسام الداخلية. (2) Supply Chain Management (SCM) – يربط الموردين. (3) Customer Relationship Management (CRM) – يدير علاقات العملاء. (4) Knowledge Management Systems (KMS) – يدير المعرفة."
+  },
+  {
+    q: "ما هو CRM وما هدفه؟",
+    o: ["نظام لإدارة سلسلة التوريد وتقليل التكلفة", "نظام لإدارة علاقات العملاء بهدف تحسين رضاهم وزيادة المبيعات", "نظام لتخزين المعرفة والخبرة", "نظام لربط كل أقسام الشركة في قاعدة بيانات واحدة"],
+    a: 1, e: "CRM = Customer Relationship Management. يتابع كل تعاملات الشركة مع العملاء. الهدف: رضا العميل + زيادة المبيعات + الاحتفاظ بالعملاء. يجمع بيانات العملاء من كل نقاط الاتصال."
+  },
+  {
+    q: "في Figure 2-3، كيف يحصل MIS على بياناته؟",
+    o: ["مباشرة من الإنترنت", "من ثلاثة TPS: Order Processing System + Materials Resource Planning + General Ledger System", "من ESS فقط", "يولد بياناته بنفسه بدون مصدر خارجي"],
+    a: 1, e: "في Figure 2-3، ثلاثة TPS توفر بيانات ملخصة للـ MIS: (1) Order Processing System (Sales Data). (2) Materials Resource Planning (Unit Product Cost Data). (3) General Ledger System (Expense Data / Accounting Files). ثم MIS يولد Reports وOnline Dashboards للمديرين."
+  },
+  {
+    q: "ما المقصود بـ Cross-Functional Process ولماذا هو مهم؟",
+    o: ["Process داخل قسم واحد فقط", "Process يعبر عدة أقسام ويحتاج تنسيق محكم بينها", "نوع من Transaction Processing", "نوع من Enterprise Applications"],
+    a: 1, e: "Cross-Functional Process = عملية تمر عبر أكثر من قسم وظيفي. مهمة لأن معظم العمليات الحقيقية كإتمام طلب العميل تحتاج تعاون Sales + Accounting + Manufacturing. بدون تنسيق جيد تفشل العملية."
+  }
+];
+
+let score = 0;
+function buildQ() {
+  const wrap = document.getElementById('qwrap');
+  wrap.innerHTML = '';
+  document.getElementById('stot').textContent = qs.length;
+  qs.forEach((q, i) => {
+    const d = document.createElement('div');
+    d.className = 'qcard'; d.id = 'qc-' + i;
+    d.innerHTML = `
+      <div class="qq">❓ ${i+1}. ${q.q}</div>
+      <div class="qopts">${q.o.map((o, j) => `<button class="qopt" onclick="ansQ(${i},${j})">${o}</button>`).join('')}</div>
+      <div class="qfb" id="qf-${i}"></div>
+      <button class="qnxt" id="qn-${i}" onclick="goNext(${i})">التالي ←</button>
+    `;
+    wrap.appendChild(d);
+  });
+}
+function ansQ(qi, oi) {
+  const card = document.getElementById('qc-' + qi);
+  if (card.dataset.done) return;
+  card.dataset.done = '1';
+  const opts = card.querySelectorAll('.qopt');
+  opts.forEach(o => o.disabled = true);
+  opts[qs[qi].a].classList.add('ok');
+  const fb = document.getElementById('qf-' + qi);
+  const nxt = document.getElementById('qn-' + qi);
+  if (oi === qs[qi].a) {
+    score++;
+    fb.textContent = '✅ صح! ' + qs[qi].e;
+    fb.className = 'qfb show ok';
+  } else {
+    opts[oi].classList.add('no');
+    fb.textContent = '❌ غلط. ' + qs[qi].e;
+    fb.className = 'qfb show no';
+  }
+  updateScore();
+  nxt.classList.add('show');
+}
+function goNext(i) {
+  const n = document.getElementById('qc-' + (i+1));
+  if (n) n.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function updateScore() {
+  document.getElementById('sbar').style.display = 'flex';
+  document.getElementById('snum').textContent = score;
+  document.getElementById('sfill').style.width = (score / qs.length * 100) + '%';
+}
+function resetQ() {
+  score = 0;
+  document.getElementById('sbar').style.display = 'none';
+  buildQ();
+}
+buildQ();
+</script>
+</body>
+</html>
