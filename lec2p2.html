@@ -1,0 +1,1806 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIS – Lecture 2 Part 2 | مراجعة شاملة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e1a;
+  --bg2: #111827;
+  --bg3: #1a2236;
+  --card: #161d2e;
+  --border: #1e2d4a;
+  --accent1: #00c9ff;
+  --accent2: #7b2ff7;
+  --accent3: #ff6b35;
+  --accent4: #00e676;
+  --accent5: #ffd600;
+  --accent6: #ff4081;
+  --text: #e8eaf0;
+  --text2: #a0aabb;
+  --text3: #6b7a99;
+  --glow1: rgba(0,201,255,0.15);
+  --glow2: rgba(123,47,247,0.15);
+  --glow3: rgba(255,107,53,0.15);
+  --glow4: rgba(0,230,118,0.15);
+  --glow5: rgba(255,214,0,0.15);
+  --glow6: rgba(255,64,129,0.15);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Cairo', 'Tajawal', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ========= NOISE OVERLAY ========= */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* ========= HEADER ========= */
+.hero {
+  position: relative;
+  text-align: center;
+  padding: 60px 20px 40px;
+  background: linear-gradient(135deg, #0a0e1a 0%, #1a0a2e 50%, #0a1a2e 100%);
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -80px; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(123,47,247,0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent1), var(--accent2), transparent);
+}
+
+.badge {
+  display: inline-block;
+  background: linear-gradient(90deg, var(--accent2), var(--accent1));
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 16px;
+  border-radius: 20px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.2;
+  background: linear-gradient(135deg, #fff 0%, var(--accent1) 50%, var(--accent2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+}
+
+.hero p {
+  color: var(--text2);
+  font-size: 1rem;
+  max-width: 600px;
+  margin: 0 auto 24px;
+}
+
+/* ========= NAV PILLS ========= */
+.nav-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px 16px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+
+.nav-pill {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  color: var(--text2);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  font-family: 'Cairo', sans-serif;
+}
+
+.nav-pill:hover {
+  border-color: var(--accent1);
+  color: var(--accent1);
+  background: var(--glow1);
+}
+
+/* ========= MAIN LAYOUT ========= */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 16px 80px;
+}
+
+/* ========= SECTION HEADER ========= */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 48px 0 24px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--border);
+}
+
+.section-icon {
+  font-size: 1.8rem;
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.section-header h2 {
+  font-size: 1.4rem;
+  font-weight: 900;
+  line-height: 1.3;
+}
+
+.section-header .en {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--text3);
+  margin-top: 3px;
+}
+
+/* ========= CARDS ========= */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 16px 16px 0 0;
+}
+
+/* Color variants */
+.c1::before { background: var(--accent1); }
+.c2::before { background: var(--accent2); }
+.c3::before { background: var(--accent3); }
+.c4::before { background: var(--accent4); }
+.c5::before { background: var(--accent5); }
+.c6::before { background: var(--accent6); }
+
+.c1:hover { box-shadow: 0 8px 32px var(--glow1); }
+.c2:hover { box-shadow: 0 8px 32px var(--glow2); }
+.c3:hover { box-shadow: 0 8px 32px var(--glow3); }
+.c4:hover { box-shadow: 0 8px 32px var(--glow4); }
+.c5:hover { box-shadow: 0 8px 32px var(--glow5); }
+.c6:hover { box-shadow: 0 8px 32px var(--glow6); }
+
+.card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card p, .card li {
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: var(--text2);
+}
+
+.card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.card ul li {
+  padding: 4px 0 4px 20px;
+  position: relative;
+}
+
+.card ul li::before {
+  content: '▸';
+  position: absolute;
+  right: 0;
+  color: var(--accent1);
+  font-size: 0.8rem;
+}
+
+/* ========= HIGHLIGHT BOX ========= */
+.highlight {
+  background: linear-gradient(135deg, rgba(0,201,255,0.08), rgba(123,47,247,0.08));
+  border: 1px solid rgba(0,201,255,0.25);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin: 12px 0;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.highlight strong {
+  color: var(--accent1);
+}
+
+/* ========= EN TERM ========= */
+.en-term {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  background: rgba(0,201,255,0.1);
+  color: var(--accent1);
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(0,201,255,0.2);
+}
+
+.en-term.purple {
+  background: rgba(123,47,247,0.1);
+  color: #b794f4;
+  border-color: rgba(123,47,247,0.2);
+}
+
+.en-term.orange {
+  background: rgba(255,107,53,0.1);
+  color: var(--accent3);
+  border-color: rgba(255,107,53,0.2);
+}
+
+.en-term.green {
+  background: rgba(0,230,118,0.1);
+  color: var(--accent4);
+  border-color: rgba(0,230,118,0.2);
+}
+
+.en-term.yellow {
+  background: rgba(255,214,0,0.1);
+  color: var(--accent5);
+  border-color: rgba(255,214,0,0.2);
+}
+
+.en-term.pink {
+  background: rgba(255,64,129,0.1);
+  color: var(--accent6);
+  border-color: rgba(255,64,129,0.2);
+}
+
+/* ========= GRID ========= */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+@media (max-width: 640px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
+
+/* ========= COMPARISON TABLE ========= */
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.compare-table th {
+  background: var(--bg3);
+  padding: 12px 14px;
+  font-weight: 700;
+  text-align: right;
+  border-bottom: 2px solid var(--border);
+}
+
+.compare-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text2);
+}
+
+.compare-table tr:last-child td { border-bottom: none; }
+.compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* ========= TIMELINE / PYRAMID ========= */
+.pyramid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 20px;
+}
+
+.pyramid-level {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  text-align: center;
+  padding: 12px 20px;
+  transition: transform 0.2s;
+  cursor: default;
+}
+
+.pyramid-level:hover { transform: scale(1.03); }
+
+.pl1 { background: linear-gradient(90deg, rgba(123,47,247,0.3), rgba(0,201,255,0.3)); border: 1px solid var(--accent2); width: 90%; }
+.pl2 { background: linear-gradient(90deg, rgba(0,201,255,0.2), rgba(0,230,118,0.2)); border: 1px solid var(--accent1); width: 75%; }
+.pl3 { background: linear-gradient(90deg, rgba(0,230,118,0.2), rgba(255,214,0,0.2)); border: 1px solid var(--accent4); width: 60%; }
+.pl4 { background: linear-gradient(90deg, rgba(255,107,53,0.3), rgba(255,64,129,0.3)); border: 1px solid var(--accent3); width: 45%; }
+
+.pyramid-arrow {
+  font-size: 1.2rem;
+  color: var(--text3);
+}
+
+/* ========= STEPS ========= */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.step {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 12px 16px;
+  background: var(--bg3);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  transition: border-color 0.2s;
+}
+
+.step:hover { border-color: var(--accent1); }
+
+.step-num {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent2), var(--accent1));
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.step-body strong {
+  display: block;
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+}
+
+.step-body span {
+  font-size: 0.82rem;
+  color: var(--text2);
+}
+
+/* ========= TIME-SPACE MATRIX ========= */
+.matrix-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.matrix {
+  width: 100%;
+  min-width: 360px;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.matrix th, .matrix td {
+  padding: 12px 10px;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+
+.matrix th {
+  background: var(--bg3);
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.matrix td { color: var(--text2); line-height: 1.6; }
+
+.mx-tl { background: rgba(0,201,255,0.08); }
+.mx-tr { background: rgba(123,47,247,0.08); }
+.mx-bl { background: rgba(0,230,118,0.08); }
+.mx-br { background: rgba(255,107,53,0.08); }
+
+/* ========= Q&A ========= */
+.qa-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.qa-item {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.qa-q {
+  padding: 12px 16px;
+  background: var(--bg3);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.qa-q:hover { background: rgba(0,201,255,0.05); }
+
+.qa-q .arrow {
+  transition: transform 0.3s;
+  font-size: 0.7rem;
+  color: var(--accent1);
+}
+
+.qa-item.open .qa-q .arrow { transform: rotate(90deg); }
+
+.qa-a {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s;
+  background: var(--card);
+  color: var(--accent4);
+  font-size: 0.88rem;
+  line-height: 1.7;
+  padding: 0 16px;
+}
+
+.qa-item.open .qa-a {
+  max-height: 200px;
+  padding: 12px 16px;
+}
+
+/* ========= IMPORTANT BADGE ========= */
+.imp {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255,214,0,0.12);
+  border: 1px solid rgba(255,214,0,0.3);
+  color: var(--accent5);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 20px;
+  margin-right: 6px;
+}
+
+/* ========= DIVIDER ========= */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 32px 0;
+}
+
+/* ========= SCROLL TOP ========= */
+.scroll-top {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent2), var(--accent1));
+  color: #fff;
+  font-size: 1.2rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.2s;
+  z-index: 200;
+}
+
+.scroll-top.visible { opacity: 1; }
+.scroll-top:hover { transform: scale(1.1); }
+
+/* ========= PROGRESS BAR ========= */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent2), var(--accent1));
+  z-index: 300;
+  transition: width 0.1s;
+}
+
+/* ========= FEATURE PILL ========= */
+.feature-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  color: var(--text2);
+  margin: 4px;
+}
+
+.feature-pill span { font-size: 1rem; }
+
+/* ========= WARNING BOX ========= */
+.warn-box {
+  background: rgba(255,107,53,0.08);
+  border: 1px solid rgba(255,107,53,0.3);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 0.88rem;
+  color: #ffb08a;
+  margin: 12px 0;
+}
+
+.warn-box strong { color: var(--accent3); }
+
+/* ========= SUCCESS BOX ========= */
+.success-box {
+  background: rgba(0,230,118,0.07);
+  border: 1px solid rgba(0,230,118,0.25);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 0.88rem;
+  color: #90ffc9;
+  margin: 12px 0;
+}
+
+.success-box strong { color: var(--accent4); }
+
+/* ========= SUMMARY CARD ========= */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.sum-item {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.sum-item:hover { transform: translateY(-3px); }
+
+.sum-item .icon { font-size: 1.8rem; margin-bottom: 8px; }
+.sum-item .label { font-size: 0.75rem; color: var(--text3); margin-bottom: 4px; font-family: 'JetBrains Mono', monospace; }
+.sum-item .value { font-size: 0.9rem; font-weight: 700; color: var(--text); }
+
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card, .step, .qa-item {
+  animation: fadeInUp 0.5s ease both;
+}
+
+/* print: hide nav */
+@media print {
+  .nav-pills, .scroll-top, .progress-bar { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="badge">MIS · Lecture 2 · Part Two</div>
+  <h1>Global E-business<br>& Collaboration</h1>
+  <p>كل حرف وكل كلمة من المحاضرة — شرح كامل بالعربي مع الإنجليزي الأصلي</p>
+</div>
+
+<!-- NAV -->
+<nav class="nav-pills">
+  <a href="#erp" class="nav-pill">🗄️ Enterprise Systems</a>
+  <a href="#scm" class="nav-pill">🚚 SCM</a>
+  <a href="#crm" class="nav-pill">👤 CRM</a>
+  <a href="#kms" class="nav-pill">🧠 KMS</a>
+  <a href="#intranet" class="nav-pill">🌐 Intranet/Extranet</a>
+  <a href="#ebusiness" class="nav-pill">💻 E-Business</a>
+  <a href="#pyramid" class="nav-pill">📊 IS Pyramid</a>
+  <a href="#collab" class="nav-pill">🤝 Collaboration</a>
+  <a href="#collabmodel" class="nav-pill">⚙️ Collab Model</a>
+  <a href="#tools" class="nav-pill">🛠️ Tools</a>
+  <a href="#matrix" class="nav-pill">📐 Time/Space</a>
+  <a href="#itdept" class="nav-pill">🏢 IT Department</a>
+  <a href="#qa" class="nav-pill">❓ Q&A</a>
+</nav>
+
+<div class="container">
+
+<!-- ===================== 1. ENTERPRISE SYSTEMS ===================== -->
+<div id="erp">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(0,201,255,0.12);border:1px solid rgba(0,201,255,0.3)">🗄️</div>
+    <div>
+      <h2 style="color:var(--accent1)">Enterprise Systems <span class="en-term">ERP</span></h2>
+      <div class="en">Enterprise Resource Planning</div>
+    </div>
+  </div>
+
+  <div class="card c1">
+    <h3>💡 يعني إيه؟ — What is it?</h3>
+    <div class="highlight">
+      <strong>Enterprise systems</strong> — Collects data from different firm functions and stores data in <strong>single central data repository</strong><br>
+      <span style="color:var(--text2)">سيستم بيجمع بيانات كل أقسام الشركة في مكان واحد — قاعدة بيانات مركزية واحدة</span>
+    </div>
+    <div class="highlight">
+      <strong>Resolves problem of fragmented data</strong><br>
+      <span style="color:var(--text2)">بيحل مشكلة البيانات المتفرقة — قبل كده كل قسم عنده داتا لوحده</span>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card c1">
+      <h3>📦 بيجمع بيانات من</h3>
+      <ul>
+        <li><span class="en-term">Sales</span> — المبيعات</li>
+        <li><span class="en-term">HR</span> — الموارد البشرية</li>
+        <li><span class="en-term">Finance</span> — المالية</li>
+        <li><span class="en-term">Production</span> — الإنتاج</li>
+      </ul>
+      <div style="margin-top:12px;text-align:center;font-size:1.4rem">↓</div>
+      <div class="highlight" style="text-align:center"><strong>Central Database</strong><br><span style="color:var(--text2)">قاعدة بيانات مركزية واحدة</span></div>
+    </div>
+    <div class="card c1">
+      <h3>🎯 بيساعد في Enable:</h3>
+      <div class="highlight" style="margin-bottom:8px">
+        <strong>Coordination of daily activities</strong><br>
+        <span style="color:var(--text2)">تنسيق الأنشطة اليومية — كل الأقسام تشتغل مع بعض</span>
+      </div>
+      <div class="highlight" style="margin-bottom:8px">
+        <strong>Efficient response to customer orders</strong><br>
+        <span style="color:var(--text2)">(production, inventory) — استجابة سريعة لطلبات العملاء — الإنتاج + المخزن متربطين</span>
+      </div>
+      <div class="highlight">
+        <strong>Help managers make decisions</strong><br>
+        <span style="color:var(--text2)">about daily operations and longer-term planning — بيساعد المديرين في القرارات اليومية والتخطيط طويل المدى</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="warn-box">
+    <strong>❌ المشكلة قبل ERP:</strong> كل قسم عنده داتا لوحده 👉 فوضى وتعارض في المعلومات<br>
+    <strong>✅ بعد ERP:</strong> كل الشركة داتا واحدة 👉 نظام وتنسيق
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===================== 2. SCM ===================== -->
+<div id="scm">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(123,47,247,0.12);border:1px solid rgba(123,47,247,0.3)">🚚</div>
+    <div>
+      <h2 style="color:var(--accent2)">Supply Chain Management <span class="en-term purple">SCM</span></h2>
+      <div class="en">إدارة سلسلة التوريد</div>
+    </div>
+  </div>
+
+  <div class="card c2">
+    <h3>💡 يعني إيه؟</h3>
+    <div class="highlight">
+      <strong>Supply chain management (SCM) systems</strong> — Manage firm's relationships with suppliers<br>
+      <span style="color:var(--text2)">بيدير علاقة الشركة مع الموردين — يربط الموردين بالمصنع والتوزيع</span>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card c2">
+      <h3>📊 بيشارك معلومات زي: <br><small style="font-weight:400;color:var(--text2)">Share information about:</small></h3>
+      <ul>
+        <li><span class="en-term purple">Orders</span> — الطلبات</li>
+        <li><span class="en-term purple">Production</span> — الإنتاج</li>
+        <li><span class="en-term purple">Inventory levels</span> — مستويات المخزون</li>
+        <li><span class="en-term purple">Delivery of products and services</span> — التسليم</li>
+      </ul>
+    </div>
+    <div class="card c2">
+      <h3>🎯 الهدف Goal:</h3>
+      <div class="highlight">
+        <strong>Right amount of products</strong> — الكمية الصح<br>
+        <strong>to destination</strong> — للمكان الصح<br>
+        <strong>with least amount of time</strong> — ⏰ في أقل وقت<br>
+        <strong>and lowest cost</strong> — 💰 بأقل تكلفة
+      </div>
+    </div>
+  </div>
+
+  <!-- SCM Flow Diagram -->
+  <div class="card c2" style="padding:0;overflow:hidden">
+    <div style="padding:16px;border-bottom:1px solid var(--border)"><strong>🔗 سلسلة التوريد — Supply Chain Flow</strong></div>
+    <div style="padding:20px;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;text-align:center">
+      <div style="background:rgba(123,47,247,0.15);border:1px solid rgba(123,47,247,0.3);border-radius:10px;padding:12px 18px;font-size:0.85rem">🏭<br><strong>Supplier</strong><br><span style="color:var(--text3);font-size:0.75rem">المورد</span></div>
+      <div style="color:var(--accent2);font-size:1.5rem;font-weight:900">→</div>
+      <div style="background:rgba(0,201,255,0.1);border:1px solid rgba(0,201,255,0.25);border-radius:10px;padding:12px 18px;font-size:0.85rem">🏗️<br><strong>Production</strong><br><span style="color:var(--text3);font-size:0.75rem">الإنتاج</span></div>
+      <div style="color:var(--accent2);font-size:1.5rem;font-weight:900">→</div>
+      <div style="background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);border-radius:10px;padding:12px 18px;font-size:0.85rem">📦<br><strong>Inventory</strong><br><span style="color:var(--text3);font-size:0.75rem">المخزون</span></div>
+      <div style="color:var(--accent2);font-size:1.5rem;font-weight:900">→</div>
+      <div style="background:rgba(255,214,0,0.08);border:1px solid rgba(255,214,0,0.2);border-radius:10px;padding:12px 18px;font-size:0.85rem">🚚<br><strong>Delivery</strong><br><span style="color:var(--text3);font-size:0.75rem">التسليم</span></div>
+      <div style="color:var(--accent2);font-size:1.5rem;font-weight:900">→</div>
+      <div style="background:rgba(255,64,129,0.08);border:1px solid rgba(255,64,129,0.2);border-radius:10px;padding:12px 18px;font-size:0.85rem">👥<br><strong>Customer</strong><br><span style="color:var(--text3);font-size:0.75rem">العميل</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===================== 3. CRM ===================== -->
+<div id="crm">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(255,107,53,0.12);border:1px solid rgba(255,107,53,0.3)">👤</div>
+    <div>
+      <h2 style="color:var(--accent3)">Customer Relationship Management <span class="en-term orange">CRM</span></h2>
+      <div class="en">إدارة علاقات العملاء</div>
+    </div>
+  </div>
+
+  <div class="card c3">
+    <h3>💡 يعني إيه؟</h3>
+    <div class="highlight">
+      <strong>Customer relationship management systems</strong> — Provide information to coordinate all of the business processes that deal with customers<br>
+      <span style="color:var(--text2)">بيوفر معلومات لتنسيق كل العمليات اللي بتتعامل مع العملاء</span>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card c3">
+      <h3>🛒 Sales</h3>
+      <p>المبيعات<br><span style="font-size:0.8rem">تتبع عمليات البيع ورغبات العملاء</span></p>
+    </div>
+    <div class="card c3">
+      <h3>📣 Marketing</h3>
+      <p>التسويق<br><span style="font-size:0.8rem">استهداف العملاء الصح بالرسائل الصح</span></p>
+    </div>
+    <div class="card c3">
+      <h3>🎧 Customer Service</h3>
+      <p>خدمة العملاء<br><span style="font-size:0.8rem">حل المشاكل وتحسين التجربة</span></p>
+    </div>
+  </div>
+
+  <div class="success-box">
+    <strong>🎯 الهدف:</strong><br>
+    Helps firms <strong>identify</strong> (تحديد)، <strong>attract</strong> (جذب)، and <strong>retain</strong> (الاحتفاظ بـ) most <strong>profitable customers</strong> (أكتر العملاء ربحية)
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===================== 4. KMS ===================== -->
+<div id="kms">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(0,230,118,0.12);border:1px solid rgba(0,230,118,0.3)">🧠</div>
+    <div>
+      <h2 style="color:var(--accent4)">Knowledge Management Systems <span class="en-term green">KMS</span></h2>
+      <div class="en">أنظمة إدارة المعرفة</div>
+    </div>
+  </div>
+
+  <div class="card c4">
+    <h3>💡 يعني إيه؟</h3>
+    <div class="highlight">
+      <strong>Knowledge management systems (KMS)</strong> — Support processes for capturing and applying knowledge and expertise<br>
+      <span style="color:var(--text2)">بيدعم عمليات جمع وتطبيق المعرفة والخبرة</span>
+    </div>
+    <div class="highlight">
+      <strong>How to create, produce, deliver products and services</strong><br>
+      <span style="color:var(--text2)">إزاي تصنع وتنتج وتوصل المنتجات والخدمات</span>
+    </div>
+    <div class="highlight">
+      <strong>Collect internal knowledge and experience within firm</strong> and make it available to employees<br>
+      <span style="color:var(--text2)">بيجمع المعرفة والخبرة الداخلية في الشركة ويخليها متاحة لكل الموظفين</span>
+    </div>
+    <div class="highlight">
+      <strong>Link to external sources of knowledge</strong><br>
+      <span style="color:var(--text2)">بيربط بمصادر معرفة خارجية كمان</span>
+    </div>
+  </div>
+
+  <div class="success-box">
+    <strong>🔥 مثال:</strong> موظف جديد 👉 يدخل السيستم ويتعلم من خبرة الموظفين القدام — مش محتاج يبدأ من الصفر
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===================== 5. INTRANET & EXTRANET ===================== -->
+<div id="intranet">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(255,214,0,0.12);border:1px solid rgba(255,214,0,0.3)">🌐</div>
+    <div>
+      <h2 style="color:var(--accent5)">Intranet & Extranet</h2>
+      <div class="en">الشبكة الداخلية والخارجية</div>
+    </div>
+  </div>
+
+  <div class="card c5">
+    <h3>📌 Used to increase integration and expedite the flow of information</h3>
+    <p style="margin-top:8px">أيضاً بتُستخدم لزيادة الدمج وتسريع تدفق المعلومات</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card c5">
+      <h3>🏢 Intranet</h3>
+      <div class="highlight">
+        <strong>Internal company Web sites accessible only by employees</strong><br>
+        <span style="color:var(--text2)">مواقع ويب داخلية للشركة بس الموظفين يقدروا يدخلوها</span>
+      </div>
+      <ul style="margin-top:10px">
+        <li>HR system — نظام الموارد البشرية</li>
+        <li>ملفات الشركة الداخلية</li>
+        <li>الإجراءات والسياسات</li>
+      </ul>
+    </div>
+    <div class="card c5">
+      <h3>🌍 Extranet</h3>
+      <div class="highlight">
+        <strong>Company Web sites accessible externally only to vendors and suppliers</strong><br>
+        <span style="color:var(--text2)">مواقع الشركة بس بيدخلها من بره — الموردين والشركاء بس</span>
+      </div>
+      <div class="highlight">
+        <strong>Often used to coordinate supply chain</strong><br>
+        <span style="color:var(--text2)">بيتُستخدم كتير لتنسيق سلسلة التوريد</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="border-color:rgba(255,214,0,0.3)">
+    <h3>💣 الفرق بين Intranet و Extranet</h3>
+    <table class="compare-table" style="margin-top:12px">
+      <thead>
+        <tr>
+          <th>الميزة</th>
+          <th>🏢 Intranet</th>
+          <th>🌍 Extranet</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>النطاق</td><td>داخلي</td><td>خارجي</td></tr>
+        <tr><td>من يستخدمه</td><td>الموظفين فقط</td><td>الموردين والشركاء</td></tr>
+        <tr><td>الأمان</td><td>آمن داخلياً</td><td>مشاركة محدودة ومضبوطة</td></tr>
+        <tr><td>الهدف</td><td>تنسيق داخلي</td><td>تنسيق مع الموردين</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===================== 6. E-BUSINESS ===================== -->
+<div id="ebusiness">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(255,64,129,0.12);border:1px solid rgba(255,64,129,0.3)">💻</div>
+    <div>
+      <h2 style="color:var(--accent6)">E-business / E-commerce / E-government</h2>
+      <div class="en">التجارة الإلكترونية والأعمال الرقمية</div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card c6">
+      <h3>💻 E-business</h3>
+      <div class="highlight">
+        <strong>Use of digital technology and Internet to drive major business processes</strong><br>
+        <span style="color:var(--text2)">استخدام التكنولوجيا الرقمية والإنترنت لتشغيل العمليات التجارية الأساسية</span>
+      </div>
+      <p style="margin-top:8px">الأوسع — كل العمليات تبقى Digital: بيع + شراء + إدارة + تواصل</p>
+    </div>
+    <div class="card c6">
+      <h3>🛒 E-commerce</h3>
+      <div class="highlight">
+        <strong>Subset of e-business</strong><br>
+        <span style="color:var(--text2)">جزء من E-business</span>
+      </div>
+      <div class="highlight">
+        <strong>Buying and selling goods and services through Internet</strong><br>
+        <span style="color:var(--text2)">بيع وشراء السلع والخدمات عبر الإنترنت فقط</span>
+      </div>
+      <p style="margin-top:6px;font-size:0.8rem">مثال: Amazon, Jumia</p>
+    </div>
+    <div class="card c6">
+      <h3>🏛️ E-government</h3>
+      <div class="highlight">
+        <strong>Using Internet technology to deliver information and services to citizens, employees, and businesses</strong><br>
+        <span style="color:var(--text2)">الحكومة تستخدم الإنترنت لتقديم خدمات ومعلومات للمواطنين والموظفين والشركات</span>
+      </div>
+      <p style="margin-top:6px;font-size:0.8rem">مثال: استخراج أوراق أونلاين، دفع فواتير</p>
+    </div>
+  </div>
+
+  <div class="card" style="border-color:rgba(255,64,129,0.3)">
+    <h3>🎯 الفرق المهم جداً</h3>
+    <table class="compare-table" style="margin-top:12px">
+      <thead><tr><th>النوع</th><th>التعريف</th><th>النطاق</th></tr></thead>
+      <tbody>
+        <tr><td><span class="en-term pink">E-business</span></td><td>كل العمليات التجارية الرقمية</td><td>الأوسع</td></tr>
+        <tr><td><span class="en-term pink">E-commerce</span></td><td>البيع والشراء أونلاين فقط</td><td>جزء من E-business</td></tr>
+        <tr><td><span class="en-term pink">E-government</span></td><td>خدمات حكومية أونلاين</td><td>مستقل</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===================== 7. IS PYRAMID ===================== -->
+<div id="pyramid">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(0,201,255,0.12);border:1px solid rgba(0,201,255,0.3)">📊</div>
+    <div>
+      <h2 style="color:var(--accent1)">Information Systems Levels — Figure 2.26</h2>
+      <div class="en">مستويات أنظمة المعلومات في الشركة</div>
+    </div>
+  </div>
+
+  <div class="card c1">
+    <h3>📌 كل مستوى إداري ليه سيستم خاص — E-Business يجمعهم كلهم</h3>
+    <div class="pyramid" style="margin-top:16px">
+      <div class="pyramid-level pl1">
+        👑 <strong>Senior Management</strong> — المستوى الأعلى<br>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:0.8rem">EIS / ESS</span>
+        <span style="font-size:0.75rem;margin-right:8px;color:var(--text2)">Executive Information / Support System</span>
+      </div>
+      <div class="pyramid-arrow">▲</div>
+      <div class="pyramid-level pl2">
+        👔 <strong>Middle Management</strong> — الإدارة الوسطى<br>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:0.8rem">MIS + DSS</span>
+        <span style="font-size:0.75rem;margin-right:8px;color:var(--text2)">Management Information + Decision Support</span>
+      </div>
+      <div class="pyramid-arrow">▲</div>
+      <div class="pyramid-level pl3">
+        👷 <strong>Operational Management</strong> — المستوى التشغيلي<br>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:0.8rem">TPS</span>
+        <span style="font-size:0.75rem;margin-right:8px;color:var(--text2)">Transaction Processing System</span>
+      </div>
+      <div class="pyramid-arrow">▲</div>
+      <div class="pyramid-level pl4">
+        🌐 <strong>E-Business</strong> — يجمع كل المستويات
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3" style="margin-top:14px">
+    <div class="card c1">
+      <h3>🔴 TPS</h3>
+      <p><strong>Transaction Processing System</strong><br>المستوى التشغيلي — العمليات اليومية زي الطلبات والمشتريات</p>
+    </div>
+    <div class="card c1">
+      <h3>🟡 MIS / DSS</h3>
+      <p><strong>Management Information / Decision Support</strong><br>الإدارة الوسطى — تقارير واتخاذ قرارات</p>
+    </div>
+    <div class="card c1">
+      <h3>🟢 EIS / ESS</h3>
+      <p><strong>Executive Information / Support System</strong><br>الإدارة العليا — رؤية استراتيجية شاملة</p>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===================== 8. COLLABORATION ===================== -->
+<div id="collab">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(123,47,247,0.12);border:1px solid rgba(123,47,247,0.3)">🤝</div>
+    <div>
+      <h2 style="color:var(--accent2)">Collaboration — التعاون</h2>
+      <div class="en">Systems for Collaboration and Teamwork</div>
+    </div>
+  </div>
+
+  <div class="card c2">
+    <h3>📌 تعريف Collaboration:</h3>
+    <div class="highlight">
+      <strong>Short-lived or long-term</strong> — ممكن يكون قصير (Project) أو طويل (Team دائم)<br>
+      <strong>Informal or formal (teams)</strong> — ممكن يكون غير رسمي أو رسمي (فرق عمل)
+    </div>
+  </div>
+
+  <div class="card c2">
+    <h3>🚀 ليه التعاون بقى مهم؟ — Growing importance of collaboration:</h3>
+    <div class="steps" style="margin-top:12px">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Changing nature of work</strong>
+          <span>طبيعة الشغل اتغيرت — الشغل بقى أكتر تعقيداً ومحتاج تعاون</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Growth of professional work — "interaction jobs"</strong>
+          <span>نمو شغل التفاعل — شغل محتاج تعامل مع ناس وتنسيق مستمر</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Changing organization of the firm</strong>
+          <span>تغيير هيكل الشركة — Teams بدل Hierarchy</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <strong>Changing scope of the firm</strong>
+          <span>تغيير نطاق الشركة — شركات بقت تشتغل عالمياً</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <strong>Emphasis on innovation</strong>
+          <span>التركيز على الابتكار — الأفكار بتطلع من التعاون</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <strong>Changing culture of work</strong>
+          <span>ثقافة الشغل اتغيرت — مشاركة أكتر وحرية أكتر</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Social Business -->
+  <div class="card c2" style="margin-top:16px">
+    <h3>🌐 Social Business</h3>
+    <div class="highlight">
+      <strong>Use of social networking platforms, internal and external</strong><br>
+      <span style="color:var(--text2)">استخدام منصات التواصل الاجتماعي داخل وخارج الشركة</span>
+    </div>
+    <div class="highlight">
+      <strong>Engage employees, customers, and suppliers</strong><br>
+      <span style="color:var(--text2)">إشراك الموظفين والعملاء والموردين</span>
+    </div>
+    <div class="highlight">
+      <strong>Goal is to deepen interactions and expedite information sharing</strong><br>
+      <span style="color:var(--text2)">الهدف: تعميق التفاعلات وتسريع تبادل المعلومات</span>
+    </div>
+    <div class="highlight">
+      <strong>"Conversations"</strong> — محادثات مباشرة — تفاعل حقيقي مش أوامر بس
+    </div>
+    <div class="highlight">
+      <strong>Requires information transparency</strong><br>
+      <span style="color:var(--text2)">محتاج شفافية — المعلومات لازم تبقى واضحة ومفتوحة</span>
+    </div>
+    <div class="highlight">
+      <strong>Driving the exchange of information without intervention from executives or others</strong><br>
+      <span style="color:var(--text2)">بيدفع تبادل المعلومات من غير تدخل المديرين أو غيرهم</span>
+    </div>
+  </div>
+
+  <!-- Benefits of Collaboration -->
+  <div class="card c2" style="margin-top:16px">
+    <h3>💼 Business benefits of collaboration and teamwork</h3>
+    <div class="highlight">
+      <strong>Investments in collaboration technology can bring organization improvements, returning high ROI</strong><br>
+      <span style="color:var(--text2)">الاستثمار في تكنولوجيا التعاون بيجيب تحسينات كبيرة وعائد استثمار عالي</span>
+    </div>
+    <div class="grid-2" style="margin-top:12px">
+      <div>
+        <div class="feature-pill" style="margin-bottom:6px;width:100%"><span>⚡</span> <span class="en-term purple">Productivity</span> — إنتاجية أعلى</div>
+        <div class="feature-pill" style="margin-bottom:6px;width:100%"><span>⭐</span> <span class="en-term purple">Quality</span> — جودة أفضل</div>
+        <div class="feature-pill" style="margin-bottom:6px;width:100%"><span>💡</span> <span class="en-term purple">Innovation</span> — ابتكار</div>
+      </div>
+      <div>
+        <div class="feature-pill" style="margin-bottom:6px;width:100%"><span>🎧</span> <span class="en-term purple">Customer service</span> — خدمة أحسن</div>
+        <div class="feature-pill" style="margin-bottom:6px;width:100%"><span>💰</span> <span class="en-term purple">Financial performance</span></div>
+        <div class="feature-pill" style="width:100%"><span>📈</span> Profitability, sales, sales growth — ربحية ومبيعات</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===================== 9. COLLABORATION MODEL ===================== -->
+<div id="collabmodel">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(0,230,118,0.12);border:1px solid rgba(0,230,118,0.3)">⚙️</div>
+    <div>
+      <h2 style="color:var(--accent4)">Collaboration Model — Figure 2-7</h2>
+      <div class="en">نموذج التعاون الناجح</div>
+    </div>
+  </div>
+
+  <!-- Model Diagram -->
+  <div class="card c4" style="padding:24px">
+    <h3 style="text-align:center;margin-bottom:20px">🎯 Successful collaboration requires:</h3>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:16px">
+      <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center">
+        <div style="background:rgba(0,230,118,0.1);border:1.5px solid rgba(0,230,118,0.3);border-radius:14px;padding:16px 20px;text-align:center;min-width:160px">
+          <div style="font-size:1.5rem;margin-bottom:6px">🧠</div>
+          <div style="font-weight:700;color:var(--accent4)">Collaboration<br>Capability</div>
+          <div style="font-size:0.75rem;color:var(--text3);margin-top:4px">قدرة الشركة على التعاون</div>
+        </div>
+        <div style="display:flex;align-items:center;font-size:1.5rem;color:var(--text3)">+</div>
+        <div style="background:rgba(0,201,255,0.1);border:1.5px solid rgba(0,201,255,0.3);border-radius:14px;padding:16px 20px;text-align:center;min-width:160px">
+          <div style="font-size:1.5rem;margin-bottom:6px">💻</div>
+          <div style="font-weight:700;color:var(--accent1)">Collaboration<br>Technology</div>
+          <div style="font-size:0.75rem;color:var(--text3);margin-top:4px">التكنولوجيا المستخدمة</div>
+        </div>
+        <div style="display:flex;align-items:center;font-size:1.5rem;color:var(--text3)">+</div>
+        <div style="background:rgba(255,214,0,0.1);border:1.5px solid rgba(255,214,0,0.3);border-radius:14px;padding:16px 20px;text-align:center;min-width:160px">
+          <div style="font-size:1.5rem;margin-bottom:6px">⭐</div>
+          <div style="font-weight:700;color:var(--accent5)">Collaboration<br>Quality</div>
+          <div style="font-size:0.75rem;color:var(--text3);margin-top:4px">جودة التعاون نفسه</div>
+        </div>
+      </div>
+      <div style="font-size:1.8rem;color:var(--accent4)">↓</div>
+      <div style="background:linear-gradient(135deg,rgba(0,230,118,0.15),rgba(0,201,255,0.15));border:2px solid rgba(0,230,118,0.4);border-radius:14px;padding:16px 32px;text-align:center">
+        <div style="font-size:1.4rem;margin-bottom:4px">🏆</div>
+        <div style="font-weight:900;font-size:1.1rem;color:var(--accent4)">Firm Performance</div>
+        <div style="font-size:0.8rem;color:var(--text2)">أداء الشركة يتحسن</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3" style="margin-top:14px">
+    <div class="card c4">
+      <h3>🔓 Open Culture</h3>
+      <p>ثقافة مفتوحة — الناس تشارك أفكارها بحرية</p>
+    </div>
+    <div class="card c4">
+      <h3>🌿 Decentralized Structure</h3>
+      <p>هيكل لامركزي — مش كل القرار عند مدير واحد — فيه حرية للموظفين</p>
+    </div>
+    <div class="card c4">
+      <h3>🌐 Breadth of Collaboration</h3>
+      <p>اتساع التعاون — التعاون بين أقسام كتير مش قسم واحد</p>
+    </div>
+  </div>
+
+  <!-- Command vs Collaborative -->
+  <div class="grid-2" style="margin-top:14px">
+    <div class="card c3">
+      <h3>❌ Command and Control Organization</h3>
+      <div class="highlight">
+        <strong>"Command and control" organizations</strong><br>
+        المدير يقول والباقي ينفذ بس
+      </div>
+      <div class="warn-box">
+        <strong>No value placed on teamwork</strong> — مفيش قيمة للعمل الجماعي<br>
+        <strong>or lower-level participation in decisions</strong> — الموظفين مش بيشاركوا في القرارات
+      </div>
+    </div>
+    <div class="card c4">
+      <h3>✅ Collaborative Business Culture</h3>
+      <div class="success-box">
+        <strong>Senior managers rely on teams of employees</strong> — المدير بيعتمد على الفرق<br>
+        <strong>Policies, products, designs, processes, and systems rely on teams</strong> — كل حاجة بتعتمد على الفرق<br>
+        <strong>The managers purpose is to build teams</strong> — هدف المدير يبني وينظم الفرق
+      </div>
+    </div>
+  </div>
+
+  <!-- Collaboration Technology Usage -->
+  <div class="card c4" style="margin-top:14px">
+    <h3>💻 Collaboration Technology — استخدامين مهمين</h3>
+    <div class="grid-2" style="margin-top:12px">
+      <div class="highlight">
+        <strong>Use of collaboration technology for implementation and operations</strong><br>
+        <span style="color:var(--text2)">في التنفيذ والعمليات اليومية</span>
+      </div>
+      <div class="highlight">
+        <strong>Use of collaborative technology for strategic planning</strong><br>
+        <span style="color:var(--text2)">في التخطيط الاستراتيجي طويل المدى</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===================== 10. TOOLS ===================== -->
+<div id="tools">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(0,201,255,0.12);border:1px solid rgba(0,201,255,0.3)">🛠️</div>
+    <div>
+      <h2 style="color:var(--accent1)">Tools for Collaboration and Teamwork</h2>
+      <div class="en">أدوات التعاون والعمل الجماعي</div>
+    </div>
+  </div>
+
+  <div class="card c1">
+    <h3>📌 الأدوات الأساسية:</h3>
+    <div class="grid-2" style="margin-top:12px">
+      <div>
+        <div class="feature-pill" style="width:100%;margin-bottom:8px"><span>📧</span> <span class="en-term">E-mail and instant messaging</span></div>
+        <p style="font-size:0.8rem;color:var(--text3);margin-bottom:10px;padding-right:8px">بريد إلكتروني ورسائل فورية — التواصل السريع</p>
+        <div class="feature-pill" style="width:100%;margin-bottom:8px"><span>📖</span> <span class="en-term">Wikis</span></div>
+        <p style="font-size:0.8rem;color:var(--text3);margin-bottom:10px;padding-right:8px">صفحات يكتب فيها الفريق ويعدل عليها</p>
+        <div class="feature-pill" style="width:100%;margin-bottom:8px"><span>🌐</span> <span class="en-term">Virtual worlds</span></div>
+        <p style="font-size:0.8rem;color:var(--text3);padding-right:8px">بيئات افتراضية للتفاعل</p>
+      </div>
+      <div>
+        <div class="feature-pill" style="width:100%;margin-bottom:8px"><span>💼</span> <span class="en-term">Collaboration and social business platforms</span></div>
+        <p style="font-size:0.8rem;color:var(--text3);padding-right:8px">منصات التعاون والأعمال الاجتماعية</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card c1" style="margin-top:14px">
+    <h3>📌 الأدوات المتقدمة:</h3>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">
+      <div style="background:rgba(0,201,255,0.08);border:1px solid rgba(0,201,255,0.2);border-radius:10px;padding:10px 16px;font-size:0.85rem;text-align:center">
+        📹 <strong>Virtual meeting systems (telepresence)</strong><br><span style="color:var(--text3);font-size:0.75rem">اجتماعات افتراضية — كأنك موجود</span>
+      </div>
+      <div style="background:rgba(0,201,255,0.08);border:1px solid rgba(0,201,255,0.2);border-radius:10px;padding:10px 16px;font-size:0.85rem;text-align:center">
+        🔵 <strong>Google Apps / Google Sites</strong><br><span style="color:var(--text3);font-size:0.75rem">أدوات جوجل للتعاون</span>
+      </div>
+      <div style="background:rgba(0,201,255,0.08);border:1px solid rgba(0,201,255,0.2);border-radius:10px;padding:10px 16px;font-size:0.85rem;text-align:center">
+        ☁️ <strong>Cyberlockers</strong><br><span style="color:var(--text3);font-size:0.75rem">تخزين سحابي مشترك</span>
+      </div>
+      <div style="background:rgba(0,201,255,0.08);border:1px solid rgba(0,201,255,0.2);border-radius:10px;padding:10px 16px;font-size:0.85rem;text-align:center">
+        🪟 <strong>Microsoft SharePoint</strong><br><span style="color:var(--text3);font-size:0.75rem">منصة مايكروسوفت للتعاون</span>
+      </div>
+      <div style="background:rgba(0,201,255,0.08);border:1px solid rgba(0,201,255,0.2);border-radius:10px;padding:10px 16px;font-size:0.85rem;text-align:center">
+        🪷 <strong>Lotus Notes</strong><br><span style="color:var(--text3);font-size:0.75rem">منصة IBM للتعاون</span>
+      </div>
+      <div style="background:rgba(0,201,255,0.08);border:1px solid rgba(0,201,255,0.2);border-radius:10px;padding:10px 16px;font-size:0.85rem;text-align:center">
+        🌐 <strong>Enterprise social networking tools</strong><br><span style="color:var(--text3);font-size:0.75rem">أدوات شبكات التواصل للشركات</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enterprise Social Networking Features -->
+  <div class="card c1" style="margin-top:14px">
+    <h3>🌐 Enterprise social networking software capabilities — المميزات</h3>
+    <div class="grid-2" style="margin-top:12px">
+      <div>
+        <div class="highlight" style="margin-bottom:8px">
+          <strong>Profiles</strong> — بيانات المستخدم ومعلوماته الوظيفية
+        </div>
+        <div class="highlight" style="margin-bottom:8px">
+          <strong>Content sharing</strong> — مشاركة الملفات والمحتوى
+        </div>
+        <div class="highlight" style="margin-bottom:8px">
+          <strong>Feeds and notifications</strong> — إشعارات وتحديثات مستمرة
+        </div>
+      </div>
+      <div>
+        <div class="highlight" style="margin-bottom:8px">
+          <strong>Groups and team workspaces</strong> — فرق عمل ومساحات مشتركة
+        </div>
+        <div class="highlight" style="margin-bottom:8px">
+          <strong>Tagging and social bookmarking</strong> — تنظيم المعلومات وتصنيفها
+        </div>
+        <div class="highlight">
+          <strong>Permissions and privacy</strong> — التحكم في الوصول والخصوصية
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 Steps Evaluating -->
+  <div class="card c1" style="margin-top:14px">
+    <h3>🧠 Six steps in evaluating software tools — 6 خطوات لتقييم أدوات التعاون</h3>
+    <div class="steps" style="margin-top:12px">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>What are your firm's collaboration challenges?</strong>
+          <span>المشكلة إيه؟ — ايه تحديات التعاون عندك؟</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>What kinds of solutions are available?</strong>
+          <span>الحلول المتاحة إيه؟</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Analyze available products' cost and benefits.</strong>
+          <span>تحليل التكلفة مقابل الفايدة — Cost vs Benefits</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <strong>Evaluate security risks.</strong>
+          <span>تقييم مخاطر الأمان 🔐</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <strong>Consult users for implementation and training issues.</strong>
+          <span>اسأل المستخدمين عن التطبيق والتدريب</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <strong>Evaluate product vendors.</strong>
+          <span>تقييم الشركات المزودة للمنتج</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===================== 11. TIME/SPACE MATRIX ===================== -->
+<div id="matrix">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(255,107,53,0.12);border:1px solid rgba(255,107,53,0.3)">📐</div>
+    <div>
+      <h2 style="color:var(--accent3)">Time/Space Collaboration Tool Matrix — Figure 2-8</h2>
+      <div class="en">مصفوفة الوقت والمكان لأدوات التعاون</div>
+    </div>
+  </div>
+
+  <div class="card c3">
+    <h3>📌 Two dimensions of collaboration technologies — بُعدين مهمين:</h3>
+    <div class="grid-2" style="margin-top:12px">
+      <div class="highlight">
+        <strong>Space (or location)</strong> — المكان<br>
+        <span style="color:var(--text2)">Remote (عن بُعد) or Co-located (نفس المكان)</span>
+      </div>
+      <div class="highlight">
+        <strong>Time</strong> — الوقت<br>
+        <span style="color:var(--text2)">Synchronous (نفس الوقت) or Asynchronous (أوقات مختلفة)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card c3" style="margin-top:14px">
+    <h3 style="margin-bottom:16px">📊 The Time/Space Collaboration Tool Matrix — الجدول الكامل</h3>
+    <div class="matrix-wrap">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th></th>
+            <th>⏰ Same time<br><span style="font-weight:400;font-size:0.75rem">Synchronous — نفس الوقت</span></th>
+            <th>⌛ Different time<br><span style="font-weight:400;font-size:0.75rem">Asynchronous — أوقات مختلفة</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>🏢 Co-located<br><span style="font-weight:400;font-size:0.75rem">Same place — نفس المكان</span></th>
+            <td class="mx-tl">
+              <strong>Face to face interactions</strong><br>
+              تفاعل وجهاً لوجه<br>
+              <span style="color:var(--text3);font-size:0.78rem">decision rooms, single display groupware, shared table, wall displays, roomware</span><br>
+              <span style="font-size:0.78rem;color:var(--accent4)">غرف الاجتماعات، شاشات مشتركة</span>
+            </td>
+            <td class="mx-tr">
+              <strong>Continuous task</strong><br>
+              مهام مستمرة<br>
+              <span style="color:var(--text3);font-size:0.78rem">team rooms, large public display, shift work groupware, project management</span><br>
+              <span style="font-size:0.78rem;color:var(--accent4)">غرف الفرق، إدارة المشاريع، الشيفتات</span>
+            </td>
+          </tr>
+          <tr>
+            <th>🌍 Remote<br><span style="font-weight:400;font-size:0.75rem">Different place — مكان مختلف</span></th>
+            <td class="mx-bl">
+              <strong>Remote interactions</strong><br>
+              تفاعل عن بُعد<br>
+              <span style="color:var(--text3);font-size:0.78rem">video conferencing, instant messaging, chats/MUDs/virtual worlds, shared screens, multi-user editors</span><br>
+              <span style="font-size:0.78rem;color:var(--accent4)">Zoom، Chat، عوالم افتراضية</span>
+            </td>
+            <td class="mx-br">
+              <strong>Communication + coordination</strong><br>
+              تواصل + تنسيق<br>
+              <span style="color:var(--text3);font-size:0.78rem">email, bulletin boards, blogs, asynchronous conferencing, group calendars, workflow, version control, wikis</span><br>
+              <span style="font-size:0.78rem;color:var(--accent4)">Email، Blogs، Wikis، تقويمات</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:14px">
+    <div class="card c3">
+      <h3>🔄 Synchronous — نفس الوقت</h3>
+      <p>كلكم بتتواصلوا في نفس اللحظة<br>مثال: Zoom meeting، Chat</p>
+    </div>
+    <div class="card c3">
+      <h3>⏳ Asynchronous — أوقات مختلفة</h3>
+      <p>كل واحد يرد لما يقدر<br>مثال: Email، Blog، Wiki</p>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===================== 12. IT DEPARTMENT ===================== -->
+<div id="itdept">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(0,230,118,0.12);border:1px solid rgba(0,230,118,0.3)">🏢</div>
+    <div>
+      <h2 style="color:var(--accent4)">The Information Systems Function in Business</h2>
+      <div class="en">قسم نظم المعلومات في الشركة</div>
+    </div>
+  </div>
+
+  <div class="card c4">
+    <h3>📌 Information systems department:</h3>
+    <div class="highlight">
+      <strong>Formal organizational unit responsible for information technology services</strong><br>
+      <span style="color:var(--text2)">وحدة تنظيمية رسمية مسؤولة عن خدمات تكنولوجيا المعلومات</span>
+    </div>
+    <div class="highlight">
+      <strong>Often headed by chief information officer (CIO)</strong><br>
+      <span style="color:var(--text2)">غالباً بيترأسه الـ CIO — كبير مسؤولي المعلومات</span>
+    </div>
+  </div>
+
+  <!-- Officers -->
+  <div class="grid-2" style="margin-top:14px">
+    <div class="card c4">
+      <h3>👔 المناصب القيادية — Senior positions:</h3>
+      <div class="steps" style="margin-top:10px">
+        <div class="step">
+          <div class="step-num" style="background:linear-gradient(135deg,var(--accent4),#00b860);width:40px;height:40px;border-radius:10px;font-size:0.75rem;font-family:'JetBrains Mono',monospace">CIO</div>
+          <div class="step-body">
+            <strong>Chief Information Officer</strong>
+            <span>رئيس قسم المعلومات — المسؤول الأول</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:linear-gradient(135deg,var(--accent6),#c62828);width:40px;height:40px;border-radius:10px;font-size:0.75rem;font-family:'JetBrains Mono',monospace">CSO</div>
+          <div class="step-body">
+            <strong>Chief Security Officer</strong>
+            <span>مسؤول الأمن الأول 🔐</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:linear-gradient(135deg,var(--accent2),#4a148c);width:40px;height:40px;border-radius:10px;font-size:0.75rem;font-family:'JetBrains Mono',monospace">CKO</div>
+          <div class="step-body">
+            <strong>Chief Knowledge Officer</strong>
+            <span>مسؤول المعرفة الأول 🧠</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:linear-gradient(135deg,var(--accent5),#f57f17);width:40px;height:40px;border-radius:10px;font-size:0.75rem;font-family:'JetBrains Mono',monospace;color:#000">CPO</div>
+          <div class="step-body">
+            <strong>Chief Privacy Officer</strong>
+            <span>مسؤول الخصوصية الأول</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card c4">
+      <h3>👨‍💼 الوظائف — Roles:</h3>
+      <div class="steps" style="margin-top:10px">
+        <div class="step">
+          <div class="step-num">👨‍💻</div>
+          <div class="step-body">
+            <strong>Programmers</strong>
+            <span>بيكتبوا الكود والبرامج</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">🧠</div>
+          <div class="step-body">
+            <strong>Systems analysts</strong>
+            <span>بيفهموا المشكلة ويصمموا الحل</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">👔</div>
+          <div class="step-body">
+            <strong>Information systems managers</strong>
+            <span>بيديروا السيستم والفريق</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- End Users -->
+  <div class="card c4" style="margin-top:14px">
+    <h3>👥 End Users — المستخدمون النهائيون</h3>
+    <div class="highlight">
+      <strong>Representatives of other departments for whom applications are developed</strong><br>
+      <span style="color:var(--text2)">ممثلون من الأقسام التانية اللي بتتطور التطبيقات لهم</span>
+    </div>
+    <div class="highlight">
+      <strong>Increasing role in system design, development</strong><br>
+      <span style="color:var(--text2)">دورهم بيزيد في تصميم وتطوير السيستم — مش بس مستخدمين</span>
+    </div>
+  </div>
+
+  <!-- IT Governance -->
+  <div class="card c4" style="margin-top:14px">
+    <h3>🧠 IT Governance — حوكمة تكنولوجيا المعلومات</h3>
+    <div class="highlight">
+      <strong>Strategies and policies for using IT in the organization</strong><br>
+      <span style="color:var(--text2)">استراتيجيات وسياسات استخدام IT في المنظمة</span>
+    </div>
+    <div class="grid-3" style="margin-top:12px">
+      <div class="highlight" style="text-align:center">
+        <strong>Decision rights</strong><br>
+        <span style="color:var(--text2);font-size:0.8rem">حقوق اتخاذ القرار</span>
+      </div>
+      <div class="highlight" style="text-align:center">
+        <strong>Accountability</strong><br>
+        <span style="color:var(--text2);font-size:0.8rem">المسؤولية والمحاسبة</span>
+      </div>
+      <div class="highlight" style="text-align:center">
+        <strong>Organization of IS function</strong><br>
+        <span style="color:var(--text2);font-size:0.8rem">تنظيم قسم نظم المعلومات</span>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top:12px">
+      <div class="card c4" style="padding:14px">
+        <h3 style="font-size:0.9rem">🏛️ Centralized</h3>
+        <p>مركزي — كل حاجة في مكان واحد تحت سيطرة مركزية</p>
+      </div>
+      <div class="card c4" style="padding:14px">
+        <h3 style="font-size:0.9rem">🌿 Decentralized</h3>
+        <p>لامركزي — كل قسم ليه سيستم وصلاحية خاصة بيه</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===================== FINAL SUMMARY ===================== -->
+<div>
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(255,214,0,0.15);border:1px solid rgba(255,214,0,0.4)">🎯</div>
+    <div>
+      <h2 style="color:var(--accent5)">الخلاصة النهائية — Final Summary</h2>
+      <div class="en">كل حاجة في سطر واحد</div>
+    </div>
+  </div>
+
+  <div class="summary-grid">
+    <div class="sum-item" style="border-color:rgba(0,201,255,0.3)">
+      <div class="icon">🗄️</div>
+      <div class="label">ERP</div>
+      <div class="value">سيستم واحد<br>لكل الشركة</div>
+    </div>
+    <div class="sum-item" style="border-color:rgba(123,47,247,0.3)">
+      <div class="icon">🚚</div>
+      <div class="label">SCM</div>
+      <div class="value">إدارة<br>الموردين</div>
+    </div>
+    <div class="sum-item" style="border-color:rgba(255,107,53,0.3)">
+      <div class="icon">👤</div>
+      <div class="label">CRM</div>
+      <div class="value">إدارة<br>العملاء</div>
+    </div>
+    <div class="sum-item" style="border-color:rgba(0,230,118,0.3)">
+      <div class="icon">🧠</div>
+      <div class="label">KMS</div>
+      <div class="value">إدارة<br>المعرفة</div>
+    </div>
+    <div class="sum-item" style="border-color:rgba(255,214,0,0.3)">
+      <div class="icon">🏢</div>
+      <div class="label">Intranet</div>
+      <div class="value">داخل<br>الشركة فقط</div>
+    </div>
+    <div class="sum-item" style="border-color:rgba(255,214,0,0.3)">
+      <div class="icon">🌍</div>
+      <div class="label">Extranet</div>
+      <div class="value">مع الموردين<br>من بره</div>
+    </div>
+    <div class="sum-item" style="border-color:rgba(255,64,129,0.3)">
+      <div class="icon">💻</div>
+      <div class="label">E-business</div>
+      <div class="value">كل الشغل<br>رقمياً</div>
+    </div>
+    <div class="sum-item" style="border-color:rgba(255,64,129,0.3)">
+      <div class="icon">🛒</div>
+      <div class="label">E-commerce</div>
+      <div class="value">بيع/شراء<br>أونلاين</div>
+    </div>
+    <div class="sum-item" style="border-color:rgba(0,201,255,0.3)">
+      <div class="icon">🤝</div>
+      <div class="label">Collaboration</div>
+      <div class="value">شغل جماعي<br>منظم</div>
+    </div>
+    <div class="sum-item" style="border-color:rgba(0,230,118,0.3)">
+      <div class="icon">🔄</div>
+      <div class="label">Synchronous</div>
+      <div class="value">نفس الوقت<br>Zoom مثلاً</div>
+    </div>
+    <div class="sum-item" style="border-color:rgba(255,107,53,0.3)">
+      <div class="icon">⏳</div>
+      <div class="label">Asynchronous</div>
+      <div class="value">أوقات مختلفة<br>Email مثلاً</div>
+    </div>
+    <div class="sum-item" style="border-color:rgba(123,47,247,0.3)">
+      <div class="icon">🏢</div>
+      <div class="label">IT Dept</div>
+      <div class="value">CIO يقوده<br>مسؤول عن IT</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===================== Q&A ===================== -->
+<div id="qa">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(255,64,129,0.12);border:1px solid rgba(255,64,129,0.3)">❓</div>
+    <div>
+      <h2 style="color:var(--accent6)">أسئلة امتحان متوقعة 🔥</h2>
+      <div class="en">اضغط على السؤال عشان تشوف الإجابة</div>
+    </div>
+  </div>
+
+  <div class="qa-list">
+    <div class="qa-item">
+      <div class="qa-q" onclick="toggleQA(this)">❓ What is ERP? <span class="arrow">▶</span></div>
+      <div class="qa-a">✅ Enterprise systems that integrate all business functions in one central data repository — بيجمع بيانات كل أقسام الشركة في مكان واحد ويحل مشكلة الداتا المتفرقة</div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-q" onclick="toggleQA(this)">❓ What does ERP enable? <span class="arrow">▶</span></div>
+      <div class="qa-a">✅ Coordination of daily activities + Efficient response to customer orders + Help managers make decisions about daily operations and longer-term planning</div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-q" onclick="toggleQA(this)">❓ What is SCM? <span class="arrow">▶</span></div>
+      <div class="qa-a">✅ Supply Chain Management — Manages firm's relationships with suppliers, shares info about orders/production/inventory/delivery, goal is right amount at destination with least time and lowest cost</div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-q" onclick="toggleQA(this)">❓ What is CRM? <span class="arrow">▶</span></div>
+      <div class="qa-a">✅ Customer Relationship Management — Provides info to coordinate business processes dealing with customers (sales, marketing, service) — helps identify, attract, and retain most profitable customers</div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-q" onclick="toggleQA(this)">❓ What is KMS? <span class="arrow">▶</span></div>
+      <div class="qa-a">✅ Knowledge Management System — Supports capturing and applying knowledge and expertise within the firm, collects internal knowledge and makes it available to employees, and links to external sources</div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-q" onclick="toggleQA(this)">❓ الفرق بين Intranet و Extranet؟ <span class="arrow">▶</span></div>
+      <div class="qa-a">✅ Intranet = internal company websites accessible only by employees (داخلي للموظفين بس) | Extranet = accessible externally only to vendors and suppliers, often used to coordinate supply chain (خارجي للموردين والشركاء)</div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-q" onclick="toggleQA(this)">❓ الفرق بين E-business و E-commerce؟ <span class="arrow">▶</span></div>
+      <div class="qa-a">✅ E-business = use of digital technology and Internet to drive MAJOR business processes (الأوسع — كل العمليات) | E-commerce = SUBSET of e-business — buying and selling goods and services through Internet فقط</div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-q" onclick="toggleQA(this)">❓ What is E-government? <span class="arrow">▶</span></div>
+      <div class="qa-a">✅ Using Internet technology to deliver information and services to citizens, employees, and businesses — الحكومة بتستخدم الإنترنت لتقديم خدمات ومعلومات</div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-q" onclick="toggleQA(this)">❓ What are the benefits of collaboration? <span class="arrow">▶</span></div>
+      <div class="qa-a">✅ Productivity + Quality + Innovation + Customer service + Financial performance (Profitability, sales, sales growth) — إنتاجية + جودة + ابتكار + خدمة عملاء + أداء مالي</div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-q" onclick="toggleQA(this)">❓ What are the 3 elements of successful collaboration (Figure 2-7)? <span class="arrow">▶</span></div>
+      <div class="qa-a">✅ Collaboration Capability (open culture, decentralized structure, breadth) + Collaboration Technology + Collaboration Quality = Firm Performance</div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-q" onclick="toggleQA(this)">❓ الفرق بين Synchronous و Asynchronous؟ <span class="arrow">▶</span></div>
+      <div class="qa-a">✅ Synchronous = same time (نفس الوقت) مثل Video conferencing, Instant messaging | Asynchronous = different time (أوقات مختلفة) مثل Email, Wikis, Blogs</div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-q" onclick="toggleQA(this)">❓ What is CIO? + Other C-level officers? <span class="arrow">▶</span></div>
+      <div class="qa-a">✅ CIO = Chief Information Officer (head of IT dept) | CSO = Chief Security Officer | CKO = Chief Knowledge Officer | CPO = Chief Privacy Officer</div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-q" onclick="toggleQA(this)">❓ What is IT Governance? <span class="arrow">▶</span></div>
+      <div class="qa-a">✅ Strategies and policies for using IT in the organization — includes decision rights, accountability, organization of IS function (centralized or decentralized)</div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-q" onclick="toggleQA(this)">❓ What are the 6 steps in evaluating collaboration software? <span class="arrow">▶</span></div>
+      <div class="qa-a">✅ 1) Collaboration challenges 2) Available solutions 3) Cost vs Benefits 4) Security risks 5) Consult users (implementation & training) 6) Evaluate product vendors</div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-q" onclick="toggleQA(this)">❓ What is Social Business? <span class="arrow">▶</span></div>
+      <div class="qa-a">✅ Use of social networking platforms (internal and external) to engage employees, customers, and suppliers — goal is to deepen interactions and expedite information sharing — requires information transparency</div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-q" onclick="toggleQA(this)">❓ Why is collaboration growing in importance? (6 reasons) <span class="arrow">▶</span></div>
+      <div class="qa-a">✅ 1) Changing nature of work 2) Growth of "interaction jobs" 3) Changing organization of firm 4) Changing scope of firm 5) Emphasis on innovation 6) Changing culture of work</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end container -->
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// Progress bar
+window.addEventListener('scroll', () => {
+  const winScroll = document.documentElement.scrollTop;
+  const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const scrolled = (winScroll / height) * 100;
+  document.getElementById('progressBar').style.width = scrolled + '%';
+
+  // Scroll top button
+  const btn = document.getElementById('scrollTop');
+  if (winScroll > 300) btn.classList.add('visible');
+  else btn.classList.remove('visible');
+});
+
+// Q&A toggle
+function toggleQA(el) {
+  const item = el.parentElement;
+  item.classList.toggle('open');
+}
+
+// Stagger card animation
+document.querySelectorAll('.card').forEach((card, i) => {
+  card.style.animationDelay = (i * 0.04) + 's';
+});
+</script>
+</body>
+</html>
