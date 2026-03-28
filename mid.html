@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIS — Past Exams Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080810;
+    --surface: #0f0f1a;
+    --card: #13131f;
+    --border: #1e1e30;
+    --accent: #a78bfa;
+    --green: #00e5a0;
+    --red: #ff4d6d;
+    --text: #e8e8f8;
+    --muted: #5a5a80;
+    --gold: #ffd166;
+    --tf-true: #00c2ff;
+    --tf-false: #ff6b9d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; min-height: 100vh; overflow-x: hidden; }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: linear-gradient(rgba(167,139,250,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(167,139,250,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none; z-index: 0;
+  }
+  .wrapper { position: relative; z-index: 1; max-width: 880px; margin: 0 auto; padding: 44px 20px 90px; }
+
+  /* HEADER */
+  header { text-align: center; margin-bottom: 48px; }
+  .tag { display: inline-block; background: rgba(167,139,250,0.12); border: 1px solid rgba(167,139,250,0.35); color: var(--accent); font-size: 10px; letter-spacing: 3.5px; text-transform: uppercase; padding: 6px 18px; border-radius: 2px; margin-bottom: 18px; }
+  h1 { font-family: 'Syne', sans-serif; font-size: clamp(28px, 5.5vw, 50px); font-weight: 800; line-height: 1.05; letter-spacing: -1px; background: linear-gradient(130deg, #fff 0%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 10px; }
+  .subtitle { color: var(--muted); font-size: 12px; letter-spacing: 1px; }
+
+  /* TABS */
+  .tabs { display: flex; gap: 8px; margin-bottom: 36px; flex-wrap: wrap; justify-content: center; }
+  .tab-btn { background: var(--surface); border: 1px solid var(--border); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 9px 18px; cursor: pointer; border-radius: 4px; transition: all 0.2s; }
+  .tab-btn.active { background: rgba(167,139,250,0.15); border-color: var(--accent); color: var(--accent); }
+  .tab-btn:hover:not(.active) { border-color: var(--muted); color: var(--text); }
+
+  /* SCOREBOARD */
+  #scoreboard { display: flex; gap: 10px; justify-content: center; margin-bottom: 32px; flex-wrap: wrap; }
+  .score-pill { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 9px 18px; font-size: 11px; display: flex; align-items: center; gap: 8px; }
+  .score-pill span { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 20px; }
+  .score-pill.correct span { color: var(--green); }
+  .score-pill.wrong span { color: var(--red); }
+  .score-pill.total span { color: var(--gold); }
+
+  /* PROGRESS */
+  .progress-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; height: 5px; margin-bottom: 40px; overflow: hidden; }
+  .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent), #60a5fa); width: 0%; transition: width 0.5s ease; border-radius: 4px; }
+
+  /* SECTION LABEL */
+  .section-label { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); border-left: 3px solid var(--accent); padding-left: 12px; margin: 44px 0 20px; }
+  .section-desc { font-size: 11px; color: var(--muted); margin-top: 4px; letter-spacing: 0; font-family: 'DM Mono', monospace; }
+
+  /* EXAM BADGE */
+  .exam-badge { display: inline-block; background: rgba(255,209,102,0.1); border: 1px solid rgba(255,209,102,0.3); color: var(--gold); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 2px 8px; border-radius: 2px; margin-left: 8px; vertical-align: middle; }
+
+  /* QUESTION CARD */
+  .q-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 24px 26px; margin-bottom: 12px; position: relative; overflow: hidden; animation: slideIn 0.3s ease both; }
+  .q-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), transparent); opacity: 0; transition: opacity 0.3s; }
+  .q-card.answered::before { opacity: 1; }
+  .q-num { font-size: 9px; letter-spacing: 2px; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .q-text { font-family: 'Syne', sans-serif; font-size: 14.5px; font-weight: 600; line-height: 1.55; color: var(--text); margin-bottom: 16px; }
+
+  /* MCQ OPTIONS */
+  .options { display: flex; flex-direction: column; gap: 7px; }
+  .option-btn { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 12.5px; padding: 11px 14px; text-align: left; cursor: pointer; transition: all 0.2s; display: flex; align-items: flex-start; gap: 10px; line-height: 1.45; }
+  .option-btn:hover:not(:disabled) { background: rgba(167,139,250,0.08); border-color: var(--accent); transform: translateX(4px); }
+  .option-btn .letter { flex-shrink: 0; width: 21px; height: 21px; border-radius: 4px; background: var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; transition: all 0.2s; }
+  .option-btn:disabled { cursor: default; }
+  .option-btn.correct-ans { background: rgba(0,229,160,0.1); border-color: var(--green); color: var(--green); }
+  .option-btn.correct-ans .letter { background: var(--green); color: #000; }
+  .option-btn.wrong-ans { background: rgba(255,77,109,0.08); border-color: var(--red); color: var(--red); }
+  .option-btn.wrong-ans .letter { background: var(--red); color: #fff; }
+  .option-btn.reveal-correct { border-color: var(--green); background: rgba(0,229,160,0.04); }
+
+  /* TRUE/FALSE */
+  .tf-wrap { display: flex; gap: 10px; margin-top: 4px; }
+  .tf-btn { flex: 1; padding: 12px; border-radius: 6px; border: 1px solid var(--border); background: rgba(255,255,255,0.025); color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s; letter-spacing: 1px; }
+  .tf-btn:hover:not(:disabled) { transform: translateY(-2px); }
+  .tf-btn.tf-true-btn:hover:not(:disabled) { background: rgba(0,194,255,0.12); border-color: var(--tf-true); color: var(--tf-true); }
+  .tf-btn.tf-false-btn:hover:not(:disabled) { background: rgba(255,107,157,0.12); border-color: var(--tf-false); color: var(--tf-false); }
+  .tf-btn:disabled { cursor: default; }
+  .tf-btn.tf-correct { background: rgba(0,229,160,0.12); border-color: var(--green); color: var(--green); }
+  .tf-btn.tf-wrong { background: rgba(255,77,109,0.1); border-color: var(--red); color: var(--red); }
+  .tf-btn.tf-reveal { border-color: var(--green); background: rgba(0,229,160,0.06); color: var(--green); }
+
+  /* FEEDBACK */
+  .feedback { margin-top: 12px; padding: 10px 14px; border-radius: 6px; font-size: 11.5px; line-height: 1.65; display: none; border-left: 3px solid; }
+  .feedback.show { display: block; }
+  .feedback.ok { border-color: var(--green); color: var(--green); background: rgba(0,229,160,0.05); }
+  .feedback.bad { border-color: var(--red); color: var(--red); background: rgba(255,77,109,0.05); }
+
+  /* SECTION PAGE */
+  .section-page { display: none; }
+  .section-page.active { display: block; }
+
+  /* FINISH */
+  .finish-btn-wrap { text-align: center; margin-top: 50px; }
+  .finish-btn { background: transparent; border: 2px solid var(--accent); color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; padding: 13px 40px; cursor: pointer; border-radius: 6px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.2s; }
+  .finish-btn:hover { background: var(--accent); color: #000; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(167,139,250,0.3); }
+
+  /* MODAL */
+  #results-modal { display: none; position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); align-items: center; justify-content: center; }
+  #results-modal.show { display: flex; }
+  .modal-box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 48px 44px; text-align: center; max-width: 460px; width: 90%; animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+  @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .modal-emoji { font-size: 56px; margin-bottom: 14px; }
+  .modal-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+  .modal-score { font-size: 50px; font-family: 'Syne', sans-serif; font-weight: 800; color: var(--gold); margin: 14px 0; }
+  .modal-sub { color: var(--muted); font-size: 12px; margin-bottom: 28px; line-height: 1.6; }
+  .btn-restart { background: var(--accent); color: #000; border: none; border-radius: 6px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; padding: 13px 32px; cursor: pointer; letter-spacing: 1px; transition: all 0.2s; }
+  .btn-restart:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(167,139,250,0.35); }
+
+  @keyframes slideIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  @media(max-width:600px) { .q-card { padding: 18px 14px; } .q-text { font-size: 13.5px; } .option-btn { font-size: 11.5px; } .tf-btn { font-size: 12px; } }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <header>
+    <div class="tag">MIS · Past Exams Compilation</div>
+    <h1>MIS Midterm Master Quiz</h1>
+    <p class="subtitle">Midterm 2024 · Spring 2021 Model A & C · Fall 2024</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('all')">◈ All Questions</button>
+    <button class="tab-btn" onclick="switchTab('mid2024')">Midterm 2024</button>
+    <button class="tab-btn" onclick="switchTab('spring2021c')">Spring 2021 — C</button>
+    <button class="tab-btn" onclick="switchTab('spring2021a')">Spring 2021 — A</button>
+    <button class="tab-btn" onclick="switchTab('fall2024')">Fall 2024</button>
+  </div>
+
+  <div id="scoreboard">
+    <div class="score-pill correct">✔ Correct <span id="sc-correct">0</span></div>
+    <div class="score-pill wrong">✘ Wrong <span id="sc-wrong">0</span></div>
+    <div class="score-pill total">◈ Answered <span id="sc-total">0</span></div>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="prog-bar"></div></div>
+
+  <div id="quiz-container"></div>
+
+  <div class="finish-btn-wrap">
+    <button class="finish-btn" onclick="showResults()">See Final Score →</button>
+  </div>
+</div>
+
+<div id="results-modal">
+  <div class="modal-box">
+    <div class="modal-emoji" id="modal-emoji">🎯</div>
+    <div class="modal-title" id="modal-title">Done!</div>
+    <div class="modal-score" id="modal-score">0/0</div>
+    <div class="modal-sub" id="modal-sub"></div>
+    <button class="btn-restart" onclick="restart()">↺ Restart</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// QUESTION BANK
+// type: 'mcq' or 'tf'
+// source: exam identifier
+// ═══════════════════════════════════════════════════════
+
+const ALL_QUESTIONS = [
+
+  // ─────────────────────────────────────────────────────
+  // MIDTERM 2024 — MCQ (Q1–Q10)
+  // ─────────────────────────────────────────────────────
+  { id:1, source:'mid2024', type:'mcq', badge:'Midterm 2024 · Q1',
+    q:"_____ systems manage firm's relationships with suppliers, and share information about orders, production, inventory levels, delivery of products and services.",
+    opts:["Customer Relationship Management (CRM)","Supply Chain Management (SCM)","Enterprise Resource Planning (ERP)","Knowledge Management Systems (KMS)"],
+    ans:1, exp:"SCM manages supplier relationships and shares info about orders, production, inventory, and delivery." },
+
+  { id:2, source:'mid2024', type:'mcq', badge:'Midterm 2024 · Q2',
+    q:"A(n) _____ system collects data from various key business processes and stores the data in a single, comprehensive data repository, usable by other parts of the business.",
+    opts:["SCM","CRM","Enterprise (ERP)","KMS"],
+    ans:2, exp:"ERP (Enterprise Resource Planning) collects data from all key processes and stores it in ONE central data repository." },
+
+  { id:3, source:'mid2024', type:'mcq', badge:'Midterm 2024 · Q3',
+    q:"The use of information systems because of necessity describes the business objective of _____.",
+    opts:["Operational excellence","Competitive advantage","Survival","Improved decision making"],
+    ans:2, exp:"SURVIVAL = using IS out of necessity — industry-level changes or government regulations force adoption." },
+
+  { id:4, source:'mid2024', type:'mcq', badge:'Midterm 2024 · Q4',
+    q:"From a business perspective, raw data is transformed systematically during various stages, transforming it into valuable information, in a process called _____.",
+    opts:["The data pipeline","The information value chain","The data warehouse","Business intelligence processing"],
+    ans:1, exp:"The INFORMATION VALUE CHAIN = raw data transformed through stages, each adding value, producing better decisions and higher profits." },
+
+  { id:5, source:'mid2024', type:'mcq', badge:'Midterm 2024 · Q5',
+    q:"_____ is a cloud computing model that provides on-demand access to computing resources such as servers, storage, networking, and virtualization.",
+    opts:["Software as a Service (SaaS)","Platform as a Service (PaaS)","Infrastructure as a Service (IaaS)","Database as a Service (DBaaS)"],
+    ans:2, exp:"IaaS = provides on-demand computing INFRASTRUCTURE: servers, storage, networking, virtualization." },
+
+  { id:6, source:'mid2024', type:'mcq', badge:'Midterm 2024 · Q6',
+    q:"Sales order entry, hotel reservations, and payroll are examples of what type of system?",
+    opts:["Management Information System (MIS)","Decision Support System (DSS)","Executive Support System (ESS)","Transaction Processing System (TPS)"],
+    ans:3, exp:"TPS handles day-to-day OPERATIONAL transactions: payroll, reservations, order entry. It serves operational management." },
+
+  { id:7, source:'mid2024', type:'mcq', badge:'Midterm 2024 · Q7',
+    q:"_____ is output returned to appropriate members of the organization to help them evaluate or correct the input stage.",
+    opts:["Processing","Input","Feedback","Output"],
+    ans:2, exp:"FEEDBACK = output returned to appropriate people to evaluate or correct the INPUT stage. It closes the IS loop." },
+
+  { id:8, source:'mid2024', type:'mcq', badge:'Midterm 2024 · Q8',
+    q:"The association rules used in market basket analysis result in ____.",
+    opts:["Data","Raw facts","Knowledge","Information"],
+    ans:2, exp:"Market basket analysis via association rules produces KNOWLEDGE — actionable insights derived from data patterns." },
+
+  { id:9, source:'mid2024', type:'mcq', badge:'Midterm 2024 · Q9',
+    q:"All of the following are Business Intelligence (BI) systems EXCEPT _____.",
+    opts:["Decision Support System (DSS)","Management Information System (MIS)","Executive Support System (ESS)","Transaction Processing System (TPS)"],
+    ans:3, exp:"TPS is NOT a BI system. BI includes DSS, MIS, and ESS. TPS handles routine operational transactions only." },
+
+  { id:10, source:'mid2024', type:'mcq', badge:'Midterm 2024 · Q10',
+    q:"Introducing a new streaming service is an example of _____.",
+    opts:["Operational excellence","Customer intimacy","New business model","Competitive advantage"],
+    ans:2, exp:"A streaming service = NEW BUSINESS MODEL. A business model describes how a company produces, delivers, and sells to create wealth." },
+
+  // ─────────────────────────────────────────────────────
+  // MIDTERM 2024 — TRUE/FALSE (Q11–Q20)
+  // ─────────────────────────────────────────────────────
+  { id:11, source:'mid2024', type:'tf', badge:'Midterm 2024 · Q11',
+    q:"Enterprise systems and enterprise applications are synonymous.",
+    ans:false, exp:"FALSE — Enterprise SYSTEMS (ERP) and enterprise APPLICATIONS (CRM, SCM, KMS) are NOT the same. Enterprise applications is the broader term." },
+
+  { id:12, source:'mid2024', type:'tf', badge:'Midterm 2024 · Q12',
+    q:"In an organization, the middle level works with production and service workers.",
+    ans:false, exp:"FALSE — MIDDLE management works with knowledge workers and scientists. OPERATIONAL management works with production/service workers." },
+
+  { id:13, source:'mid2024', type:'tf', badge:'Midterm 2024 · Q13',
+    q:"TPS systems serve the strategy level of an organization.",
+    ans:false, exp:"FALSE — TPS serves the OPERATIONAL level. Strategy level is served by ESS (Executive Support Systems)." },
+
+  { id:14, source:'mid2024', type:'tf', badge:'Midterm 2024 · Q14',
+    q:"There is considerable variation in the returns firms receive from systems investments.",
+    ans:true, exp:"TRUE — Not all IT investments return equally. Complementary assets (right people, processes, business model) determine how much value is derived." },
+
+  { id:15, source:'mid2024', type:'tf', badge:'Midterm 2024 · Q15',
+    q:"Assembling a product is a cross-functional business process.",
+    ans:false, exp:"FALSE — Assembling a product is a FUNCTIONAL (manufacturing) process. Cross-functional processes span multiple departments, like fulfilling an order." },
+
+  { id:16, source:'mid2024', type:'tf', badge:'Midterm 2024 · Q16',
+    q:"A fully digital firm produces only digital goods or services.",
+    ans:false, exp:"FALSE — A digital firm uses digital networks for ALL key business relationships and processes. It doesn't have to produce only digital goods." },
+
+  { id:17, source:'mid2024', type:'tf', badge:'Midterm 2024 · Q17',
+    q:"The cost of attracting new customers is higher than retaining existing customers.",
+    ans:true, exp:"TRUE — Acquiring new customers costs significantly more than keeping existing ones. This is why customer intimacy is a key strategic objective." },
+
+  { id:18, source:'mid2024', type:'tf', badge:'Midterm 2024 · Q18',
+    q:"Management Information Systems commonly use descriptive analysis.",
+    ans:true, exp:"TRUE — MIS produces routine reports and descriptive summaries (what happened?) for middle management decision making." },
+
+  { id:19, source:'mid2024', type:'tf', badge:'Midterm 2024 · Q19',
+    q:"BI is an umbrella term that encompasses techniques for deriving actionable business insights.",
+    ans:true, exp:"TRUE — Business Intelligence (BI) = umbrella term covering DSS, ESS, MIS, and techniques for deriving actionable insights from data." },
+
+  { id:20, source:'mid2024', type:'tf', badge:'Midterm 2024 · Q20',
+    q:"IT audit is the strategies and policies for using IT in the organization.",
+    ans:false, exp:"FALSE — IT audit is the REVIEW and EXAMINATION of IT controls and systems. IT GOVERNANCE refers to strategies and policies for using IT." },
+
+  // ─────────────────────────────────────────────────────
+  // SPRING 2021 MODEL C — MCQ (Q1–Q20)
+  // ─────────────────────────────────────────────────────
+  { id:21, source:'spring2021c', type:'tf', badge:'Spring 2021 C · Q1',
+    q:"Developing a new product, fulfilling an order, and hiring a new employee are examples of business processes.",
+    ans:true, exp:"TRUE — These are all business processes: structured sets of activities performed within an organization to produce a specific output." },
+
+  { id:22, source:'spring2021c', type:'tf', badge:'Spring 2021 C · Q2',
+    q:"The dimensions of information systems are management, organizations, and information technology.",
+    ans:true, exp:"TRUE — The THREE dimensions of IS are: (1) Organization, (2) Management, and (3) Technology." },
+
+  { id:23, source:'spring2021c', type:'mcq', badge:'Spring 2021 C · Q3',
+    q:"Converting raw data into a more meaningful form is called _____.",
+    opts:["Capturing","Processing","Organizing","Feedback"],
+    ans:1, exp:"PROCESSING = converting/transforming raw input data into a meaningful and useful form." },
+
+  { id:24, source:'spring2021c', type:'tf', badge:'Spring 2021 C · Q4',
+    q:"Data from DSS typically provides information to MIS.",
+    ans:false, exp:"FALSE — It's the OPPOSITE. MIS and TPS provide data TO DSS. DSS uses data from MIS, TPS, and external sources." },
+
+  { id:25, source:'spring2021c', type:'mcq', badge:'Spring 2021 C · Q5',
+    q:"Which main business function is responsible for maintaining employee records?",
+    opts:["Finance and accounting","Manufacturing and production","Sales and marketing","Human resources"],
+    ans:3, exp:"HUMAN RESOURCES is responsible for employee records, hiring, payroll, and workforce management." },
+
+  { id:26, source:'spring2021c', type:'tf', badge:'Spring 2021 C · Q6',
+    q:"A firm that invests in efficient business processes is making an investment in organizational complementary assets.",
+    ans:true, exp:"TRUE — Efficient business processes = ORGANIZATIONAL complementary asset (along with appropriate business model)." },
+
+  { id:27, source:'spring2021c', type:'tf', badge:'Spring 2021 C · Q7',
+    q:"Executive support systems have high business intelligence capabilities.",
+    ans:true, exp:"TRUE — ESS serves senior management with high BI capabilities: strategic dashboards, external data, forecasting, and unstructured decisions." },
+
+  { id:28, source:'spring2021c', type:'mcq', badge:'Spring 2021 C · Q8',
+    q:"The six important business objectives of information technology are new products, services, and business models; customer and supplier intimacy; survival; competitive advantage; operational excellence; and _____.",
+    opts:["Improved business practices","Improved flexibility","Improved efficiency","Improved decision making"],
+    ans:3, exp:"The 6th objective is IMPROVED DECISION MAKING — real-time accurate data helps managers avoid guesses and poor outcomes." },
+
+  { id:29, source:'spring2021c', type:'mcq', badge:'Spring 2021 C · Q9',
+    q:"Which of the following are systems that span functional areas, focus on executing business processes across the entire business firm, and include all levels of management?",
+    opts:["Transaction processing systems","Executive support systems","Enterprise applications","All of the above"],
+    ans:2, exp:"ENTERPRISE APPLICATIONS span all functional areas, all management levels, and execute firm-wide business processes (CRM, SCM, ERP, KMS)." },
+
+  { id:30, source:'spring2021c', type:'mcq', badge:'Spring 2021 C · Q10',
+    q:"Which of the following are environmental actors that interact with an organization and its information systems?",
+    opts:["Customers only","Suppliers only","Regulatory agencies only","All of the above (customers, suppliers, and regulatory agencies)"],
+    ans:3, exp:"Environmental actors = customers, suppliers, competitors, stockholders, AND regulatory agencies. All interact with the IS." },
+
+  { id:31, source:'spring2021c', type:'tf', badge:'Spring 2021 C · Q11',
+    q:"KMS enable organizations to better manage processes for capturing and applying knowledge and expertise.",
+    ans:true, exp:"TRUE — Knowledge Management Systems (KMS) capture and distribute knowledge and expertise across the organization." },
+
+  { id:32, source:'spring2021c', type:'mcq', badge:'Spring 2021 C · Q12',
+    q:"'Delivering the right information to the right people at the right time in the right format with the goal of achieving better decisions faster' describes _____.",
+    opts:["OLAP","Business Intelligence (BI)","Data Mining (DM)","OLTP"],
+    ans:1, exp:"BUSINESS INTELLIGENCE (BI) = right info + right people + right time + right format → better, faster decisions." },
+
+  { id:33, source:'spring2021c', type:'tf', badge:'Spring 2021 C · Q13',
+    q:"A fully digital firm produces only digital goods or services.",
+    ans:false, exp:"FALSE — A digital firm uses digital networks for its key processes and relationships. It can sell physical products (like Amazon)." },
+
+  { id:34, source:'spring2021c', type:'tf', badge:'Spring 2021 C · Q14',
+    q:"Knowledge workers assist with paperwork at all levels of the firm.",
+    ans:false, exp:"FALSE — Knowledge workers CREATE new knowledge and information. DATA workers assist with paperwork. Knowledge workers include engineers, scientists, and architects." },
+
+  { id:35, source:'spring2021c', type:'mcq', badge:'Spring 2021 C · Q15',
+    q:"Recording the amount of money a customer withdraws from an ATM is the functionality of _____.",
+    opts:["DSS","TPS","ESS","MIS"],
+    ans:1, exp:"ATM withdrawal recording = TPS (Transaction Processing System). TPS handles routine, structured, day-to-day operational transactions." },
+
+  { id:36, source:'spring2021c', type:'tf', badge:'Spring 2021 C · Q16',
+    q:"Transaction processing systems serve the middle level of management.",
+    ans:false, exp:"FALSE — TPS serves the OPERATIONAL (lowest) level of management. Middle management is served by MIS and DSS." },
+
+  { id:37, source:'spring2021c', type:'tf', badge:'Spring 2021 C · Q17',
+    q:"Intranets allow firms to work easily with third-party suppliers and vendors.",
+    ans:false, exp:"FALSE — EXTRANETS allow firms to work with suppliers and vendors. INTRANETS are internal networks for employees only." },
+
+  { id:38, source:'spring2021c', type:'mcq', badge:'Spring 2021 C · Q18',
+    q:"'The average number of tickets sold daily online' is an example of _____.",
+    opts:["Input (raw data being captured)","Raw data (unprocessed fact)","Meaningful information (processed data)","Feedback"],
+    ans:2, exp:"An AVERAGE is a calculated, meaningful result — this is INFORMATION, not raw data. Raw data would be individual ticket sale records." },
+
+  { id:39, source:'spring2021c', type:'mcq', badge:'Spring 2021 C · Q19',
+    q:"All of the following are Business Intelligence Systems EXCEPT:",
+    opts:["Decision support systems","Transaction processing systems","Management information systems","Executive support systems"],
+    ans:1, exp:"TPS is NOT a BI system. BI systems = DSS, MIS, ESS. TPS is purely operational — it captures transactions, not supports decisions." },
+
+  { id:40, source:'spring2021c', type:'mcq', badge:'Spring 2021 C · Q20',
+    q:"_____ collects data from different firm functions and stores that data in a single central data repository.",
+    opts:["CRM","KMS","SCM","ERP"],
+    ans:3, exp:"ERP = collects data from ALL firm functions (HR, Finance, Production, Sales) and stores in ONE central database." },
+
+  // ─────────────────────────────────────────────────────
+  // SPRING 2021 MODEL A — MCQ + T/F
+  // ─────────────────────────────────────────────────────
+  { id:41, source:'spring2021a', type:'mcq', badge:'Spring 2021 A · Q1',
+    q:"Recording the amount of money a customer withdraws from an ATM is the functionality of _____.",
+    opts:["MIS","TPS","ESS","DSS"],
+    ans:1, exp:"TPS = Transaction Processing System. ATM withdrawal recording is a routine operational transaction — classic TPS function." },
+
+  { id:42, source:'spring2021a', type:'tf', badge:'Spring 2021 A · Q2',
+    q:"An IT infrastructure provides the platform on which the firm can build its information systems.",
+    ans:true, exp:"TRUE — IT infrastructure = the technology platform (hardware + software + networks) that IS is built upon." },
+
+  { id:43, source:'spring2021a', type:'tf', badge:'Spring 2021 A · Q3',
+    q:"Globalization presents challenges as well as opportunities to the business.",
+    ans:true, exp:"TRUE — The Internet reduces global operating costs (opportunity) but also increases competition and complexity (challenge)." },
+
+  { id:44, source:'spring2021a', type:'mcq', badge:'Spring 2021 A · Q4',
+    q:"The information systems department is often headed by _____.",
+    opts:["CEO","CSO","CPO","CIO"],
+    ans:3, exp:"CIO = Chief Information Officer. The senior manager who oversees the use of IT in the firm." },
+
+  { id:45, source:'spring2021a', type:'tf', badge:'Spring 2021 A · Q5',
+    q:"Data from DSS typically provides information to MIS.",
+    ans:false, exp:"FALSE — MIS/TPS provide data TO DSS, not the other way around. DSS also uses external data." },
+
+  { id:46, source:'spring2021a', type:'mcq', badge:'Spring 2021 A · Q6',
+    q:"Separation of business functions, unique business processes, unique business culture, and politics represent which dimension of information systems?",
+    opts:["Organizational dimension","Management dimension","Technology dimension","None of the above"],
+    ans:0, exp:"ORGANIZATIONAL dimension includes: hierarchy, separation of business functions, unique culture, and organizational politics." },
+
+  { id:47, source:'spring2021a', type:'tf', badge:'Spring 2021 A · Q7',
+    q:"Executive support systems have high business intelligence capabilities.",
+    ans:true, exp:"TRUE — ESS serves senior management with high-level BI: aggregated external/internal data, trend analysis, and strategic forecasting." },
+
+  { id:48, source:'spring2021a', type:'mcq', badge:'Spring 2021 A · Q8',
+    q:"Improving operations to achieve higher profitability and lower costs is considered a/an _____.",
+    opts:["Complementary asset","Business process","Business model","Operational excellence"],
+    ans:3, exp:"OPERATIONAL EXCELLENCE = improving efficiency to achieve higher profitability. Walmart's Retail Link is the key example." },
+
+  { id:49, source:'spring2021a', type:'tf', badge:'Spring 2021 A · Q9',
+    q:"There is a growing interdependence between a firm's ability to use information technology and its ability to implement corporate strategies and achieve corporate goals.",
+    ans:true, exp:"TRUE — What a firm CAN DO increasingly depends on what its systems ALLOW it to do. IT and strategy are deeply intertwined." },
+
+  { id:50, source:'spring2021a', type:'tf', badge:'Spring 2021 A · Q10',
+    q:"The goal of social business is to deepen interactions with groups inside and outside the firm to expedite and enhance information sharing, innovation, and decision making.",
+    ans:true, exp:"TRUE — Social business uses social tools internally and externally to speed up information sharing, boost innovation, and improve decisions." },
+
+  { id:51, source:'spring2021a', type:'mcq', badge:'Spring 2021 A · Q11',
+    q:"An example of raw data from a national chain of automobile stores would be _____.",
+    opts:["An average of 13 Toyotas sold daily in Kentucky","30% increase in Toyota RAV4 sales during September in Kentucky","1 Toyota RAV4 sold March 3, 2008 in Louisville, Kentucky","All of the above"],
+    ans:2, exp:"RAW DATA = individual, unprocessed fact: 1 specific car sold on a specific date. Averages and percentages are INFORMATION (processed)." },
+
+  { id:52, source:'spring2021a', type:'tf', badge:'Spring 2021 A · Q12',
+    q:"In 'Command and Control' organizations, senior managers rely on teams of employees to achieve and implement results.",
+    ans:false, exp:"FALSE — In command & control, senior managers make ALL decisions TOP-DOWN. Relying on teams is characteristic of COLLABORATIVE cultures." },
+
+  { id:53, source:'spring2021a', type:'mcq', badge:'Spring 2021 A · Q13',
+    q:"_____ collects data from different firm functions and stores that data in a single central data repository.",
+    opts:["KMS","CRM","SCM","ERP"],
+    ans:3, exp:"ERP centralizes data from all business functions into ONE repository. This eliminates data silos across departments." },
+
+  { id:54, source:'spring2021a', type:'tf', badge:'Spring 2021 A · Q14',
+    q:"Investing in information technology does not guarantee good returns.",
+    ans:true, exp:"TRUE — Returns vary considerably. Firms must also invest in complementary assets (people, processes, business models) to get value from IT." },
+
+  { id:55, source:'spring2021a', type:'tf', badge:'Spring 2021 A · Q15',
+    q:"Electronic business is considered a subset of electronic commerce.",
+    ans:false, exp:"FALSE — It's the OPPOSITE. E-COMMERCE (buying/selling online) is a subset of E-BUSINESS (which includes all digital business processes)." },
+
+  { id:56, source:'spring2021a', type:'mcq', badge:'Spring 2021 A · Q16',
+    q:"The use of information systems because of necessity describes the business objective of _____.",
+    opts:["Survival","Improved flexibility","Competitive advantage","Improved business practices"],
+    ans:0, exp:"SURVIVAL = necessity-driven IS adoption. Citibank's ATM introduction and regulatory compliance (Sarbanes-Oxley) are the examples." },
+
+  { id:57, source:'spring2021a', type:'mcq', badge:'Spring 2021 A · Q17',
+    q:"Which of the following is NOT an example of enterprise applications?",
+    opts:["Supply chain management systems","Decision Support Systems","Customer relationship management systems","Knowledge management systems"],
+    ans:1, exp:"DSS is NOT an enterprise application. Enterprise apps = CRM, SCM, KMS, ERP. DSS is a standalone decision-support tool." },
+
+  { id:58, source:'spring2021a', type:'mcq', badge:'Spring 2021 A · Q18',
+    q:"Company websites accessible only to employees in different locations, vendors, and suppliers are called _____.",
+    opts:["Extranet","World Wide Web","Internet","Intranet"],
+    ans:0, exp:"EXTRANET = extended intranet accessible to authorized EXTERNAL parties (suppliers, vendors, partners). Intranet = employees only." },
+
+  { id:59, source:'spring2021a', type:'mcq', badge:'Spring 2021 A · Q19',
+    q:"All of the following are Business Intelligence Systems EXCEPT:",
+    opts:["Decision support systems","Management information systems","Transaction processing systems","Executive support systems"],
+    ans:2, exp:"TPS is NOT a BI system. TPS captures operational transactions. BI systems (DSS, MIS, ESS) analyze data for decision support." },
+
+  { id:60, source:'spring2021a', type:'tf', badge:'Spring 2021 A · Q20',
+    q:"Digital firms overcome the limits raised by time and space variation.",
+    ans:true, exp:"TRUE — Digital firms offer TIME SHIFTING (work anytime) and SPACE SHIFTING (work anywhere), overcoming geographic and time barriers." },
+
+  // ─────────────────────────────────────────────────────
+  // FALL 2024 — MCQ (Q1–Q20) + T/F (Q21–Q30)
+  // ─────────────────────────────────────────────────────
+  { id:61, source:'fall2024', type:'mcq', badge:'Fall 2024 · Q1',
+    q:"What characterizes 'interaction jobs'?",
+    opts:["Jobs that require minimal human interaction","Roles focused on manual labor","Positions involving complex problem-solving and communication","Tasks that are entirely automated"],
+    ans:2, exp:"Interaction jobs = complex problem-solving + communication — they require human judgment, collaboration, and cognitive engagement." },
+
+  { id:62, source:'fall2024', type:'mcq', badge:'Fall 2024 · Q2',
+    q:"All of the following are direct business benefits of collaboration, EXCEPT _____.",
+    opts:["Improved quality","Improved financial performance","Improved customer service","Improved compliance with government regulations"],
+    ans:3, exp:"Compliance is NOT listed as a direct collaboration benefit. Direct benefits include: quality, financial performance, and customer service." },
+
+  { id:63, source:'fall2024', type:'mcq', badge:'Fall 2024 · Q3',
+    q:"Which of the following helps expedite the flow of information between the firm and its suppliers and customers?",
+    opts:["Intranet","Extranet","KMS","TPS"],
+    ans:1, exp:"EXTRANET = connects the firm with external partners (suppliers, customers). Intranet is internal only." },
+
+  { id:64, source:'fall2024', type:'mcq', badge:'Fall 2024 · Q4',
+    q:"Which system is typically used for long-term forecasting and planning?",
+    opts:["TPS","DSS","ESS","MIS"],
+    ans:2, exp:"ESS (Executive Support System) = serves senior management with long-term forecasting, strategic planning, and external trend analysis." },
+
+  { id:65, source:'fall2024', type:'mcq', badge:'Fall 2024 · Q5',
+    q:"Buying or selling goods over the Internet is called _____.",
+    opts:["E-commerce","E-business","Intranet","Extranet"],
+    ans:0, exp:"E-COMMERCE = buying or selling goods/services online. E-business is broader (all digital business operations)." },
+
+  { id:66, source:'fall2024', type:'mcq', badge:'Fall 2024 · Q6',
+    q:"An example of a collaboration tool that supports remote, asynchronous collaboration is _____.",
+    opts:["Team rooms","Version control / E-mail","Wall displays","Video conference"],
+    ans:1, exp:"EMAIL = remote (different locations) + asynchronous (different times). Team rooms = co-located asynchronous. Video conference = remote synchronous." },
+
+  { id:67, source:'fall2024', type:'mcq', badge:'Fall 2024 · Q7',
+    q:"Which type of system would you use to change a production schedule if a key supplier was late in delivering goods?",
+    opts:["TPS","ESS","KMS","MIS"],
+    ans:0, exp:"TPS — production schedule changes triggered by supplier delays are handled at the OPERATIONAL level by TPS." },
+
+  { id:68, source:'fall2024', type:'mcq', badge:'Fall 2024 · Q8',
+    q:"What is a common output of an MIS?",
+    opts:["Real-time data streams","Tactical decision support and routine reports","Unstructured strategic decisions","Strategic forecasts for senior executives"],
+    ans:1, exp:"MIS produces ROUTINE REPORTS and TACTICAL DECISION SUPPORT for middle management (structured, periodic reporting)." },
+
+  { id:69, source:'fall2024', type:'mcq', badge:'Fall 2024 · Q9',
+    q:"What impact does an emphasis on innovation have on a firm's culture?",
+    opts:["Encourages risk-taking and creativity","Reduces the need for employee training","Limits opportunities for employee input","Prioritizes short-term profits over long-term growth"],
+    ans:0, exp:"Innovation culture = risk-taking + creativity. This aligns with collaborative environments that support experimentation." },
+
+  { id:70, source:'fall2024', type:'mcq', badge:'Fall 2024 · Q10',
+    q:"Aligning IT with business objectives primarily aims to achieve what?",
+    opts:["Increase technological innovation","Enhance operational efficiency","Reduce workforce","Improve regulatory compliance"],
+    ans:1, exp:"IT-business alignment primarily aims to ENHANCE OPERATIONAL EFFICIENCY and ensure IS investments support strategic goals." },
+
+  { id:71, source:'fall2024', type:'mcq', badge:'Fall 2024 · Q11',
+    q:"_____ is a benefit that allows people working collaboratively to communicate errors and corrective actions faster than if they work in isolation.",
+    opts:["Quality","Productivity","Innovation","Customer service"],
+    ans:0, exp:"QUALITY benefit of collaboration = faster error detection and corrective action communication among team members." },
+
+  { id:72, source:'fall2024', type:'mcq', badge:'Fall 2024 · Q12',
+    q:"Which of the following is NOT an example of enterprise applications?",
+    opts:["Decision Support Systems","Supply chain management systems","Knowledge management systems","Customer relationship management systems"],
+    ans:0, exp:"DSS is NOT an enterprise application. Enterprise apps = CRM, SCM, KMS, ERP. They span the whole firm." },
+
+  { id:73, source:'fall2024', type:'mcq', badge:'Fall 2024 · Q13',
+    q:"What is the primary purpose of a Transaction Processing System (TPS)?",
+    opts:["To provide high-level executive reports","To manage day-to-day business transactions","To support strategic decision making","To automate complex analytical business processes"],
+    ans:1, exp:"TPS PRIMARY PURPOSE = manage day-to-day OPERATIONAL transactions (ATM withdrawals, order entry, payroll, reservations)." },
+
+  { id:74, source:'fall2024', type:'mcq', badge:'Fall 2024 · Q14',
+    q:"Which of the following is one of the collaboration and teamwork tools?",
+    opts:["Wikis","Virtual worlds","Cyberlocker","All of the above"],
+    ans:3, exp:"All three are collaboration tools: WIKIS (shared writing), VIRTUAL WORLDS (avatar-based meetings), CYBERLOCKERS (file sharing)." },
+
+  { id:75, source:'fall2024', type:'mcq', badge:'Fall 2024 · Q15',
+    q:"Introducing the features of buying and selling through the Internet is considered a _____.",
+    opts:["Complementary asset","New business model","Long-term plan","None of the above"],
+    ans:1, exp:"NEW BUSINESS MODEL — describing how a company will produce, deliver, and sell using e-commerce = a new business model." },
+
+  { id:76, source:'fall2024', type:'mcq', badge:'Fall 2024 · Q16',
+    q:"An example of a collaboration tool that supports remote, synchronous collaboration is _____.",
+    opts:["Roomware","E-mail","MUD (Multi-User Dungeon)","Wall displays"],
+    ans:2, exp:"MUD = remote (different locations) + synchronous (same time). E-mail = remote asynchronous. Roomware = co-located synchronous." },
+
+  { id:77, source:'fall2024', type:'mcq', badge:'Fall 2024 · Q17',
+    q:"Enterprise Resource Planning (ERP) systems are designed to _____.",
+    opts:["Handle customer interactions only","Integrate all departments and functions across a company","Focus on financial account management only","Provide external customer support"],
+    ans:1, exp:"ERP = INTEGRATES all departments and functions (HR, Finance, Manufacturing, Sales) into ONE unified system with a central database." },
+
+  { id:78, source:'fall2024', type:'mcq', badge:'Fall 2024 · Q18',
+    q:"_____ provide information to coordinate all of the business processes that deal with customers.",
+    opts:["SCM","CRM","ERP","KMS"],
+    ans:1, exp:"CRM = Customer Relationship Management. Coordinates all customer-facing business processes (sales, service, marketing)." },
+
+  { id:79, source:'fall2024', type:'mcq', badge:'Fall 2024 · Q19',
+    q:"How can information systems help a company achieve product differentiation?",
+    opts:["By automating routine tasks","By creating unique products or services","By reducing production costs","By increasing the bargaining power of suppliers"],
+    ans:1, exp:"IS supports PRODUCT DIFFERENTIATION by enabling creation of unique, innovative products/services competitors can't easily copy." },
+
+  { id:80, source:'fall2024', type:'mcq', badge:'Fall 2024 · Q20',
+    q:"Which of the following is a potential threat when implementing a low-cost leadership strategy?",
+    opts:["Increased competition","Reduced product quality","Loss of unique selling points","Greater supplier dependence"],
+    ans:0, exp:"Low-cost leadership threat = INCREASED COMPETITION (others can match or undercut your prices), eroding the cost advantage." },
+
+  { id:81, source:'fall2024', type:'tf', badge:'Fall 2024 · Q21',
+    q:"Investments in collaboration technology guarantee organizational improvements, returning high ROI.",
+    ans:false, exp:"FALSE — Technology alone does NOT guarantee ROI. Complementary assets (culture, processes, people) must also be in place." },
+
+  { id:82, source:'fall2024', type:'tf', badge:'Fall 2024 · Q22',
+    q:"Successful collaboration requires only an appropriate organizational structure.",
+    ans:false, exp:"FALSE — Collaboration requires BOTH appropriate structure AND technology + culture + incentives. Structure alone is insufficient." },
+
+  { id:83, source:'fall2024', type:'tf', badge:'Fall 2024 · Q23',
+    q:"Enterprise systems are any applications that span the enterprise, such as CRM, SCM, and KMS.",
+    ans:true, exp:"TRUE — Enterprise applications (or systems) span the entire firm and include CRM, SCM, ERP, and KMS." },
+
+  { id:84, source:'fall2024', type:'tf', badge:'Fall 2024 · Q24',
+    q:"The 'Innovation' benefit allows people interacting and working together to capture expert knowledge and solve problems more rapidly than working in isolation.",
+    ans:false, exp:"FALSE — That description is the KNOWLEDGE benefit. Innovation benefit = new ideas and solutions from collaborative creativity." },
+
+  { id:85, source:'fall2024', type:'tf', badge:'Fall 2024 · Q25',
+    q:"Information systems and technology is a major enabling tool for new products, services, and business models.",
+    ans:true, exp:"TRUE — IS/IT enables creation of new products (iPad), services (Netflix streaming), and business models (subscription services)." },
+
+  { id:86, source:'fall2024', type:'tf', badge:'Fall 2024 · Q26',
+    q:"Collaborative business cultures are hierarchical, with clear lines of authority and decision making concentrated at the top.",
+    ans:false, exp:"FALSE — That describes COMMAND AND CONTROL culture. Collaborative cultures distribute authority and rely on team-based decision making." },
+
+  { id:87, source:'fall2024', type:'tf', badge:'Fall 2024 · Q27',
+    q:"In command and control culture, senior managers rely on teams of employees.",
+    ans:false, exp:"FALSE — In command & control, senior managers make decisions THEMSELVES and push them down. Teams are a collaborative culture trait." },
+
+  { id:88, source:'fall2024', type:'tf', badge:'Fall 2024 · Q28',
+    q:"Behavioral approach emphasizes mathematically based models.",
+    ans:false, exp:"FALSE — TECHNICAL approach uses mathematical models. BEHAVIORAL approach focuses on psychology, sociology, and economics." },
+
+  { id:89, source:'fall2024', type:'tf', badge:'Fall 2024 · Q29',
+    q:"Management Information Systems combines computer science, management science, operations research, and practical orientation with behavioral issues.",
+    ans:true, exp:"TRUE — MIS = technical foundation (CS + management science + operations research) COMBINED WITH behavioral issues and practical orientation." },
+
+  { id:90, source:'fall2024', type:'tf', badge:'Fall 2024 · Q30',
+    q:"Selecting an appropriate business model is an example of managerial assets.",
+    ans:false, exp:"FALSE — Appropriate business model = ORGANIZATIONAL asset. Managerial assets include incentives for management innovation and collaborative work environments." },
+];
+
+// ═══════════════════════════════════════════════════════
+// STATE & RENDER ENGINE
+// ═══════════════════════════════════════════════════════
+let correct = 0, wrong = 0, answered = 0;
+let currentQuestions = [];
+let currentTotal = 0;
+let currentTab = 'all';
+
+function getQuestions(tab) {
+  if (tab === 'all') return ALL_QUESTIONS;
+  return ALL_QUESTIONS.filter(q => q.source === tab);
+}
+
+function renderAll(tab) {
+  currentTab = tab;
+  currentQuestions = getQuestions(tab);
+  currentTotal = currentQuestions.length;
+  correct = 0; wrong = 0; answered = 0;
+  updateScore();
+  document.getElementById('prog-bar').style.width = '0%';
+
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = '';
+
+  const letters = ['A','B','C','D'];
+  let lastSection = '';
+
+  currentQuestions.forEach((item, i) => {
+    const sectionKey = item.source;
+    if (tab === 'all' && sectionKey !== lastSection) {
+      lastSection = sectionKey;
+      const sectionNames = {
+        mid2024: 'Midterm 2024',
+        spring2021c: 'Spring 2021 — Model C',
+        spring2021a: 'Spring 2021 — Model A',
+        fall2024: 'Fall 2024 — Midterm'
+      };
+      const sl = document.createElement('div');
+      sl.className = 'section-label';
+      sl.innerHTML = sectionNames[sectionKey] + `<div class="section-desc">${currentQuestions.filter(q=>q.source===sectionKey).length} questions from this exam</div>`;
+      container.appendChild(sl);
+    }
+
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = `qcard-${item.id}`;
+
+    if (item.type === 'mcq') {
+      const optsHtml = item.opts.map((o,oi) =>
+        `<button class="option-btn" onclick="selectMCQ(${item.id},${oi})" id="opt-${item.id}-${oi}">
+          <span class="letter">${letters[oi]}</span>${o}
+        </button>`
+      ).join('');
+      card.innerHTML = `
+        <div class="q-num">Q${i+1} <span class="exam-badge">${item.badge}</span></div>
+        <div class="q-text">${item.q}</div>
+        <div class="options">${optsHtml}</div>
+        <div class="feedback" id="fb-${item.id}"></div>`;
+    } else {
+      card.innerHTML = `
+        <div class="q-num">Q${i+1} <span class="exam-badge">${item.badge}</span></div>
+        <div class="q-text">${item.q}</div>
+        <div class="tf-wrap">
+          <button class="tf-btn tf-true-btn" onclick="selectTF(${item.id}, true)" id="tf-t-${item.id}">✓ TRUE</button>
+          <button class="tf-btn tf-false-btn" onclick="selectTF(${item.id}, false)" id="tf-f-${item.id}">✗ FALSE</button>
+        </div>
+        <div class="feedback" id="fb-${item.id}"></div>`;
+    }
+    container.appendChild(card);
+  });
+}
+
+function selectMCQ(qId, optIdx) {
+  const card = document.getElementById(`qcard-${qId}`);
+  if (card.classList.contains('answered')) return;
+  card.classList.add('answered');
+  const item = ALL_QUESTIONS.find(q => q.id === qId);
+  const btns = card.querySelectorAll('.option-btn');
+  btns.forEach(b => b.disabled = true);
+  const isCorrect = optIdx === item.ans;
+  btns[optIdx].classList.add(isCorrect ? 'correct-ans' : 'wrong-ans');
+  if (!isCorrect) btns[item.ans].classList.add('reveal-correct');
+  showFeedback(qId, isCorrect, item.exp);
+  updateState(isCorrect);
+}
+
+function selectTF(qId, chosen) {
+  const card = document.getElementById(`qcard-${qId}`);
+  if (card.classList.contains('answered')) return;
+  card.classList.add('answered');
+  const item = ALL_QUESTIONS.find(q => q.id === qId);
+  const tBtn = document.getElementById(`tf-t-${qId}`);
+  const fBtn = document.getElementById(`tf-f-${qId}`);
+  tBtn.disabled = true; fBtn.disabled = true;
+  const isCorrect = chosen === item.ans;
+  const chosenBtn = chosen ? tBtn : fBtn;
+  const correctBtn = item.ans ? tBtn : fBtn;
+  chosenBtn.classList.add(isCorrect ? 'tf-correct' : 'tf-wrong');
+  if (!isCorrect) correctBtn.classList.add('tf-reveal');
+  showFeedback(qId, isCorrect, item.exp);
+  updateState(isCorrect);
+}
+
+function showFeedback(qId, isCorrect, exp) {
+  const fb = document.getElementById(`fb-${qId}`);
+  fb.classList.add('show', isCorrect ? 'ok' : 'bad');
+  fb.textContent = (isCorrect ? '✔ Correct — ' : '✘ Wrong — ') + exp;
+}
+
+function updateState(isCorrect) {
+  if (isCorrect) correct++; else wrong++;
+  answered++;
+  updateScore();
+  document.getElementById('prog-bar').style.width = `${(answered/currentTotal)*100}%`;
+}
+
+function updateScore() {
+  document.getElementById('sc-correct').textContent = correct;
+  document.getElementById('sc-wrong').textContent = wrong;
+  document.getElementById('sc-total').textContent = answered;
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.remove('active'));
+  const tabMap = { all:0, mid2024:1, spring2021c:2, spring2021a:3, fall2024:4 };
+  document.querySelectorAll('.tab-btn')[tabMap[tab]].classList.add('active');
+  renderAll(tab);
+}
+
+function showResults() {
+  const pct = currentTotal > 0 ? Math.round((correct / currentTotal) * 100) : 0;
+  let emoji = '💀', title = 'Keep Studying!', sub = 'Go back through the slides carefully.';
+  if (pct >= 90) { emoji = '🏆'; title = 'Outstanding!'; sub = "Top score — you're ready for the exam!"; }
+  else if (pct >= 75) { emoji = '🎯'; title = 'Great Job!'; sub = 'Almost there! Review your mistakes.'; }
+  else if (pct >= 55) { emoji = '📚'; title = 'Not Bad!'; sub = 'Focus on weak areas and try again.'; }
+  document.getElementById('modal-emoji').textContent = emoji;
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-score').textContent = `${correct} / ${currentTotal}`;
+  document.getElementById('modal-sub').textContent = sub + `\n${pct}% — ${answered} of ${currentTotal} answered.`;
+  document.getElementById('results-modal').classList.add('show');
+}
+
+function restart() { location.reload(); }
+
+// INIT
+renderAll('all');
+</script>
+</body>
+</html>
