@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIS — Chapter 1 Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #08090f;
+    --surface: #10111a;
+    --card: #14151f;
+    --border: #22243a;
+    --accent: #00c2ff;
+    --accent2: #ff6b9d;
+    --green: #00e5a0;
+    --red: #ff4d6d;
+    --text: #e6e8f8;
+    --muted: #60658a;
+    --gold: #ffd166;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,194,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,194,255,0.03) 1px, transparent 1px);
+    background-size: 44px 44px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  /* Glow blobs */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0,194,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 44px 20px 90px;
+  }
+  header { text-align: center; margin-bottom: 50px; }
+  .tag {
+    display: inline-block;
+    background: rgba(0,194,255,0.1);
+    border: 1px solid rgba(0,194,255,0.35);
+    color: var(--accent);
+    font-size: 10px;
+    letter-spacing: 3.5px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 2px;
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(30px, 6vw, 54px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -1px;
+    background: linear-gradient(130deg, #fff 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  .subtitle { color: var(--muted); font-size: 12px; letter-spacing: 1px; }
+
+  /* SCOREBOARD */
+  #scoreboard {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+  .score-pill {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 22px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .score-pill span { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 22px; }
+  .score-pill.correct span { color: var(--green); }
+  .score-pill.wrong span { color: var(--red); }
+  .score-pill.total span { color: var(--gold); }
+
+  /* PROGRESS */
+  .progress-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    height: 5px;
+    margin-bottom: 44px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #a78bfa);
+    width: 0%;
+    transition: width 0.5s ease;
+    border-radius: 4px;
+  }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-left: 3px solid var(--accent);
+    padding-left: 12px;
+    margin: 50px 0 22px;
+  }
+  .section-desc {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    letter-spacing: 0;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* QUESTION CARD */
+  .q-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 26px 28px;
+    margin-bottom: 14px;
+    transition: border-color 0.3s;
+    position: relative;
+    overflow: hidden;
+    animation: slideIn 0.3s ease both;
+  }
+  .q-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .q-card.answered::before { opacity: 1; }
+  .q-num { font-size: 10px; letter-spacing: 2px; color: var(--muted); margin-bottom: 10px; }
+  .q-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.55;
+    color: var(--text);
+    margin-bottom: 18px;
+  }
+
+  /* OPTIONS */
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option-btn {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 12px 16px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    line-height: 1.45;
+  }
+  .option-btn:hover:not(:disabled) {
+    background: rgba(0,194,255,0.08);
+    border-color: var(--accent);
+    transform: translateX(4px);
+  }
+  .option-btn .letter {
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    border-radius: 4px;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .option-btn:disabled { cursor: default; }
+  .option-btn.correct-ans { background: rgba(0,229,160,0.1); border-color: var(--green); color: var(--green); }
+  .option-btn.correct-ans .letter { background: var(--green); color: #000; }
+  .option-btn.wrong-ans { background: rgba(255,77,109,0.08); border-color: var(--red); color: var(--red); }
+  .option-btn.wrong-ans .letter { background: var(--red); color: #fff; }
+  .option-btn.reveal-correct { border-color: var(--green); background: rgba(0,229,160,0.05); }
+
+  /* FEEDBACK */
+  .feedback {
+    margin-top: 14px;
+    padding: 11px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    line-height: 1.65;
+    display: none;
+    border-left: 3px solid;
+  }
+  .feedback.show { display: block; }
+  .feedback.ok { border-color: var(--green); color: var(--green); background: rgba(0,229,160,0.05); }
+  .feedback.bad { border-color: var(--red); color: var(--red); background: rgba(255,77,109,0.05); }
+
+  /* RESULTS MODAL */
+  #results-modal {
+    display: none;
+    position: fixed;
+    inset: 0; z-index: 100;
+    background: rgba(0,0,0,0.88);
+    backdrop-filter: blur(10px);
+    align-items: center;
+    justify-content: center;
+  }
+  #results-modal.show { display: flex; }
+  .modal-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 50px 46px;
+    text-align: center;
+    max-width: 460px;
+    width: 90%;
+    animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .modal-emoji { font-size: 58px; margin-bottom: 14px; }
+  .modal-title { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+  .modal-score { font-size: 52px; font-family: 'Syne', sans-serif; font-weight: 800; color: var(--gold); margin: 14px 0; }
+  .modal-sub { color: var(--muted); font-size: 13px; margin-bottom: 30px; }
+  .btn-restart {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 14px 34px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-restart:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,194,255,0.35); }
+
+  .finish-btn-wrap { text-align: center; margin-top: 54px; }
+  .finish-btn {
+    background: transparent;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 14px 42px;
+    cursor: pointer;
+    border-radius: 6px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .finish-btn:hover { background: var(--accent); color: #000; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,194,255,0.3); }
+
+  @keyframes slideIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  @media(max-width:600px) { .q-card { padding: 18px 14px; } .q-text { font-size: 14px; } .option-btn { font-size: 12px; } }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <header>
+    <div class="tag">MIS · Management Information Systems</div>
+    <h1>Chapter 1 Quiz</h1>
+    <p class="subtitle">Information Systems in Global Business Today</p>
+  </header>
+
+  <div id="scoreboard">
+    <div class="score-pill correct">✔ Correct <span id="sc-correct">0</span></div>
+    <div class="score-pill wrong">✘ Wrong <span id="sc-wrong">0</span></div>
+    <div class="score-pill total">◈ Answered <span id="sc-total">0</span></div>
+  </div>
+
+  <div class="progress-wrap"><div class="progress-bar" id="prog-bar"></div></div>
+
+  <!-- SECTION A -->
+  <div class="section-label">SECTION A — Role of IS in Business Today
+    <div class="section-desc">Strategic objectives, digital firms, globalization</div>
+  </div>
+  <div id="quiz-a"></div>
+
+  <!-- SECTION B -->
+  <div class="section-label">SECTION B — Perspectives on Information Systems
+    <div class="section-desc">IS definition, components, data vs information, dimensions</div>
+  </div>
+  <div id="quiz-b"></div>
+
+  <!-- SECTION C -->
+  <div class="section-label">SECTION C — Complementary Assets & Academic Approaches
+    <div class="section-desc">Complementary assets, technical vs behavioral, sociotechnical view</div>
+  </div>
+  <div id="quiz-c"></div>
+
+  <div class="finish-btn-wrap">
+    <button class="finish-btn" onclick="showResults()">See Final Score →</button>
+  </div>
+</div>
+
+<div id="results-modal">
+  <div class="modal-box">
+    <div class="modal-emoji" id="modal-emoji">🎯</div>
+    <div class="modal-title" id="modal-title">Quiz Complete!</div>
+    <div class="modal-score" id="modal-score">0 / 0</div>
+    <div class="modal-sub" id="modal-sub">Keep reviewing!</div>
+    <button class="btn-restart" onclick="restart()">↺ Restart Quiz</button>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────
+// SECTION A — Role of IS in Business Today
+// ─────────────────────────────────────────────────────────
+const sectionA = [
+  {
+    q: "Between 1980 and 2009, information technology capital investment (hardware, software, and communications equipment) grew from what percentage to what percentage of all invested capital?",
+    opts: ["From 12% to 32%", "From 32% to 52%", "From 20% to 60%", "From 52% to 72%"],
+    ans: 1,
+    exp: "IT capital investment grew from 32% to 52% of all invested capital between 1980 and 2009."
+  },
+  {
+    q: "Which of the following BEST describes a 'fully digital firm' as presented in the lecture?",
+    opts: [
+      "A firm that sells only digital products like software and e-books.",
+      "A firm where significant business relationships are digitally enabled, core processes run on digital networks, and key assets are managed digitally.",
+      "A firm that has eliminated all paper-based processes from its accounting department.",
+      "A firm that relies exclusively on social media for customer communication."
+    ],
+    ans: 1,
+    exp: "A digital firm has digitally enabled relationships, digital core processes, and digitally managed key assets. It also offers time shifting and space shifting flexibility."
+  },
+  {
+    q: "The lecture states that business firms invest in information systems to achieve SIX strategic business objectives. Which of the following is NOT one of those six objectives?",
+    opts: ["Operational excellence", "Competitive advantage", "Employee satisfaction", "Survival"],
+    ans: 2,
+    exp: "The 6 objectives are: Operational excellence, New products/services/business models, Customer & supplier intimacy, Improved decision making, Competitive advantage, and Survival. Employee satisfaction is NOT listed."
+  },
+  {
+    q: "Walmart's 'Retail Link' system, which links suppliers directly to stores, is given as an example of which strategic business objective?",
+    opts: ["Competitive advantage", "Customer and supplier intimacy", "Operational excellence", "Survival"],
+    ans: 2,
+    exp: "Retail Link = OPERATIONAL EXCELLENCE. It improves efficiency and replenishment, which leads to higher profitability."
+  },
+  {
+    q: "Apple's iPad, Google's Android OS, and Netflix are cited in the lecture as examples of information systems supporting which strategic objective?",
+    opts: [
+      "Survival",
+      "Operational excellence",
+      "New products, services, and business models",
+      "Improved decision making"
+    ],
+    ans: 2,
+    exp: "These are examples of IS enabling NEW PRODUCTS, SERVICES, AND BUSINESS MODELS. A business model describes how a company produces, delivers, and sells to create wealth."
+  },
+  {
+    q: "High-end hotels that use computers to track customer preferences and customize the environment are an example of which strategic objective?",
+    opts: [
+      "Competitive advantage",
+      "Customer and supplier intimacy",
+      "Operational excellence",
+      "Improved decision making"
+    ],
+    ans: 1,
+    exp: "Tracking customer preferences = CUSTOMER INTIMACY. Serving customers well leads to return visits, raising revenues and profits."
+  },
+  {
+    q: "JCPenney's information system that links sales records to a contract manufacturer is an example of which strategic IS objective?",
+    opts: [
+      "Operational excellence",
+      "New business models",
+      "Survival",
+      "Customer and supplier intimacy"
+    ],
+    ans: 3,
+    exp: "JCPenney links to its SUPPLIER (contract manufacturer). This is SUPPLIER INTIMACY — which lowers costs by providing vital inputs efficiently."
+  },
+  {
+    q: "Without accurate information, managers must rely on forecasts, best guesses, and luck. The lecture states this leads to poor outcomes such as overproduction and misallocation of resources. Which strategic objective does information systems address here?",
+    opts: ["Survival", "Competitive advantage", "Improved decision making", "Operational excellence"],
+    ans: 2,
+    exp: "IMPROVED DECISION MAKING. Verizon's digital dashboard giving real-time data on customer complaints and network performance is the example given."
+  },
+  {
+    q: "Verizon's Web-based digital dashboard providing managers with real-time data on customer complaints, network performance, and line outages is an example of which strategic business objective?",
+    opts: ["Operational excellence", "Customer intimacy", "Survival", "Improved decision making"],
+    ans: 3,
+    exp: "Real-time data for managers = IMPROVED DECISION MAKING. Without it, managers resort to guesswork."
+  },
+  {
+    q: "Citibank's introduction of ATMs is given as an example of which strategic IS objective?",
+    opts: ["Competitive advantage", "New products and services", "Survival", "Customer intimacy"],
+    ans: 2,
+    exp: "SURVIVAL — when ATMs became an industry standard, banks HAD to adopt them just to stay in business. Governmental regulations (e.g., Sarbanes-Oxley Act) are also survival examples."
+  },
+  {
+    q: "The Sarbanes-Oxley Act and the Toxic Substances Control Act are mentioned as reasons why some companies adopt information systems. This relates to which strategic objective?",
+    opts: ["Improved decision making", "Operational excellence", "Competitive advantage", "Survival"],
+    ans: 3,
+    exp: "Regulatory compliance = SURVIVAL. Governments require record-keeping, forcing firms to implement IS just to continue operating legally."
+  },
+  {
+    q: "The lecture describes 'competitive advantage' in information systems as delivering better performance, charging less for superior products, and responding to customers and suppliers in real time. Which companies are listed as examples?",
+    opts: [
+      "Google, Amazon, Microsoft",
+      "Apple, Walmart, UPS",
+      "Netflix, Citibank, JCPenney",
+      "Verizon, Facebook, Twitter"
+    ],
+    ans: 1,
+    exp: "Apple, Walmart, and UPS are the specific examples given for COMPETITIVE ADVANTAGE."
+  },
+  {
+    q: "The lecture notes a 'growing interdependence' between information technology and business. What does this interdependence MOST directly mean?",
+    opts: [
+      "All business decisions must be made by IT departments.",
+      "What the organization would like to do depends on what its systems will permit it to do.",
+      "Companies must outsource all IT functions to remain competitive.",
+      "Information technology replaces all management roles."
+    ],
+    ans: 1,
+    exp: "Changes in business strategy require changes in IT systems — and vice versa. What an org can do is shaped by what its systems allow."
+  },
+  {
+    q: "Which of the following trends is highlighted in the lecture as transforming how businesses use information systems TODAY?",
+    opts: [
+      "Decline of mobile computing due to desktop preference",
+      "Reduction in cloud computing adoption",
+      "Emerging mobile digital platform, growing use of big data, and growth in cloud computing",
+      "Shift from global to purely local business operations"
+    ],
+    ans: 2,
+    exp: "Three key transforming trends: Mobile digital platform, Big Data, and Cloud Computing."
+  },
+  {
+    q: "Regarding globalization, the lecture states that the Internet has drastically reduced which of the following?",
+    opts: [
+      "The need for information systems in business",
+      "The costs of operating on a global scale",
+      "The volume of foreign trade between countries",
+      "The number of outsourcing opportunities"
+    ],
+    ans: 1,
+    exp: "The Internet drastically reduced the COSTS of operating globally, creating both opportunities (foreign trade, outsourcing) and challenges."
+  },
+];
+
+// ─────────────────────────────────────────────────────────
+// SECTION B — Perspectives on IS
+// ─────────────────────────────────────────────────────────
+const sectionB = [
+  {
+    q: "Which of the following is the MOST accurate definition of an 'information system' according to the lecture?",
+    opts: [
+      "A set of computers and software applications used by a company's IT department.",
+      "A set of interrelated components that collect, process, store, and distribute information to support decision making, coordination, and control.",
+      "A single database that stores all organizational data for future reporting.",
+      "A management tool used exclusively by senior executives for strategic planning."
+    ],
+    ans: 1,
+    exp: "IS = interrelated components that collect, process, STORE, and DISTRIBUTE information. It supports decision making, coordination, and control."
+  },
+  {
+    q: "What is the key DIFFERENCE between 'data' and 'information' as defined in the lecture?",
+    opts: [
+      "Data is stored in computers; information is stored in people's minds.",
+      "Data is used by managers; information is used by employees.",
+      "Data are streams of raw facts; information is data that has been shaped into a meaningful form.",
+      "Data is digital; information is always printed on paper."
+    ],
+    ans: 2,
+    exp: "DATA = raw facts (e.g., individual sales transactions). INFORMATION = processed data in meaningful form (e.g., total unit sales of a product)."
+  },
+  {
+    q: "A supermarket's checkout counter records thousands of individual item scans. When these are processed to show total unit sales of dish detergent for a specific store, the result is an example of:",
+    opts: ["Raw data being collected", "Information being produced from processed data", "Feedback being returned to the input stage", "Output being ignored by the system"],
+    ans: 1,
+    exp: "Raw checkout scans = DATA. Total unit sales of dish detergent = INFORMATION (data shaped into a meaningful, useful form)."
+  },
+  {
+    q: "The three core activities that an information system performs to produce the information an organization needs are:",
+    opts: [
+      "Planning, executing, and controlling",
+      "Input, processing, and output",
+      "Collect, analyze, and report",
+      "Design, develop, and deploy"
+    ],
+    ans: 1,
+    exp: "The three activities are: INPUT (capture raw data) → PROCESSING (convert to meaningful form) → OUTPUT (transfer to people/activities)."
+  },
+  {
+    q: "In an information system, 'input' is best defined as:",
+    opts: [
+      "Transferring processed information to people who use it.",
+      "Converting raw data into a meaningful and useful form.",
+      "Capturing raw data from the organization or its external environment.",
+      "Returning output to the input stage for correction."
+    ],
+    ans: 2,
+    exp: "INPUT = capturing raw data from inside the org or from the external environment (customers, suppliers, regulators, etc.)."
+  },
+  {
+    q: "In an information system, 'processing' is best defined as:",
+    opts: [
+      "Storing data in a database for future retrieval.",
+      "Converting raw data into a meaningful and useful form.",
+      "Distributing processed information to decision makers.",
+      "Capturing raw facts from external sources."
+    ],
+    ans: 1,
+    exp: "PROCESSING = converting/transforming raw input data into meaningful information."
+  },
+  {
+    q: "What is 'feedback' in the context of an information system?",
+    opts: [
+      "The initial raw data entered into the system.",
+      "The hardware used to store processed results.",
+      "Output that is returned to appropriate members of the organization to help evaluate or correct the input stage.",
+      "The external environment that surrounds the information system."
+    ],
+    ans: 2,
+    exp: "FEEDBACK = output returned to evaluate/correct the INPUT stage. It closes the loop and allows the system to self-correct."
+  },
+  {
+    q: "The lecture uses a house-building analogy to explain a key concept. Computers and software are like the MATERIALS AND TOOLS used to build a house. What is the POINT of this analogy?",
+    opts: [
+      "Information systems are too expensive for small organizations.",
+      "A house can only be built with specific tools and no substitutions.",
+      "Computers and software are just the technical foundation — they are not the information system itself.",
+      "An information system must be physically installed like a house."
+    ],
+    ans: 2,
+    exp: "Computers = tools/materials. They're the technical foundation but NOT the full IS. An IS also requires people, processes, and organizational context."
+  },
+  {
+    q: "Environmental actors that interact with an organization and its information systems include which of the following?",
+    opts: [
+      "Only internal employees and middle managers",
+      "Customers, suppliers, competitors, stockholders, and regulatory agencies",
+      "Only government bodies and legal regulators",
+      "Only the IT department and system administrators"
+    ],
+    ans: 1,
+    exp: "External actors = customers, suppliers, competitors, stockholders, and regulatory agencies. These are all part of the IS environment."
+  },
+  {
+    q: "The organizational dimension of an information system includes which of the following elements?",
+    opts: [
+      "Hardware specifications, software versions, and network topology",
+      "Hierarchy of authority, separation of business functions, unique business culture, and organizational politics",
+      "Database schemas, telecommunications protocols, and server configurations",
+      "Mathematical models used in management science and operations research"
+    ],
+    ans: 1,
+    exp: "Organizational dimension = hierarchy (senior/middle/operational management), functional areas (sales, HR, finance), culture, and politics."
+  },
+  {
+    q: "The organizational hierarchy in a firm described in the lecture has THREE principal levels. What are they (from top to bottom)?",
+    opts: [
+      "Directors → Managers → Employees",
+      "Senior Management → Middle Management → Operational Management",
+      "Executives → Knowledge Workers → Data Workers",
+      "Strategic → Tactical → Administrative"
+    ],
+    ans: 1,
+    exp: "Three levels: Senior Management (top) → Middle Management → Operational Management (bottom). Knowledge/data workers often work at middle level."
+  },
+  {
+    q: "Which of the following is listed under the TECHNOLOGY dimension of an information system?",
+    opts: [
+      "Organizational politics and business culture",
+      "Managerial incentives and teamwork environments",
+      "Computer hardware, software, data management technology, networking and telecommunications technology",
+      "Employee hierarchy and business process design"
+    ],
+    ans: 2,
+    exp: "Technology dimension = hardware, software, data management, networking/telecom (including Internet, intranets, extranets). Together they form the IT infrastructure."
+  },
+  {
+    q: "IT infrastructure is defined in the lecture as:",
+    opts: [
+      "The collection of all employees who work in the IT department.",
+      "The platform on which the information system is built.",
+      "The government regulations that guide IT use in organizations.",
+      "The financial budget allocated to technology investments."
+    ],
+    ans: 1,
+    exp: "IT INFRASTRUCTURE = the platform (hardware + software + networks) on which the entire information system is built."
+  },
+  {
+    q: "The 'management dimension' of information systems involves managers doing which of the following?",
+    opts: [
+      "Designing the database structure and network topology.",
+      "Writing code for business applications and software tools.",
+      "Setting organizational strategy for responding to business challenges and sometimes re-creating the organization.",
+      "Installing and maintaining hardware and telecommunications equipment."
+    ],
+    ans: 2,
+    exp: "Management dimension = setting strategy, responding to challenges, AND acting creatively to create new products/services, even re-creating the organization."
+  },
+  {
+    q: "From a business perspective, an information system is described as an instrument for creating value. Investments in IT lead to which expected returns?",
+    opts: [
+      "Only short-term profitability and cost reduction",
+      "Productivity increases, revenue increases, and superior long-term strategic positioning",
+      "Guaranteed equal returns for all companies that invest equally",
+      "Lower employee count and reduced operating costs exclusively"
+    ],
+    ans: 1,
+    exp: "IS investments aim for productivity increases, revenue increases, AND superior long-term strategic positioning."
+  },
+  {
+    q: "The 'business information value chain' concept in the lecture means that:",
+    opts: [
+      "All information becomes equally valuable once digitized.",
+      "Raw data is acquired and transformed through stages that progressively add value to that information.",
+      "Value is only created at the final output stage of the information system.",
+      "Information systems create value only when linked to financial accounting systems."
+    ],
+    ans: 1,
+    exp: "Value chain = raw data → transformed through multiple stages → each stage ADDS VALUE → better decisions → higher profits."
+  },
+];
+
+// ─────────────────────────────────────────────────────────
+// SECTION C — Complementary Assets & Academic Approaches
+// ─────────────────────────────────────────────────────────
+const sectionC = [
+  {
+    q: "The lecture states that investing in information technology does NOT guarantee good returns, and there is considerable variation in returns across firms. What are the TWO key factors that determine whether a firm gets good returns?",
+    opts: [
+      "Adopting the latest technology and having the largest IT budget",
+      "Adopting the right business model and investing in complementary assets",
+      "Hiring the most IT staff and implementing the most complex system",
+      "Using open-source software and outsourcing all development"
+    ],
+    ans: 1,
+    exp: "Two key factors: (1) RIGHT BUSINESS MODEL and (2) COMPLEMENTARY ASSETS (organizational and management capital)."
+  },
+  {
+    q: "What are 'complementary assets' as defined in the lecture?",
+    opts: [
+      "Software tools purchased alongside new hardware to ensure compatibility.",
+      "The additional servers and storage needed when scaling a system.",
+      "Assets required to derive value from a primary investment, such as technology.",
+      "Financial reserves set aside to cover IT maintenance costs."
+    ],
+    ans: 2,
+    exp: "Complementary assets = assets REQUIRED to derive value from the PRIMARY investment (IT). Example: invest in tech AND the people/processes to use it properly."
+  },
+  {
+    q: "Which of the following is classified as an ORGANIZATIONAL complementary asset?",
+    opts: [
+      "The Internet and telecommunications infrastructure",
+      "Technology standards across the industry",
+      "Incentives for management innovation",
+      "An appropriate business model and efficient business processes"
+    ],
+    ans: 3,
+    exp: "ORGANIZATIONAL complementary assets = appropriate business model + efficient business processes."
+  },
+  {
+    q: "Which of the following is classified as a MANAGERIAL complementary asset?",
+    opts: [
+      "Appropriate business model",
+      "The Internet and telecommunications infrastructure",
+      "Incentives for management innovation and collaborative work environments",
+      "Efficient business processes"
+    ],
+    ans: 2,
+    exp: "MANAGERIAL complementary assets = incentives for management innovation + teamwork and collaborative work environments."
+  },
+  {
+    q: "Which of the following is classified as a SOCIAL complementary asset?",
+    opts: [
+      "Efficient business processes",
+      "Teamwork and collaborative work environments",
+      "Appropriate business model",
+      "The Internet and telecommunications infrastructure and technology standards"
+    ],
+    ans: 3,
+    exp: "SOCIAL complementary assets = the Internet & telecommunications infrastructure + technology standards. These exist at the societal level."
+  },
+  {
+    q: "The TECHNICAL approach to studying information systems emphasizes which of the following?",
+    opts: [
+      "Behavioral issues like strategic integration and implementation psychology",
+      "Mathematically based models from computer science, management science, and operations research",
+      "The impact of IS on organizational culture and employee sociology",
+      "Sociotechnical optimization of human and machine systems"
+    ],
+    ans: 1,
+    exp: "Technical approach = mathematically based models. Disciplines: computer science, management science, operations research."
+  },
+  {
+    q: "The BEHAVIORAL approach to studying information systems focuses on which of the following?",
+    opts: [
+      "Building algorithms and mathematical models for data processing",
+      "Designing hardware architectures and network protocols",
+      "Behavioral issues such as strategic business integration, implementation challenges, drawing from psychology, economics, and sociology",
+      "Optimizing database schemas and query performance"
+    ],
+    ans: 2,
+    exp: "Behavioral approach = strategic business integration, implementation, design — drawing from PSYCHOLOGY, ECONOMICS, and SOCIOLOGY."
+  },
+  {
+    q: "According to the lecture, Management Information Systems (MIS) as an academic discipline combines which of the following?",
+    opts: [
+      "Only computer science and software engineering",
+      "Computer science, management science, operations research, practical orientation, AND behavioral issues",
+      "Psychology, sociology, and economics only",
+      "Hardware design, network management, and database administration"
+    ],
+    ans: 1,
+    exp: "MIS = combines computer science + management science + operations research (technical) WITH behavioral issues (practical orientation)."
+  },
+  {
+    q: "The four main actors in the MIS field as described in the lecture are:",
+    opts: [
+      "Programmers, system analysts, database administrators, network engineers",
+      "CEOs, CFOs, CIOs, and IT consultants",
+      "Suppliers of hardware and software, business firms, managers and employees, and the firm's environment (legal, social, cultural context)",
+      "Governments, universities, think tanks, and technology vendors"
+    ],
+    ans: 2,
+    exp: "Four MIS actors: (1) Hardware/software suppliers, (2) Business firms, (3) Managers & employees, (4) The firm's environment (legal, social, cultural)."
+  },
+  {
+    q: "The sociotechnical view of information systems states that optimal organizational performance is achieved by:",
+    opts: [
+      "Maximizing the performance of the technical system regardless of human factors.",
+      "Focusing exclusively on improving human and social factors while keeping technology secondary.",
+      "Jointly optimizing both the social and technical systems until a satisfactory fit is obtained.",
+      "Replacing human workers with automated technical systems as much as possible."
+    ],
+    ans: 2,
+    exp: "Sociotechnical view = JOINTLY OPTIMIZING social AND technical systems. Technology and organization mutually adjust to each other until a satisfactory fit is reached."
+  },
+  {
+    q: "What is the main reason the book adopts a sociotechnical perspective on information systems?",
+    opts: [
+      "It is required by government regulations for IS education.",
+      "To avoid a purely technological approach and account for both social and technical factors in achieving optimal performance.",
+      "Because behavioral approaches have been proven ineffective in practice.",
+      "To align with the technical approach used by most IT companies."
+    ],
+    ans: 1,
+    exp: "Sociotechnical perspective AVOIDS purely technological thinking. It recognizes that people + processes + technology must ALL be optimized together."
+  },
+  {
+    q: "A firm invests heavily in a new ERP software system but sees no improvement in performance. According to the lecture, the MOST likely reason is:",
+    opts: [
+      "The software was not developed using an agile methodology.",
+      "The firm failed to invest in complementary assets such as people, processes, and appropriate business models.",
+      "The firm did not purchase enough hardware to support the software.",
+      "The software was not integrated with the Internet."
+    ],
+    ans: 1,
+    exp: "IT alone ≠ value. Firms must ALSO invest in COMPLEMENTARY ASSETS (right people, right processes, right business model) to derive returns from technology."
+  },
+  {
+    q: "The lecture states that information systems create value for a firm as which of the following?",
+    opts: [
+      "A purely technical solution to hardware and networking problems.",
+      "An organizational and management solution to challenges posed by the environment.",
+      "A government-mandated compliance system for regulatory requirements.",
+      "A substitute for human decision-making at all levels of the firm."
+    ],
+    ans: 1,
+    exp: "IS creates value as an ORGANIZATIONAL AND MANAGEMENT solution to environmental challenges — not just a technical fix."
+  },
+  {
+    q: "The business functions (functional areas) that form part of the ORGANIZATIONAL dimension of information systems include:",
+    opts: [
+      "Hardware, software, databases, and telecommunications",
+      "Input, processing, output, and feedback",
+      "Sales and marketing, human resources, finance and accounting, manufacturing and production",
+      "Senior management, middle management, and operational management"
+    ],
+    ans: 2,
+    exp: "Organizational dimension functional areas: Sales & Marketing, Human Resources, Finance & Accounting, Manufacturing & Production."
+  },
+  {
+    q: "In the context of an information system, the 'output' activity refers to:",
+    opts: [
+      "Entering raw data into the system from the external environment.",
+      "Transforming raw facts into a structured and meaningful format.",
+      "Transferring processed information to people or activities that will use it.",
+      "Returning processed results back to correct errors in the input stage."
+    ],
+    ans: 2,
+    exp: "OUTPUT = transferring/distributing the processed information to people or activities that will use it (e.g., reports, dashboards, alerts)."
+  },
+];
+
+// ─────────────────────────────────────────────────────────
+// COMBINE ALL
+// ─────────────────────────────────────────────────────────
+const allQ = [...sectionA, ...sectionB, ...sectionC];
+const total = allQ.length;
+let correct = 0, wrong = 0, answered = 0;
+
+function renderSection(data, containerId, offset) {
+  const c = document.getElementById(containerId);
+  const letters = ['A','B','C','D'];
+  data.forEach((item, i) => {
+    const idx = offset + i;
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = `q-${idx}`;
+    const optsHtml = item.opts.map((o, oi) =>
+      `<button class="option-btn" onclick="selectAnswer(${idx},${oi})" data-qi="${idx}" data-oi="${oi}">
+        <span class="letter">${letters[oi]}</span>${o}
+      </button>`
+    ).join('');
+    card.innerHTML = `
+      <div class="q-num">Q${idx+1} of ${total}</div>
+      <div class="q-text">${item.q}</div>
+      <div class="options">${optsHtml}</div>
+      <div class="feedback" id="fb-${idx}"></div>`;
+    c.appendChild(card);
+  });
+}
+
+renderSection(sectionA, 'quiz-a', 0);
+renderSection(sectionB, 'quiz-b', sectionA.length);
+renderSection(sectionC, 'quiz-c', sectionA.length + sectionB.length);
+
+function selectAnswer(qIdx, optIdx) {
+  const card = document.getElementById(`q-${qIdx}`);
+  if (card.classList.contains('answered')) return;
+  card.classList.add('answered');
+  const item = allQ[qIdx];
+  const btns = card.querySelectorAll('.option-btn');
+  btns.forEach(b => b.disabled = true);
+  const isCorrect = optIdx === item.ans;
+  btns[optIdx].classList.add(isCorrect ? 'correct-ans' : 'wrong-ans');
+  if (!isCorrect) btns[item.ans].classList.add('reveal-correct');
+  const fb = document.getElementById(`fb-${qIdx}`);
+  fb.classList.add('show', isCorrect ? 'ok' : 'bad');
+  fb.textContent = (isCorrect ? '✔ Correct — ' : '✘ Wrong — ') + item.exp;
+  if (isCorrect) correct++; else wrong++;
+  answered++;
+  document.getElementById('sc-correct').textContent = correct;
+  document.getElementById('sc-wrong').textContent = wrong;
+  document.getElementById('sc-total').textContent = answered;
+  document.getElementById('prog-bar').style.width = `${(answered/total)*100}%`;
+}
+
+function showResults() {
+  const pct = Math.round((correct / total) * 100);
+  let emoji = '💀', title = 'Keep Studying!', sub = 'Go back through the slides carefully.';
+  if (pct >= 90) { emoji = '🏆'; title = 'Outstanding!'; sub = "Top marks — you're ready for the exam!"; }
+  else if (pct >= 75) { emoji = '🎯'; title = 'Great Job!'; sub = 'Review the ones you missed and you\'re set!'; }
+  else if (pct >= 55) { emoji = '📚'; title = 'Not Bad!'; sub = 'Focus on your weak areas and try again.'; }
+  document.getElementById('modal-emoji').textContent = emoji;
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-score').textContent = `${correct} / ${total}`;
+  document.getElementById('modal-sub').textContent = sub + ` (${pct}%)`;
+  document.getElementById('results-modal').classList.add('show');
+}
+
+function restart() { location.reload(); }
+</script>
+</body>
+</html>
