@@ -1,0 +1,1959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 2 — Global E-Business & Collaboration | Exam Domination System</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #1a1a24;
+    --card: #16161f;
+    --card2: #1e1e2a;
+    --border: #2a2a3d;
+    --text: #e8e8f0;
+    --muted: #7070a0;
+    --accent: #6c63ff;
+    --accent2: #ff6584;
+    --yellow: #ffd166;
+    --green: #06d6a0;
+    --red: #ef233c;
+    --blue: #48cae4;
+    --orange: #f4a261;
+    --glow: rgba(108,99,255,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: 260px; height: 100vh;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    z-index: 100;
+    transition: transform .3s ease;
+    padding-bottom: 2rem;
+  }
+
+  #sidebar::-webkit-scrollbar { width: 4px; }
+  #sidebar::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+  .sidebar-header {
+    padding: 1.5rem 1.2rem 1rem;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0;
+    background: var(--bg2);
+    z-index: 1;
+  }
+
+  .sidebar-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .sidebar-header p {
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 0.2rem;
+  }
+
+  .nav-section { padding: 0.8rem 0; }
+
+  .nav-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0.3rem 1.2rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .nav-item {
+    display: block;
+    padding: 0.45rem 1.2rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: all .2s;
+    cursor: pointer;
+  }
+
+  .nav-item:hover, .nav-item.active {
+    color: var(--text);
+    border-left-color: var(--accent);
+    background: rgba(108,99,255,0.08);
+  }
+
+  .nav-item span { font-size: 0.7rem; margin-right: 0.4rem; }
+
+  /* ── MAIN CONTENT ── */
+  #main {
+    margin-left: 260px;
+    min-height: 100vh;
+    padding: 0 2rem 4rem;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    position: sticky; top: 0;
+    background: rgba(10,10,15,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0.8rem 0;
+    margin: 0 -2rem 2rem;
+    padding-left: 2rem; padding-right: 2rem;
+    z-index: 90;
+    display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+  }
+
+  .topbar h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .topbar h1 span { color: var(--accent); }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    font-size: 0.78rem;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all .2s;
+  }
+
+  .btn:hover { background: var(--card2); border-color: var(--accent); color: var(--accent); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn.primary:hover { opacity: 0.88; }
+  .btn.danger { background: rgba(239,35,60,0.12); border-color: var(--red); color: var(--red); }
+
+  /* ── SECTION TITLES ── */
+  .section { margin-bottom: 3rem; }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: 0.6rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-title .tag {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    vertical-align: middle;
+  }
+
+  .tag-engine { background: rgba(108,99,255,0.2); color: var(--accent); }
+  .tag-matrix { background: rgba(6,214,160,0.15); color: var(--green); }
+  .tag-compare { background: rgba(255,209,102,0.15); color: var(--yellow); }
+  .tag-decision { background: rgba(72,202,228,0.15); color: var(--blue); }
+  .tag-trap { background: rgba(239,35,60,0.15); color: var(--red); }
+  .tag-essay { background: rgba(244,162,97,0.15); color: var(--orange); }
+  .tag-recall { background: rgba(6,214,160,0.15); color: var(--green); }
+  .tag-flash { background: rgba(108,99,255,0.2); color: var(--accent); }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.4rem;
+    margin-bottom: 1rem;
+    transition: border-color .2s;
+  }
+
+  .card:hover { border-color: var(--accent); }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+
+  .card-title .icon { font-size: 1.1rem; }
+
+  /* ── GRID ── */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+
+  @media (max-width: 900px) {
+    .grid2, .grid3 { grid-template-columns: 1fr; }
+    #sidebar { transform: translateX(-100%); }
+    #main { margin-left: 0; }
+  }
+
+  /* ── HIGHLIGHTS ── */
+  .hl-def { color: var(--blue); font-weight: 500; }
+  .hl-imp { color: var(--yellow); font-weight: 600; }
+  .hl-trap { color: var(--red); font-weight: 600; }
+  .hl-green { color: var(--green); font-weight: 500; }
+  .hl-orange { color: var(--orange); font-weight: 500; }
+
+  /* ── PILLS / BADGES ── */
+  .badge {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .badge-def { background: rgba(72,202,228,0.15); color: var(--blue); }
+  .badge-imp { background: rgba(255,209,102,0.15); color: var(--yellow); }
+  .badge-trap { background: rgba(239,35,60,0.15); color: var(--red); }
+  .badge-rule { background: rgba(6,214,160,0.15); color: var(--green); }
+
+  /* ── LIST STYLES ── */
+  .list { list-style: none; padding: 0; }
+  .list li {
+    padding: 0.4rem 0 0.4rem 1.2rem;
+    position: relative;
+    font-size: 0.88rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .list li::before {
+    content: '▸';
+    position: absolute; left: 0;
+    color: var(--accent);
+    font-size: 0.7rem;
+    top: 0.55rem;
+  }
+  .list li:last-child { border-bottom: none; }
+
+  /* ── ARROW FLOW ── */
+  .flow {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem;
+    margin: 0.6rem 0;
+  }
+  .flow-item {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.8rem;
+  }
+  .flow-arrow { color: var(--accent); font-weight: 700; font-size: 1rem; }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    background: var(--bg3);
+    padding: 0.7rem 1rem;
+    text-align: left;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 0.65rem 1rem;
+    font-size: 0.85rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(108,99,255,0.04); }
+  .td-name { font-weight: 600; color: var(--text); }
+  .td-imp { color: var(--yellow); }
+  .td-trap { color: var(--red); }
+
+  /* ── COLLAPSIBLE ── */
+  .collapsible { overflow: hidden; transition: max-height .4s ease; }
+  .collapsible.closed { max-height: 0; }
+  .collapsible.open { max-height: 9999px; }
+
+  .collapse-toggle {
+    display: flex; justify-content: space-between; align-items: center;
+    cursor: pointer;
+    padding: 0.8rem 1.2rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all .2s;
+  }
+  .collapse-toggle:hover { border-color: var(--accent); background: var(--card2); }
+  .collapse-toggle .chevron { transition: transform .3s; font-size: 0.8rem; color: var(--accent); }
+  .collapse-toggle.open .chevron { transform: rotate(180deg); }
+
+  .collapse-body {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.6rem;
+    display: none;
+  }
+  .collapse-body.open { display: block; }
+
+  /* ── DECISION CARDS ── */
+  .decision-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 0.8rem;
+  }
+  .decision-if {
+    background: rgba(72,202,228,0.1);
+    border-bottom: 1px solid var(--border);
+    padding: 0.6rem 1rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+  .decision-if::before { content: 'IF '; color: var(--blue); font-weight: 800; }
+  .decision-then {
+    background: rgba(6,214,160,0.08);
+    padding: 0.6rem 1rem;
+    font-size: 0.82rem;
+  }
+  .decision-then::before { content: 'THEN WRITE: '; color: var(--green); font-weight: 800; }
+
+  /* ── TRAP CARD ── */
+  .trap-card {
+    background: rgba(239,35,60,0.06);
+    border: 1px solid rgba(239,35,60,0.3);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.8rem;
+  }
+  .trap-card .trap-header {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-weight: 700; color: var(--red);
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+  }
+  .trap-card .trap-wrong { color: var(--red); font-size: 0.82rem; margin-bottom: 0.4rem; }
+  .trap-card .trap-right { color: var(--green); font-size: 0.82rem; }
+
+  /* ── FLASHCARDS ── */
+  #flashcard-mode { display: none; }
+  #flashcard-mode.active { display: block; }
+
+  .flashcard-wrap {
+    perspective: 1000px;
+    height: 220px;
+    cursor: pointer;
+    margin-bottom: 1rem;
+  }
+
+  .flashcard {
+    width: 100%; height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform .5s;
+  }
+
+  .flashcard.flipped { transform: rotateY(180deg); }
+
+  .fc-front, .fc-back {
+    position: absolute; width: 100%; height: 100%;
+    border-radius: 12px;
+    backface-visibility: hidden;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .fc-front {
+    background: var(--card);
+    border: 1px solid var(--border);
+  }
+  .fc-front .fc-q {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+  .fc-front .fc-hint {
+    font-size: 0.72rem; color: var(--muted);
+  }
+
+  .fc-back {
+    background: linear-gradient(135deg, rgba(108,99,255,0.2), rgba(6,214,160,0.1));
+    border: 1px solid var(--accent);
+    transform: rotateY(180deg);
+  }
+  .fc-back .fc-a {
+    font-size: 0.9rem; color: var(--text); line-height: 1.6;
+  }
+
+  .fc-nav {
+    display: flex; justify-content: center; align-items: center; gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .fc-counter {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem; color: var(--muted);
+  }
+
+  /* ── QUIZ MODE ── */
+  #quiz-mode { display: none; }
+  #quiz-mode.active { display: block; }
+
+  .quiz-q {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+    color: var(--text);
+  }
+
+  .quiz-options { list-style: none; padding: 0; }
+  .quiz-options li {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.8rem 1.2rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    font-size: 0.88rem;
+    transition: all .2s;
+    display: flex; align-items: center; gap: 0.7rem;
+  }
+
+  .quiz-options li:hover:not(.answered) { border-color: var(--accent); background: var(--card2); }
+  .quiz-options li.correct { background: rgba(6,214,160,0.12); border-color: var(--green); color: var(--green); }
+  .quiz-options li.wrong { background: rgba(239,35,60,0.1); border-color: var(--red); color: var(--red); }
+
+  .quiz-opt-letter {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--bg3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem; font-weight: 700; flex-shrink: 0;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .quiz-feedback {
+    margin-top: 1rem; padding: 1rem; border-radius: 8px;
+    font-size: 0.88rem; display: none;
+  }
+
+  .quiz-score-bar {
+    background: var(--bg3);
+    border-radius: 99px; height: 6px; margin-bottom: 1.2rem; overflow: hidden;
+  }
+  .quiz-score-fill {
+    height: 100%; background: var(--accent);
+    border-radius: 99px; transition: width .4s;
+  }
+
+  /* ── ESSAY SECTION ── */
+  .essay-block {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
+  .essay-q {
+    background: rgba(244,162,97,0.1);
+    padding: 0.9rem 1.2rem;
+    font-weight: 700; font-size: 0.92rem;
+    color: var(--orange);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  .essay-body {
+    padding: 1.2rem;
+    display: none;
+    background: var(--card);
+  }
+  .essay-body.open { display: block; }
+
+  .essay-part { margin-bottom: 1rem; }
+  .essay-part-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+  }
+  .essay-part p { font-size: 0.86rem; line-height: 1.7; }
+
+  /* ── MNEMONIC BOXES ── */
+  .mnemonic {
+    background: linear-gradient(135deg, rgba(108,99,255,0.1), rgba(255,101,132,0.08));
+    border: 1px solid rgba(108,99,255,0.3);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin: 0.8rem 0;
+  }
+  .mnemonic-label {
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem;
+  }
+  .mnemonic-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem; font-weight: 700;
+    color: var(--yellow); letter-spacing: 0.05em;
+  }
+  .mnemonic-exp { font-size: 0.8rem; color: var(--muted); margin-top: 0.4rem; }
+
+  /* ── ACTIVE RECALL ── */
+  .recall-item { margin-bottom: 0.7rem; }
+  .recall-q {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px 8px 0 0;
+    padding: 0.75rem 1rem;
+    font-weight: 600; font-size: 0.88rem;
+    cursor: pointer;
+    display: flex; justify-content: space-between;
+  }
+  .recall-q:hover { border-color: var(--accent); }
+  .recall-a {
+    background: rgba(6,214,160,0.07);
+    border: 1px solid var(--green);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.86rem;
+    display: none;
+  }
+  .recall-a.show { display: block; }
+
+  /* ── ULTRA SUMMARY ── */
+  .summary-chunk {
+    background: var(--card);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 0.8rem;
+    font-size: 0.85rem;
+    line-height: 1.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap { display: flex; align-items: center; gap: 0.8rem; }
+  .progress-bar { flex: 1; background: var(--bg3); border-radius: 99px; height: 4px; }
+  .progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--accent), var(--green)); transition: width .3s; }
+  .progress-label { font-family: 'Space Mono', monospace; font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 3rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+  }
+  .hero-tag {
+    display: inline-block;
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.7rem;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.3);
+    border-radius: 4px;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 0.8rem;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p { font-size: 0.9rem; color: var(--muted); max-width: 600px; }
+  .hero-stats {
+    display: flex; gap: 2rem; margin-top: 1.5rem; flex-wrap: wrap;
+  }
+  .hero-stat { }
+  .hero-stat-n {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.6rem; font-weight: 700;
+    color: var(--accent);
+    display: block;
+  }
+  .hero-stat-l { font-size: 0.72rem; color: var(--muted); }
+
+  /* ── MODE SWITCHER ── */
+  .mode-tabs {
+    display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem;
+  }
+  .mode-tab {
+    padding: 0.45rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .mode-tab.active, .mode-tab:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .section { animation: fadeUp .4s ease both; }
+
+  /* ── TOGGLE MOBILE ── */
+  #toggle-sidebar {
+    display: none;
+    position: fixed; top: 1rem; left: 1rem;
+    z-index: 200;
+    background: var(--accent);
+    border: none; color: #fff;
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  @media (max-width: 900px) {
+    #toggle-sidebar { display: flex; align-items: center; justify-content: center; }
+    #sidebar.open { transform: translateX(0); }
+  }
+
+  .pyramid {
+    display: flex; flex-direction: column; gap: 0.5rem; align-items: center;
+  }
+  .pyr-row {
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; padding: 0.6rem 1rem;
+    border-radius: 8px; font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+  .pyr1 { background: rgba(108,99,255,0.25); color: var(--accent); width: 40%; }
+  .pyr2 { background: rgba(72,202,228,0.2); color: var(--blue); width: 60%; }
+  .pyr3 { background: rgba(6,214,160,0.15); color: var(--green); width: 80%; }
+  .pyr4 { background: rgba(255,209,102,0.15); color: var(--yellow); width: 100%; }
+
+  .info-box {
+    background: rgba(72,202,228,0.06);
+    border: 1px solid rgba(72,202,228,0.2);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    font-size: 0.84rem;
+    margin: 0.6rem 0;
+  }
+  .info-box strong { color: var(--blue); }
+</style>
+</head>
+<body>
+
+<button id="toggle-sidebar" onclick="toggleSidebar()">☰</button>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <h2>📚 CH2 — MIS</h2>
+    <p>Exam Domination System</p>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Study Mode</div>
+    <div class="nav-item active" onclick="setMode('study')"><span>📖</span> Study Mode</div>
+    <div class="nav-item" onclick="setMode('flashcard')"><span>🃏</span> Flashcard Mode</div>
+    <div class="nav-item" onclick="setMode('quiz')"><span>🎯</span> Quiz Mode</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Sections</div>
+    <a class="nav-item" href="#s1"><span>🔵</span> Core Knowledge</a>
+    <a class="nav-item" href="#s2"><span>🔗</span> Connection Matrix</a>
+    <a class="nav-item" href="#s3"><span>⚔️</span> Comparison Tables</a>
+    <a class="nav-item" href="#s4"><span>⚡</span> Decision Engine</a>
+    <a class="nav-item" href="#s5"><span>💀</span> Exam Traps</a>
+    <a class="nav-item" href="#s6"><span>✍️</span> Essay Builder</a>
+    <a class="nav-item" href="#s7"><span>🧠</span> Ultra Summary</a>
+    <a class="nav-item" href="#s8"><span>🔄</span> Active Recall</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Actions</div>
+    <div class="nav-item" onclick="revealAll()"><span>👁</span> Reveal All</div>
+    <div class="nav-item" onclick="hideAll()"><span>🙈</span> Hide All</div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main id="main">
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <h1>Global <span>E-Business</span> & Collaboration — Ch. 2</h1>
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-label" id="progressLabel">0%</div>
+    </div>
+    <button class="btn primary" onclick="revealAll()">👁 Reveal All</button>
+    <button class="btn" onclick="setMode('quiz')">🎯 Quiz Me</button>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">Management Information Systems · Chapter 2</div>
+    <h1>Global E-Business &amp;<br><span>Collaboration</span></h1>
+    <p>Complete interactive study system — every concept, every connection, every exam trap. Built for maximum retention and full-mark essays.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="hero-stat-n">9</span><span class="hero-stat-l">Major Sections</span></div>
+      <div class="hero-stat"><span class="hero-stat-n">7</span><span class="hero-stat-l">IS Types</span></div>
+      <div class="hero-stat"><span class="hero-stat-n">4</span><span class="hero-stat-l">Enterprise Apps</span></div>
+      <div class="hero-stat"><span class="hero-stat-n">20+</span><span class="hero-stat-l">Flashcards</span></div>
+    </div>
+  </div>
+
+  <!-- MODE TABS -->
+  <div class="mode-tabs">
+    <div class="mode-tab active" onclick="setMode('study')">📖 Study Mode</div>
+    <div class="mode-tab" onclick="setMode('flashcard')">🃏 Flashcards</div>
+    <div class="mode-tab" onclick="setMode('quiz')">🎯 Quiz Mode</div>
+  </div>
+
+  <!-- ════════════════════════════════════════ STUDY MODE ════ -->
+  <div id="study-mode">
+
+    <!-- ══ SECTION 1: CORE KNOWLEDGE ══ -->
+    <div class="section" id="s1">
+      <div class="section-title">
+        🔵 Core Knowledge Engine <span class="tag tag-engine">ENGINE</span>
+      </div>
+
+      <!-- Business Processes -->
+      <div class="collapse-toggle" onclick="toggleCollapse(this)">
+        <span>📦 Business Processes — Foundations</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="collapse-body open">
+        <p style="margin-bottom:0.8rem; font-size:0.88rem;">
+          A <span class="hl-def">business process</span> = a set of logically related activities/steps that produce a specific business outcome.
+          Involves flows of <span class="hl-imp">material, information, and knowledge</span>.
+        </p>
+        <div class="grid2">
+          <div class="card">
+            <div class="card-title"><span class="icon">🏭</span> Manufacturing & Production</div>
+            <ul class="list">
+              <li>Assembling the product</li>
+              <li>Managing inventory</li>
+              <li>Controlling quality</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title"><span class="icon">📢</span> Sales & Marketing</div>
+            <ul class="list">
+              <li>Identifying customers</li>
+              <li>Selling products/services</li>
+              <li>Promoting products</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title"><span class="icon">💰</span> Finance & Accounting</div>
+            <ul class="list">
+              <li>Creating financial statements</li>
+              <li>Managing cash flow</li>
+              <li>Paying creditors</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title"><span class="icon">👥</span> Human Resources</div>
+            <ul class="list">
+              <li>Hiring employees</li>
+              <li>Evaluating performance</li>
+              <li>Enrolling in benefits</li>
+            </ul>
+          </div>
+        </div>
+        <div class="info-box" style="margin-top:0.8rem;">
+          <strong>Key Insight:</strong> Business processes can be <em>assets</em> (competitive advantage) OR <em>liabilities</em> (inefficiency).
+          The <strong>Order Fulfillment Process</strong> spans Sales, Accounting, AND Manufacturing — a perfect cross-functional example.
+        </div>
+        <p style="margin-top:0.8rem; font-size:0.85rem;">
+          <strong style="color:var(--yellow)">IT enhances processes by:</strong>
+        </p>
+        <div class="flow" style="margin-top:0.5rem;">
+          <div class="flow-item">Manual Steps</div>
+          <div class="flow-arrow">→ Automate →</div>
+          <div class="flow-item">Efficiency ↑</div>
+        </div>
+        <div class="flow">
+          <div class="flow-item">Sequential Steps</div>
+          <div class="flow-arrow">→ Parallel →</div>
+          <div class="flow-item">Speed ↑↑</div>
+        </div>
+        <div class="flow">
+          <div class="flow-item">Info Flows</div>
+          <div class="flow-arrow">→ Redesign →</div>
+          <div class="flow-item">New Business Models</div>
+        </div>
+      </div>
+
+      <!-- TPS -->
+      <div class="collapse-toggle" onclick="toggleCollapse(this)">
+        <span>⚙️ Transaction Processing Systems (TPS)</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="collapse-body open">
+        <div class="grid2">
+          <div>
+            <p style="font-size:0.87rem; margin-bottom:0.8rem;">
+              <span class="badge badge-def">DEFINITION</span><br/>
+              Performs and <strong>records daily routine transactions</strong> necessary to conduct business.
+            </p>
+            <ul class="list">
+              <li>Serves <span class="hl-imp">operational managers and staff</span></li>
+              <li>Examples: sales order entry, payroll, shipping, hotel reservations</li>
+              <li>Allows monitoring of operations status</li>
+              <li>Serves <span class="hl-def">predefined, structured goals</span> and decision making</li>
+            </ul>
+          </div>
+          <div class="card" style="background: rgba(108,99,255,0.06);">
+            <div class="card-title">🧾 Payroll TPS Example</div>
+            <div class="flow">
+              <div class="flow-item">Time Card (Input)</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-item">TPS Processing</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-item">Paychecks + Reports</div>
+            </div>
+            <p style="font-size:0.8rem; color:var(--muted); margin-top:0.5rem;">Captures employee payment data → outputs hard-copy & online reports for management</p>
+          </div>
+        </div>
+        <div class="mnemonic">
+          <div class="mnemonic-label">🧠 Memory Hook</div>
+          <div class="mnemonic-text">TPS = "Totally Predictable Stuff"</div>
+          <div class="mnemonic-exp">TPS handles repetitive, structured, daily transactions. No analysis. Just recording.</div>
+        </div>
+      </div>
+
+      <!-- Business Intelligence -->
+      <div class="collapse-toggle" onclick="toggleCollapse(this)">
+        <span>💡 Business Intelligence Systems Overview</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="collapse-body open">
+        <p style="font-size:0.87rem; margin-bottom:0.8rem;">
+          <span class="badge badge-def">DEFINITION</span> <span class="hl-def">Business Intelligence</span> = data + software tools to organize, analyze data → help managers make <strong>improved decisions</strong>.
+        </p>
+        <div class="pyramid">
+          <div class="pyr-row pyr1">ESS / EIS — Senior Management</div>
+          <div class="pyr-row pyr2">DSS — Middle Management</div>
+          <div class="pyr-row pyr3">MIS — Middle Management</div>
+          <div class="pyr-row pyr4">TPS — Operational Staff</div>
+        </div>
+        <p style="text-align:center; font-size:0.72rem; color:var(--muted); margin-top:0.4rem;">Management Pyramid — TPS feeds up to MIS, which feeds DSS and ESS</p>
+      </div>
+
+      <!-- MIS -->
+      <div class="collapse-toggle" onclick="toggleCollapse(this)">
+        <span>📊 Management Information Systems (MIS)</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="collapse-body open">
+        <div class="grid2">
+          <div>
+            <p style="font-size:0.87rem; margin-bottom:0.7rem;">
+              <span class="badge badge-def">SERVES</span> <span class="hl-imp">Middle Management</span>
+            </p>
+            <ul class="list">
+              <li>Provides reports on firm's <strong>current performance</strong></li>
+              <li>Data sourced from <strong>TPS</strong> (summarized)</li>
+              <li>Answers <strong>routine questions</strong> with predefined procedures</li>
+              <li><span class="hl-trap">Little analytic capability</span> — reports only</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">📋 MIS Data Flow</div>
+            <div class="flow" style="flex-direction:column; align-items:flex-start;">
+              <div class="flow-item">TPS 1 (Sales)</div>
+              <div class="flow-item">TPS 2 (Payroll)</div>
+              <div class="flow-item">TPS 3 (Inventory)</div>
+              <div class="flow-arrow" style="align-self:center; font-size:1.5rem;">↓</div>
+              <div class="flow-item" style="background:rgba(108,99,255,0.15); border-color:var(--accent);">MIS Reporting System</div>
+              <div class="flow-arrow" style="align-self:center; font-size:1.5rem;">↓</div>
+              <div class="flow-item" style="background:rgba(6,214,160,0.1);">Manager Reports</div>
+            </div>
+          </div>
+        </div>
+        <div class="mnemonic">
+          <div class="mnemonic-label">🧠 Memory Hook</div>
+          <div class="mnemonic-text">MIS = "My Information Summary"</div>
+          <div class="mnemonic-exp">Middle managers get a summary of what happened. No what-ifs. No analysis. Just facts.</div>
+        </div>
+      </div>
+
+      <!-- DSS -->
+      <div class="collapse-toggle" onclick="toggleCollapse(this)">
+        <span>🔮 Decision Support Systems (DSS)</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="collapse-body open">
+        <div class="grid2">
+          <div>
+            <p style="font-size:0.87rem; margin-bottom:0.7rem;">
+              <span class="badge badge-def">SERVES</span> <span class="hl-imp">Middle Management</span>
+            </p>
+            <ul class="list">
+              <li>Supports <span class="hl-imp">non-routine decision making</span></li>
+              <li>Uses <strong>both internal (TPS/MIS) + external data</strong></li>
+              <li>Example: <em>"If December sales doubled, what happens to production schedule?"</em></li>
+              <li><span class="badge badge-imp">Model-Driven DSS</span>: Voyage-estimating systems (shipping bids)</li>
+              <li><span class="badge badge-imp">Data-Driven DSS</span>: Intrawest marketing analysis</li>
+            </ul>
+          </div>
+          <div class="card" style="background: rgba(72,202,228,0.05);">
+            <div class="card-title">🚢 Voyage-Estimating DSS</div>
+            <p style="font-size:0.82rem;">Runs on powerful PC. Used <strong>daily</strong> by managers to develop bids on shipping contracts. Classic <em>model-driven</em> DSS example.</p>
+            <div class="info-box" style="margin-top:0.6rem;">
+              <strong>Key:</strong> DSS answers "what if" and "why" questions, not just "what happened."
+            </div>
+          </div>
+        </div>
+        <div class="mnemonic">
+          <div class="mnemonic-label">🧠 Memory Hook</div>
+          <div class="mnemonic-text">DSS = "Decisions Support Scenarios"</div>
+          <div class="mnemonic-exp">What-if analysis. Scenarios. Non-routine. Uses models AND data. Think flexibility.</div>
+        </div>
+      </div>
+
+      <!-- ESS -->
+      <div class="collapse-toggle" onclick="toggleCollapse(this)">
+        <span>👑 Executive Support Systems (ESS / EIS)</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="collapse-body open">
+        <div class="grid2">
+          <div>
+            <p style="font-size:0.87rem; margin-bottom:0.7rem;">
+              <span class="badge badge-def">SERVES</span> <span class="hl-imp">Senior Management</span>
+            </p>
+            <ul class="list">
+              <li>Addresses <strong>non-routine decisions</strong> requiring judgment, evaluation, insight</li>
+              <li>Incorporates <strong>external events</strong> (tax laws, competitors)</li>
+              <li>Uses summarized data from <strong>MIS + DSS</strong></li>
+              <li>Example: <em>Digital Dashboard</em> showing real-time firm financial performance</li>
+              <li>Displays: working capital, accounts receivable, accounts payable, cash flow, inventory</li>
+            </ul>
+          </div>
+          <div class="card" style="background: rgba(255,209,102,0.05);">
+            <div class="card-title">📱 Digital Dashboard</div>
+            <p style="font-size:0.82rem;">Real-time visual view of firm's health. Like a car dashboard for the CEO. Aggregates internal + external intelligence.</p>
+          </div>
+        </div>
+        <div class="mnemonic">
+          <div class="mnemonic-label">🧠 Memory Hook</div>
+          <div class="mnemonic-text">ESS = "Executives See Synthesis"</div>
+          <div class="mnemonic-exp">Senior executives need the big picture — synthesized from everywhere, internal AND external.</div>
+        </div>
+      </div>
+
+      <!-- Enterprise Apps -->
+      <div class="collapse-toggle" onclick="toggleCollapse(this)">
+        <span>🏢 Enterprise Applications — The 4 Giants</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="collapse-body open">
+        <p style="font-size:0.87rem; margin-bottom:1rem;">Enterprise applications <span class="hl-imp">span functional areas</span>, execute processes across the <strong>entire firm</strong>, and include <strong>all management levels</strong>. They may extend outside the organization.</p>
+        <div class="grid2">
+          <div class="card">
+            <div class="card-title" style="color:var(--accent)">1️⃣ Enterprise Systems (ERP)</div>
+            <ul class="list">
+              <li>Collects data from <strong>different firm functions</strong></li>
+              <li>Stores in <strong>single central data repository</strong></li>
+              <li>Resolves <span class="hl-green">fragmented data</span> problem</li>
+              <li>Enables coordination of daily activities</li>
+              <li>Helps with production, inventory, daily ops, and long-term planning</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color:var(--blue)">2️⃣ Supply Chain Management (SCM)</div>
+            <ul class="list">
+              <li>Manages relationships with <strong>suppliers</strong></li>
+              <li>Shares: orders, production, inventory, delivery info</li>
+              <li>Goal: <span class="hl-imp">right product → right place → right time → lowest cost</span></li>
+              <li>Coordinates supply chain (often via Extranets)</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color:var(--green)">3️⃣ Customer Relationship Management (CRM)</div>
+            <ul class="list">
+              <li>Coordinates business processes dealing with <strong>customers</strong></li>
+              <li>Covers: Sales, Marketing, Customer Service</li>
+              <li>Helps identify, attract, and <span class="hl-imp">retain most profitable customers</span></li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color:var(--orange)">4️⃣ Knowledge Management Systems (KMS)</div>
+            <ul class="list">
+              <li>Captures and applies <strong>knowledge & expertise</strong></li>
+              <li>How to create, produce, deliver products/services</li>
+              <li>Collects internal knowledge → makes available to employees</li>
+              <li>Links to <strong>external knowledge sources</strong></li>
+            </ul>
+          </div>
+        </div>
+        <div class="mnemonic" style="margin-top:1rem;">
+          <div class="mnemonic-label">🧠 Mnemonic — 4 Enterprise Apps</div>
+          <div class="mnemonic-text">E-S-C-K = "Every Smart Company Knows"</div>
+          <div class="mnemonic-exp">Enterprise → Supply Chain → CRM → Knowledge Management</div>
+        </div>
+      </div>
+
+      <!-- Intranets & Extranets -->
+      <div class="collapse-toggle" onclick="toggleCollapse(this)">
+        <span>🌐 Intranets, Extranets & E-Business</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="collapse-body open">
+        <div class="grid2">
+          <div class="card">
+            <div class="card-title">🔒 Intranet</div>
+            <p style="font-size:0.85rem;">Internal company Web sites. Accessible <strong>only by employees</strong>. Used to increase integration and expedite information flow within the organization.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">🔓 Extranet</div>
+            <p style="font-size:0.85rem;">Company Web sites accessible externally <strong>only to vendors and suppliers</strong>. Often used to coordinate the supply chain (connects to SCM).</p>
+          </div>
+        </div>
+        <div class="grid3" style="margin-top:0.8rem;">
+          <div class="card">
+            <div class="card-title" style="color:var(--blue)">🛒 E-Commerce</div>
+            <p style="font-size:0.82rem;">Buying and selling goods and services through the Internet. A <strong>subset</strong> of E-Business.</p>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color:var(--green)">💼 E-Business</div>
+            <p style="font-size:0.82rem;">Use of digital technology and Internet to drive <strong>major business processes</strong>. Broader than E-Commerce.</p>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color:var(--orange)">🏛 E-Government</div>
+            <p style="font-size:0.82rem;">Using Internet technology to deliver information and services to <strong>citizens, employees, and businesses</strong>.</p>
+          </div>
+        </div>
+        <div class="mnemonic" style="margin-top:0.8rem;">
+          <div class="mnemonic-label">🧠 Scope Hierarchy</div>
+          <div class="mnemonic-text">E-Commerce ⊂ E-Business ⊂ Digital Economy</div>
+          <div class="mnemonic-exp">E-Commerce is just buying/selling. E-Business is ALL digital-driven business processes. Exam trap: they are NOT the same!</div>
+        </div>
+      </div>
+
+      <!-- Collaboration -->
+      <div class="collapse-toggle" onclick="toggleCollapse(this)">
+        <span>🤝 Collaboration, Teamwork & Social Business</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="collapse-body open">
+        <div class="grid2">
+          <div>
+            <p style="font-size:0.87rem; margin-bottom:0.7rem;"><span class="badge badge-def">DEFINITION</span> Collaboration = working with others to achieve shared explicit goals.</p>
+            <p style="font-size:0.85rem; margin-bottom:0.6rem;"><strong style="color:var(--yellow)">Why Collaboration is Growing:</strong></p>
+            <ul class="list">
+              <li>Changing nature of work</li>
+              <li>Growth of professional work — "interaction jobs"</li>
+              <li>Changing organization of the firm</li>
+              <li>Changing scope of the firm (global)</li>
+              <li>Emphasis on innovation</li>
+              <li>Changing culture of work</li>
+            </ul>
+          </div>
+          <div>
+            <p style="font-size:0.85rem; margin-bottom:0.6rem;"><strong style="color:var(--green)">Benefits of Collaboration:</strong></p>
+            <ul class="list">
+              <li>Productivity ↑</li>
+              <li>Quality ↑</li>
+              <li>Innovation ↑</li>
+              <li>Customer service ↑</li>
+              <li>Financial performance ↑ (profitability, sales, growth)</li>
+            </ul>
+            <div class="info-box" style="margin-top:0.6rem;">
+              <strong>Requirements for Collaboration (Fig 2-7):</strong> Appropriate organizational <em>structure AND culture</em> + appropriate <em>collaboration technology</em>. Both are needed.
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:1rem;">
+          <p style="font-size:0.85rem; margin-bottom:0.6rem;"><strong style="color:var(--accent)">Social Business:</strong></p>
+          <ul class="list">
+            <li>Uses <strong>social networking platforms</strong> (internal & external)</li>
+            <li>Engages employees, customers, and suppliers</li>
+            <li>Goal: <span class="hl-imp">deepen interactions + expedite information sharing</span></li>
+            <li>Creates "Conversations"</li>
+            <li>Requires <strong>information transparency</strong> — exchange without executive intervention</li>
+          </ul>
+        </div>
+        <div style="margin-top:1rem;">
+          <p style="font-size:0.85rem; margin-bottom:0.7rem;"><strong style="color:var(--blue)">Command & Control vs. Collaborative Culture:</strong></p>
+          <div class="grid2">
+            <div class="trap-card">
+              <div class="trap-header">⛔ Command & Control</div>
+              <p style="font-size:0.82rem;">No value placed on teamwork. Lower-level employees don't participate in decisions. Top-down authority.</p>
+            </div>
+            <div class="card" style="background: rgba(6,214,160,0.06); border-color: rgba(6,214,160,0.2);">
+              <div class="card-title" style="color:var(--green)">✅ Collaborative Culture</div>
+              <ul class="list" style="font-size:0.82rem;">
+                <li>Senior managers rely on <strong>teams</strong></li>
+                <li>Policies, products, systems rely on teams</li>
+                <li>Manager's purpose = <strong>build teams</strong></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Collaboration Tools -->
+      <div class="collapse-toggle" onclick="toggleCollapse(this)">
+        <span>🛠 Collaboration Tools & Time/Space Matrix</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="collapse-body open">
+        <div class="grid2">
+          <div>
+            <p style="font-size:0.85rem; margin-bottom:0.6rem;"><strong>Tools Include:</strong></p>
+            <ul class="list">
+              <li>E-mail and instant messaging</li>
+              <li>Wikis</li>
+              <li>Virtual worlds</li>
+              <li>Virtual meeting systems (Telepresence)</li>
+              <li>Google Apps / Google Sites</li>
+              <li>Cyberlockers</li>
+              <li>Microsoft SharePoint</li>
+              <li>Lotus Notes</li>
+              <li>Enterprise social networking tools</li>
+            </ul>
+          </div>
+          <div>
+            <p style="font-size:0.85rem; margin-bottom:0.6rem;"><strong>Enterprise Social Networking Capabilities:</strong></p>
+            <ul class="list">
+              <li>Profiles</li>
+              <li>Content sharing</li>
+              <li>Feeds and notifications</li>
+              <li>Groups and team workspaces</li>
+              <li>Tagging and social bookmarking</li>
+              <li>Permissions and privacy</li>
+            </ul>
+          </div>
+        </div>
+        <div style="margin-top:1rem;">
+          <p style="font-size:0.85rem; margin-bottom:0.5rem;"><strong style="color:var(--yellow)">Two Dimensions of Collaboration Tech (Time/Space Matrix):</strong></p>
+          <div class="table-wrap">
+            <table>
+              <tr>
+                <th></th>
+                <th>Same Time (Synchronous)</th>
+                <th>Different Time (Asynchronous)</th>
+              </tr>
+              <tr>
+                <td class="td-name">Same Place (Co-located)</td>
+                <td>Face-to-face meetings, Decision rooms</td>
+                <td>Team rooms, bulletin boards</td>
+              </tr>
+              <tr>
+                <td class="td-name">Different Place (Remote)</td>
+                <td>Videoconferencing, Chat, Telepresence</td>
+                <td>E-mail, Wikis, Discussion forums</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div style="margin-top:1rem;">
+          <p style="font-size:0.85rem; margin-bottom:0.5rem;"><strong style="color:var(--accent)">6 Steps to Evaluate Collaboration Software:</strong></p>
+          <div class="grid2">
+            <ul class="list">
+              <li>1. What are your firm's collaboration challenges?</li>
+              <li>2. What kinds of solutions are available?</li>
+              <li>3. Analyze products' cost and benefits</li>
+            </ul>
+            <ul class="list">
+              <li>4. Evaluate security risks</li>
+              <li>5. Consult users for implementation and training issues</li>
+              <li>6. Evaluate product vendors</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- IS Function -->
+      <div class="collapse-toggle" onclick="toggleCollapse(this)">
+        <span>🏛 The Information Systems Function in Business</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="collapse-body open">
+        <div class="grid2">
+          <div>
+            <p style="font-size:0.87rem; margin-bottom:0.7rem;"><span class="badge badge-def">IS DEPARTMENT</span> = Formal organizational unit responsible for IT services.</p>
+            <p style="font-size:0.85rem; margin-bottom:0.5rem;"><strong>Key Roles:</strong></p>
+            <ul class="list">
+              <li><span class="hl-imp">CIO</span> — Chief Information Officer (heads IS dept)</li>
+              <li><span class="hl-def">CSO</span> — Chief Security Officer</li>
+              <li><span class="hl-def">CKO</span> — Chief Knowledge Officer</li>
+              <li><span class="hl-def">CPO</span> — Chief Privacy Officer</li>
+              <li>Programmers</li>
+              <li>Systems Analysts</li>
+              <li>Information Systems Managers</li>
+            </ul>
+          </div>
+          <div>
+            <p style="font-size:0.85rem; margin-bottom:0.5rem;"><strong>End Users:</strong> Representatives of <em>other departments</em> for whom applications are developed. Now have an increasing role in system design and development.</p>
+            <div class="card" style="margin-top:0.6rem;">
+              <div class="card-title" style="color:var(--yellow)">⚖️ IT Governance</div>
+              <ul class="list" style="font-size:0.82rem;">
+                <li>Strategies and policies for using IT in the org</li>
+                <li>Decision rights</li>
+                <li>Accountability</li>
+                <li>Organization of IS function: Centralized, Decentralized, etc.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="mnemonic">
+          <div class="mnemonic-label">🧠 C-Suite Memory Hook</div>
+          <div class="mnemonic-text">CIO leads: CSO · CKO · CPO</div>
+          <div class="mnemonic-exp">Information → Security → Knowledge → Privacy. Each "C" protects something different.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SECTION 2: CONNECTION MATRIX ══ -->
+    <div class="section" id="s2">
+      <div class="section-title">🔗 Connection Matrix <span class="tag tag-matrix">CONNECTIONS</span></div>
+      <div class="card">
+        <div class="card-title">🕸 How Everything Links Together</div>
+        <div class="flow" style="flex-direction:column; gap:0.3rem;">
+          <div class="flow-item" style="background:rgba(255,209,102,0.1); border-color:var(--yellow); width:100%;">Business Processes (core activities of the firm)</div>
+          <div class="flow-arrow" style="align-self:center">↓ are supported by</div>
+          <div class="flow-item" style="background:rgba(108,99,255,0.1); border-color:var(--accent); width:100%;">Information Systems (TPS → MIS → DSS → ESS)</div>
+          <div class="flow-arrow" style="align-self:center">↓ are linked by</div>
+          <div class="flow-item" style="background:rgba(6,214,160,0.1); border-color:var(--green); width:100%;">Enterprise Applications (ERP, SCM, CRM, KMS)</div>
+          <div class="flow-arrow" style="align-self:center">↓ enabled through</div>
+          <div class="flow-item" style="background:rgba(72,202,228,0.1); border-color:var(--blue); width:100%;">IT Infrastructure (Intranets, Extranets, Internet)</div>
+          <div class="flow-arrow" style="align-self:center">↓ powering</div>
+          <div class="flow-item" style="background:rgba(244,162,97,0.1); border-color:var(--orange); width:100%;">E-Business / E-Commerce / E-Government</div>
+          <div class="flow-arrow" style="align-self:center">↓ requiring</div>
+          <div class="flow-item" style="background:rgba(255,101,132,0.1); border-color:var(--accent2); width:100%;">Collaboration, Teamwork & Social Business</div>
+          <div class="flow-arrow" style="align-self:center">↓ managed by</div>
+          <div class="flow-item" style="background:rgba(255,209,102,0.1); border-color:var(--yellow); width:100%;">IS Department (CIO, IT Governance)</div>
+        </div>
+      </div>
+      <div class="grid2" style="margin-top:0.8rem;">
+        <div class="card">
+          <div class="card-title">TPS → MIS Connection</div>
+          <p style="font-size:0.84rem;">TPS captures raw daily transactions. MIS takes that data, <strong>summarizes it at period-end</strong>, and provides reports to middle managers. Without TPS, MIS has no data.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">MIS + DSS → ESS Connection</div>
+          <p style="font-size:0.84rem;">ESS draws on summarized data from both MIS and DSS, PLUS external data (competitors, laws). ESS synthesizes everything for senior executives.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">SCM ↔ Extranet Connection</div>
+          <p style="font-size:0.84rem;">SCM systems often use Extranets to coordinate with suppliers. The Extranet is the technical channel; SCM is the business process layer on top.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">Collaboration ↔ Social Business</div>
+          <p style="font-size:0.84rem;">Social business IS collaboration, but extended with social networking platforms. It requires information transparency — a cultural AND technical requirement.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SECTION 3: COMPARISON TABLES ══ -->
+    <div class="section" id="s3">
+      <div class="section-title">⚔️ Comparison War Tables <span class="tag tag-compare">COMPARE</span></div>
+      <div class="table-wrap" style="margin-bottom:1rem;">
+        <table>
+          <tr>
+            <th>System</th>
+            <th>Level Served</th>
+            <th>Type of Decision</th>
+            <th>Data Source</th>
+            <th>Example</th>
+          </tr>
+          <tr>
+            <td class="td-name">TPS</td>
+            <td>Operational Staff</td>
+            <td class="td-imp">Structured / Routine</td>
+            <td>Direct input (transactions)</td>
+            <td>Payroll processing</td>
+          </tr>
+          <tr>
+            <td class="td-name">MIS</td>
+            <td>Middle Management</td>
+            <td class="td-imp">Structured / Routine</td>
+            <td>TPS (summarized)</td>
+            <td>Annual sales report</td>
+          </tr>
+          <tr>
+            <td class="td-name">DSS</td>
+            <td>Middle Management</td>
+            <td class="td-trap">Non-Routine / What-If</td>
+            <td>TPS + MIS + External</td>
+            <td>Voyage-estimating system</td>
+          </tr>
+          <tr>
+            <td class="td-name">ESS/EIS</td>
+            <td>Senior Management</td>
+            <td class="td-trap">Non-Routine / Strategic</td>
+            <td>MIS + DSS + External</td>
+            <td>Digital dashboard</td>
+          </tr>
+        </table>
+      </div>
+      <div class="table-wrap" style="margin-bottom:1rem;">
+        <table>
+          <tr>
+            <th>Enterprise App</th>
+            <th>Focus</th>
+            <th>Key Stakeholders</th>
+            <th>Main Goal</th>
+          </tr>
+          <tr>
+            <td class="td-name">ERP (Enterprise System)</td>
+            <td>Internal operations</td>
+            <td>All departments</td>
+            <td>Unified data + coordination</td>
+          </tr>
+          <tr>
+            <td class="td-name">SCM</td>
+            <td>Supply chain</td>
+            <td>Suppliers, logistics</td>
+            <td>Right product, right time, lowest cost</td>
+          </tr>
+          <tr>
+            <td class="td-name">CRM</td>
+            <td>Customer relations</td>
+            <td>Sales, Marketing, Service</td>
+            <td>Attract + retain profitable customers</td>
+          </tr>
+          <tr>
+            <td class="td-name">KMS</td>
+            <td>Knowledge capital</td>
+            <td>All employees</td>
+            <td>Capture + apply expertise</td>
+          </tr>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <tr>
+            <th>Concept</th>
+            <th>E-Commerce</th>
+            <th>E-Business</th>
+            <th>E-Government</th>
+          </tr>
+          <tr>
+            <td class="td-name">Scope</td>
+            <td>Buying/selling only</td>
+            <td>All digital business processes</td>
+            <td>Government-citizen services</td>
+          </tr>
+          <tr>
+            <td class="td-name">Relationship</td>
+            <td class="td-trap">Subset of E-Business</td>
+            <td>Superset of E-Commerce</td>
+            <td>Separate category</td>
+          </tr>
+          <tr>
+            <td class="td-name">Medium</td>
+            <td>Internet</td>
+            <td>Digital technology + Internet</td>
+            <td>Internet technology</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══ SECTION 4: DECISION ENGINE ══ -->
+    <div class="section" id="s4">
+      <div class="section-title">⚡ Decision Engine <span class="tag tag-decision">IF → THEN</span></div>
+      <div class="decision-card">
+        <div class="decision-if">Question mentions "routine transactions," "daily operations," "payroll," "shipping"</div>
+        <div class="decision-then">Write about TPS (Transaction Processing Systems) — operational level, structured, predefined decisions</div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-if">Question mentions "reports," "current performance," "middle management summary"</div>
+        <div class="decision-then">Write about MIS — feeds from TPS, provides predefined reports, little analytic capability</div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-if">Question mentions "what-if analysis," "non-routine decisions," "scenarios," "impact of change"</div>
+        <div class="decision-then">Write about DSS — supports non-routine decisions, uses models + external data, middle management</div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-if">Question mentions "senior executives," "strategic decisions," "digital dashboard," "external events"</div>
+        <div class="decision-then">Write about ESS/EIS — synthesizes MIS + DSS + external data, requires judgment and insight</div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-if">Question mentions "linking the enterprise," "span functional areas," "all management levels"</div>
+        <div class="decision-then">Write about Enterprise Applications — specifically identify which of the 4 (ERP/SCM/CRM/KMS) is most relevant</div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-if">Question mentions "suppliers," "inventory," "delivery," "right product right time"</div>
+        <div class="decision-then">Write about SCM (Supply Chain Management) — manages supplier relationships, coordinates logistics</div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-if">Question mentions "customers," "sales + marketing + service," "profitable customers"</div>
+        <div class="decision-then">Write about CRM — identifies, attracts, retains most profitable customers across all customer-facing processes</div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-if">Question mentions "fragmented data," "single central repository," "coordination across departments"</div>
+        <div class="decision-then">Write about Enterprise Systems (ERP) — central database solves fragmented data, enables coordination</div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-if">Question mentions "collaboration," "teamwork," "interaction jobs," "changing work culture"</div>
+        <div class="decision-then">Write about 6 reasons collaboration is growing + benefits (productivity, quality, innovation, customer service, financial performance)</div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-if">Question mentions "vendors access," "supply chain coordination via web"</div>
+        <div class="decision-then">Write about Extranets (not Intranets) — Extranets are for external parties (vendors/suppliers)</div>
+      </div>
+      <div class="decision-card">
+        <div class="decision-if">Question asks about IS department leadership / governance</div>
+        <div class="decision-then">Write about CIO (heads dept) + CSO/CKO/CPO roles + IT Governance (decision rights, accountability, centralized vs decentralized)</div>
+      </div>
+    </div>
+
+    <!-- ══ SECTION 5: EXAM TRAPS ══ -->
+    <div class="section" id="s5">
+      <div class="section-title">💀 Exam Traps Detector <span class="tag tag-trap">DANGER ZONE</span></div>
+      <div class="trap-card">
+        <div class="trap-header">⚠️ TRAP 1: MIS vs. DSS Confusion</div>
+        <p class="trap-wrong">❌ Wrong: "MIS supports non-routine decisions" or "DSS provides routine reports"</p>
+        <p class="trap-right">✅ Right: MIS = routine + structured + little analytic capability. DSS = non-routine + what-if + uses models.</p>
+      </div>
+      <div class="trap-card">
+        <div class="trap-header">⚠️ TRAP 2: E-Commerce = E-Business</div>
+        <p class="trap-wrong">❌ Wrong: Treating E-Commerce and E-Business as identical</p>
+        <p class="trap-right">✅ Right: E-Commerce is a SUBSET of E-Business. E-Business = all digital business processes. E-Commerce = only buying/selling online.</p>
+      </div>
+      <div class="trap-card">
+        <div class="trap-header">⚠️ TRAP 3: Intranet vs. Extranet</div>
+        <p class="trap-wrong">❌ Wrong: "Extranets are accessible by all employees" or "Intranets coordinate with suppliers"</p>
+        <p class="trap-right">✅ Right: Intranet = internal employees only. Extranet = external vendors/suppliers only.</p>
+      </div>
+      <div class="trap-card">
+        <div class="trap-header">⚠️ TRAP 4: ESS Data Source</div>
+        <p class="trap-wrong">❌ Wrong: "ESS uses only internal data" or "ESS is the same as MIS for senior managers"</p>
+        <p class="trap-right">✅ Right: ESS incorporates BOTH internal (from MIS + DSS) AND external data (tax laws, competitor info).</p>
+      </div>
+      <div class="trap-card">
+        <div class="trap-header">⚠️ TRAP 5: ERP vs. All Enterprise Apps</div>
+        <p class="trap-wrong">❌ Wrong: Calling ERP "the enterprise application" — there are 4 types!</p>
+        <p class="trap-right">✅ Right: Enterprise Applications include 4: Enterprise Systems (ERP), SCM, CRM, and KMS. ERP is just one of them.</p>
+      </div>
+      <div class="trap-card">
+        <div class="trap-header">⚠️ TRAP 6: TPS Management Level</div>
+        <p class="trap-wrong">❌ Wrong: "TPS serves middle management"</p>
+        <p class="trap-right">✅ Right: TPS serves OPERATIONAL managers and staff — the lowest level. NOT middle management.</p>
+      </div>
+      <div class="trap-card">
+        <div class="trap-header">⚠️ TRAP 7: DSS = Only Models</div>
+        <p class="trap-wrong">❌ Wrong: "All DSS are model-driven"</p>
+        <p class="trap-right">✅ Right: DSS can be Model-Driven (voyage-estimating) OR Data-Driven (Intrawest marketing). Know both types!</p>
+      </div>
+      <div class="trap-card">
+        <div class="trap-header">⚠️ TRAP 8: Collaboration Only Needs Technology</div>
+        <p class="trap-wrong">❌ Wrong: "Good collaboration tools = good collaboration"</p>
+        <p class="trap-right">✅ Right: Collaboration requires BOTH appropriate organizational structure/culture AND technology. Culture is equally important.</p>
+      </div>
+    </div>
+
+    <!-- ══ SECTION 6: ESSAY BUILDER ══ -->
+    <div class="section" id="s6">
+      <div class="section-title">✍️ Essay Builder Pro Max <span class="tag tag-essay">ESSAYS</span></div>
+
+      <div class="essay-block">
+        <div class="essay-q" onclick="toggleEssay(this)">
+          📝 Essay: Explain the types of Information Systems and how they serve different management levels
+          <span class="chevron">▼</span>
+        </div>
+        <div class="essay-body">
+          <div class="essay-part">
+            <div class="essay-part-title">🔵 Introduction</div>
+            <p>Information systems are the backbone of modern organizations, designed to support decision-making at every level of management. Different management levels face different types of decisions, and thus require different types of information systems — ranging from operational transaction processing systems to strategic executive support systems.</p>
+          </div>
+          <div class="essay-part">
+            <div class="essay-part-title">📦 Body Point 1 — TPS (Operational Level)</div>
+            <p>At the operational level, Transaction Processing Systems (TPS) record and perform daily routine transactions such as payroll, sales order entry, and shipping. They serve operational managers and staff, providing structured, predefined outputs. For example, a payroll TPS captures time card data and produces employee paychecks and management reports.</p>
+          </div>
+          <div class="essay-part">
+            <div class="essay-part-title">📊 Body Point 2 — MIS (Middle Management)</div>
+            <p>Management Information Systems (MIS) serve middle management by providing summarized reports derived from TPS data. They answer routine questions through predefined procedures, such as producing an annual sales report. However, MIS have little analytic capability and cannot support complex decision-making.</p>
+          </div>
+          <div class="essay-part">
+            <div class="essay-part-title">🔮 Body Point 3 — DSS (Middle Management)</div>
+            <p>Decision Support Systems (DSS) also serve middle management but support non-routine, complex decisions. Unlike MIS, they can perform what-if analysis by integrating TPS, MIS, and external data. For instance, the voyage-estimating DSS helps shipping managers develop competitive bids by modeling various scenarios.</p>
+          </div>
+          <div class="essay-part">
+            <div class="essay-part-title">👑 Body Point 4 — ESS (Senior Management)</div>
+            <p>At the top level, Executive Support Systems (ESS) support senior management with strategic, non-routine decisions requiring judgment and insight. They synthesize internal data from MIS and DSS with external information about competitors and regulations. A digital dashboard is a prime example, giving executives a real-time view of financial performance indicators.</p>
+          </div>
+          <div class="essay-part">
+            <div class="essay-part-title">🔚 Conclusion</div>
+            <p>In conclusion, each type of information system is designed to match the nature of decisions at its management level. TPS handles structured operational tasks; MIS provides routine summaries; DSS enables analytical modeling; and ESS synthesizes intelligence for strategic decisions. Together, they form an integrated hierarchy that supports the entire organization.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="essay-block">
+        <div class="essay-q" onclick="toggleEssay(this)">
+          📝 Essay: Explain the role of Enterprise Applications in improving organizational performance
+          <span class="chevron">▼</span>
+        </div>
+        <div class="essay-body">
+          <div class="essay-part">
+            <div class="essay-part-title">🔵 Introduction</div>
+            <p>Organizations face a major challenge: their activities span multiple departments, yet information is often fragmented across separate systems. Enterprise applications address this challenge by integrating processes and data across the entire firm, improving coordination, efficiency, and competitive performance.</p>
+          </div>
+          <div class="essay-part">
+            <div class="essay-part-title">📦 Body — Four Enterprise Applications</div>
+            <p><strong>1. Enterprise Systems (ERP)</strong> collect data from all firm functions into a single central repository, eliminating data fragmentation and enabling real-time coordination. Managers can monitor operations and make both daily and long-term planning decisions effectively.</p>
+            <p style="margin-top:0.5rem;"><strong>2. Supply Chain Management (SCM) systems</strong> manage relationships with suppliers by sharing real-time information about orders, inventory, and delivery. The goal is to deliver the right product to the right destination at the right time with the lowest possible cost.</p>
+            <p style="margin-top:0.5rem;"><strong>3. Customer Relationship Management (CRM) systems</strong> coordinate all customer-facing processes — sales, marketing, and service — helping organizations identify, attract, and retain their most profitable customers.</p>
+            <p style="margin-top:0.5rem;"><strong>4. Knowledge Management Systems (KMS)</strong> capture the organization's expertise and make it available to all employees, preventing knowledge loss and enabling consistent service delivery.</p>
+          </div>
+          <div class="essay-part">
+            <div class="essay-part-title">🔚 Conclusion</div>
+            <p>Enterprise applications transform isolated departmental systems into an integrated organizational intelligence. By breaking down information silos and connecting suppliers, operations, and customers, they enable firms to operate more efficiently, respond more quickly, and serve customers more effectively — directly improving organizational performance.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="essay-block">
+        <div class="essay-q" onclick="toggleEssay(this)">
+          📝 Essay: Discuss the importance of collaboration and the role of technology in supporting it
+          <span class="chevron">▼</span>
+        </div>
+        <div class="essay-body">
+          <div class="essay-part">
+            <div class="essay-part-title">🔵 Introduction</div>
+            <p>In the modern business environment, no significant work is accomplished by individuals alone. Collaboration — working with others toward shared goals — has become a critical organizational capability, driven by fundamental changes in the nature of work and the structure of firms.</p>
+          </div>
+          <div class="essay-part">
+            <div class="essay-part-title">📦 Body Point 1 — Why Collaboration is Growing</div>
+            <p>Collaboration is increasingly important due to six key drivers: the changing nature of work, the growth of professional "interaction jobs," changing organizational structures, the expanding global scope of firms, the emphasis on innovation, and evolving workplace culture. These factors make teamwork not optional but essential.</p>
+          </div>
+          <div class="essay-part">
+            <div class="essay-part-title">📦 Body Point 2 — Business Benefits</div>
+            <p>Organizations that invest in collaboration technology see measurable returns: higher productivity, better quality outputs, increased innovation, improved customer service, and stronger financial performance including higher profitability and sales growth.</p>
+          </div>
+          <div class="essay-part">
+            <div class="essay-part-title">📦 Body Point 3 — Technology Tools</div>
+            <p>A wide range of technologies support collaboration, from simple email and instant messaging to sophisticated virtual meeting systems (telepresence), wikis, Microsoft SharePoint, and enterprise social networking platforms. These tools can be classified across two dimensions: location (same place vs. remote) and time (synchronous vs. asynchronous), forming the Time/Space Collaboration Matrix.</p>
+          </div>
+          <div class="essay-part">
+            <div class="essay-part-title">📦 Body Point 4 — Culture is Key</div>
+            <p>Technology alone is insufficient. Successful collaboration requires a collaborative organizational culture where senior managers value teams, policies are built through collective input, and the manager's primary role is to build and support teams — contrasting sharply with the traditional "command and control" structure.</p>
+          </div>
+          <div class="essay-part">
+            <div class="essay-part-title">🔚 Conclusion</div>
+            <p>Collaboration is no longer a luxury — it is a strategic necessity. Organizations must invest simultaneously in both the cultural transformation and the technological infrastructure needed to make teamwork effective. When both elements align, the business benefits are substantial and measurable.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SECTION 7: ULTRA SUMMARY ══ -->
+    <div class="section" id="s7">
+      <div class="section-title">🧠 Ultra Smart Summary <span class="tag tag-engine">COMPRESS</span></div>
+      <div class="summary-chunk">
+        <strong style="color:var(--yellow)">BUSINESS PROCESSES:</strong> Flows of material/info/knowledge. Can be functional (within one dept) or cross-functional (across depts — e.g., Order Fulfillment spans Sales + Accounting + Manufacturing). IT enhances by: automating manual steps, replacing sequential with parallel, changing info flows, enabling new business models.
+      </div>
+      <div class="summary-chunk" style="border-left-color:var(--blue)">
+        <strong style="color:var(--blue)">IS HIERARCHY (bottom→top):</strong> TPS (ops, routine, transactions) → MIS (middle, routine reports from TPS) → DSS (middle, non-routine, what-if, internal+external data) → ESS (senior, strategic, synthesis of everything + external). Each level feeds the one above.
+      </div>
+      <div class="summary-chunk" style="border-left-color:var(--green)">
+        <strong style="color:var(--green)">4 ENTERPRISE APPS (E-S-C-K):</strong> ERP = central data, eliminates fragmentation, coordinates all depts. SCM = supplier relations, right product/time/cost. CRM = customer-facing processes, retain profitable customers. KMS = capture+apply expertise, link internal+external knowledge.
+      </div>
+      <div class="summary-chunk" style="border-left-color:var(--orange)">
+        <strong style="color:var(--orange)">E-BUSINESS SCOPE:</strong> E-Commerce (buy/sell online) ⊂ E-Business (ALL digital processes). E-Government = digital services to citizens. Intranet = employees only. Extranet = vendors/suppliers only (used for SCM coordination).
+      </div>
+      <div class="summary-chunk" style="border-left-color:var(--accent2)">
+        <strong style="color:var(--accent2)">COLLABORATION:</strong> Growing because: work nature + interaction jobs + firm structure/scope + innovation + culture. Benefits: productivity, quality, innovation, customer service, financial performance. Needs: culture (collaborative, not command&amp;control) + technology. Social Business = social networks + transparency + "conversations." Time/Space Matrix: same/different time × same/different place.
+      </div>
+      <div class="summary-chunk" style="border-left-color:var(--yellow)">
+        <strong style="color:var(--yellow)">IS FUNCTION:</strong> IS dept headed by CIO. Other C-suite: CSO (security), CKO (knowledge), CPO (privacy). End users now participate in design. IT Governance = strategies, decision rights, accountability, centralized vs. decentralized.
+      </div>
+    </div>
+
+    <!-- ══ SECTION 8: ACTIVE RECALL ══ -->
+    <div class="section" id="s8">
+      <div class="section-title">🔄 Active Recall System <span class="tag tag-recall">SELF-TEST</span></div>
+      <p style="font-size:0.85rem; color:var(--muted); margin-bottom:1rem;">Click each question to reveal the answer. Test yourself before looking!</p>
+      <div id="recall-list"></div>
+    </div>
+
+  </div><!-- END STUDY MODE -->
+
+  <!-- ════════ FLASHCARD MODE ════ -->
+  <div id="flashcard-mode">
+    <div class="section-title">🃏 Flashcard Mode <span class="tag tag-flash">FLASH</span></div>
+    <div class="fc-nav">
+      <button class="btn" onclick="prevCard()">← Prev</button>
+      <div class="fc-counter" id="fcCounter">1 / 20</div>
+      <button class="btn" onclick="nextCard()">Next →</button>
+      <button class="btn primary" onclick="shuffleCards()">🔀 Shuffle</button>
+    </div>
+    <div class="flashcard-wrap" onclick="flipCard()">
+      <div class="flashcard" id="flashcard">
+        <div class="fc-front">
+          <div class="fc-q" id="fcQuestion">Loading...</div>
+          <div class="fc-hint">Tap to reveal answer</div>
+        </div>
+        <div class="fc-back">
+          <div class="fc-a" id="fcAnswer">Loading...</div>
+        </div>
+      </div>
+    </div>
+    <p style="text-align:center; font-size:0.78rem; color:var(--muted);">Click the card to flip it</p>
+  </div>
+
+  <!-- ════════ QUIZ MODE ════ -->
+  <div id="quiz-mode">
+    <div class="section-title">🎯 Quiz Mode <span class="tag tag-engine">MCQ</span></div>
+    <div class="quiz-score-bar"><div class="quiz-score-fill" id="quizScoreFill" style="width:0%"></div></div>
+    <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:var(--muted); margin-bottom:1.2rem;">
+      <span id="quizProgress">Question 1 of 15</span>
+      <span id="quizScore">Score: 0/0</span>
+    </div>
+    <div class="card">
+      <div class="quiz-q" id="quizQuestion">Loading...</div>
+      <ul class="quiz-options" id="quizOptions"></ul>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+      <div style="margin-top:1rem; display:flex; gap:0.5rem; justify-content:flex-end;">
+        <button class="btn primary" id="quizNextBtn" onclick="nextQuestion()" style="display:none">Next Question →</button>
+        <button class="btn" onclick="resetQuiz()">🔄 Restart</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ═══════════════════════════════════════ DATA ═══════════════════════════════
+const flashcards = [
+  { q: "What is a Transaction Processing System (TPS)?", a: "A system that performs and records daily routine transactions necessary to conduct business. It serves operational managers and staff with predefined, structured goals. Examples: payroll, sales order entry, shipping." },
+  { q: "What management level does MIS serve, and what are its limitations?", a: "MIS serves middle management. It provides reports based on TPS data but has little analytic capability. It answers only routine questions with predefined procedures." },
+  { q: "How does DSS differ from MIS?", a: "DSS supports non-routine decision making (what-if analysis) and uses both internal (TPS/MIS) and external data. MIS only provides routine reports. DSS can be model-driven (voyage-estimating) or data-driven (Intrawest marketing)." },
+  { q: "What is unique about ESS/EIS compared to other IS types?", a: "ESS serves senior management with non-routine strategic decisions. It incorporates BOTH internal data (from MIS + DSS) AND external data (tax laws, competitors). Example: Digital dashboard with real-time financial performance." },
+  { q: "Name the 4 Enterprise Applications and their focus areas", a: "1. Enterprise Systems (ERP) — unified central data. 2. SCM — supplier relationships. 3. CRM — customer-facing processes. 4. KMS — knowledge capture and sharing. Mnemonic: E-S-C-K" },
+  { q: "What is the difference between Intranet and Extranet?", a: "Intranet: internal company websites accessible ONLY by employees. Extranet: company websites accessible ONLY by vendors and suppliers — often used to coordinate the supply chain." },
+  { q: "How does E-Commerce relate to E-Business?", a: "E-Commerce is a SUBSET of E-Business. E-Commerce = buying and selling online only. E-Business = using digital technology and Internet to drive ALL major business processes." },
+  { q: "What are the 6 reasons collaboration is growing in importance?", a: "1. Changing nature of work. 2. Growth of professional 'interaction jobs'. 3. Changing organization of the firm. 4. Changing global scope. 5. Emphasis on innovation. 6. Changing culture of work." },
+  { q: "What does Social Business require to function?", a: "Social Business uses social networking platforms internally and externally. It requires information TRANSPARENCY — exchange of information without intervention from executives. It drives deeper interactions and expedite information sharing." },
+  { q: "What are the 2 dimensions of the Time/Space Collaboration Matrix?", a: "1. Space/Location: Same place (co-located) vs. Different place (remote). 2. Time: Same time (synchronous) vs. Different time (asynchronous). Example: Videoconferencing = remote + synchronous." },
+  { q: "Who heads the IS department and what other C-level roles exist?", a: "The CIO (Chief Information Officer) heads the IS dept. Other key roles: CSO (Chief Security Officer), CKO (Chief Knowledge Officer), CPO (Chief Privacy Officer)." },
+  { q: "What is IT Governance?", a: "IT Governance = strategies and policies for using IT in the organization. It defines decision rights, accountability, and the organizational structure of the IS function (centralized, decentralized, etc.)." },
+  { q: "What problem do Enterprise Systems (ERP) solve?", a: "ERP solves the problem of FRAGMENTED DATA by collecting data from different firm functions and storing it in a single central repository. This enables coordination of daily activities and efficient response to customer orders." },
+  { q: "What is the goal of SCM systems?", a: "To deliver the RIGHT amount of products to the RIGHT destination at the RIGHT time with the LOWEST cost. They manage firm-supplier relationships by sharing orders, production, inventory, and delivery information." },
+  { q: "How does IT enhance business processes?", a: "IT enhances processes by: (1) automating manual steps → efficiency. (2) enabling entirely new processes. (3) changing the flow of information. (4) replacing sequential steps with parallel steps. (5) eliminating delays. (6) supporting new business models." },
+  { q: "What is the difference between Command & Control and Collaborative culture?", a: "Command & Control: No value on teamwork, top-down, lower-level employees don't participate in decisions. Collaborative: Senior managers rely on teams, policies/products built with teams, manager's purpose = BUILD teams." },
+  { q: "What is E-Government?", a: "Using Internet technology to deliver information and services to citizens, employees, and businesses. It is distinct from E-Commerce and E-Business." },
+  { q: "What are the 6 steps to evaluate collaboration software tools?", a: "1. Identify firm's challenges. 2. Research available solutions. 3. Analyze cost/benefit. 4. Evaluate security risks. 5. Consult users on training/implementation. 6. Evaluate vendors." },
+  { q: "What are the capabilities of Enterprise Social Networking Software?", a: "Profiles, content sharing, feeds and notifications, groups and team workspaces, tagging and social bookmarking, permissions and privacy." },
+  { q: "What 5 business benefits come from collaboration investments?", a: "Productivity ↑, Quality ↑, Innovation ↑, Customer service ↑, Financial performance ↑ (profitability, sales, sales growth)." }
+];
+
+const quizQuestions = [
+  { q: "Which information system serves operational managers and handles daily routine transactions?", options: ["MIS", "DSS", "TPS", "ESS"], correct: 2, explanation: "TPS (Transaction Processing Systems) handles daily routine transactions like payroll and shipping, serving operational managers." },
+  { q: "What is the primary data source for MIS reports?", options: ["External databases", "TPS summarized data", "DSS models", "Direct executive input"], correct: 1, explanation: "MIS obtains its data from TPS systems. Multiple TPS supply summarized transaction data to the MIS reporting system." },
+  { q: "Which system would a manager use to ask: 'What happens to production if December sales double?'", options: ["TPS", "MIS", "DSS", "Intranet"], correct: 2, explanation: "DSS supports non-routine what-if decision making. This is a classic DSS scenario." },
+  { q: "E-Commerce is best described as:", options: ["Broader than E-Business", "Using Internet to drive all business processes", "A subset of E-Business focused on buying/selling", "Government use of Internet"], correct: 2, explanation: "E-Commerce is a subset of E-Business. It refers specifically to buying and selling goods/services through the Internet." },
+  { q: "Which enterprise application is specifically designed to solve the 'fragmented data' problem?", options: ["CRM", "SCM", "Enterprise System (ERP)", "KMS"], correct: 2, explanation: "Enterprise Systems collect data from different functions into a single central repository, resolving fragmented data." },
+  { q: "Extranets are accessible by:", options: ["All employees internally", "Vendors and suppliers externally", "Citizens and government", "Only executives"], correct: 1, explanation: "Extranets are company websites accessible externally ONLY to vendors and suppliers, often used to coordinate supply chain." },
+  { q: "ESS/EIS is distinguished by its use of:", options: ["Only internal TPS data", "Only predefined reports", "Both internal (MIS/DSS) and external data", "Real-time transaction data only"], correct: 2, explanation: "ESS incorporates BOTH internal summarized data from MIS and DSS AND external data like tax laws and competitor information." },
+  { q: "Which of the following is NOT one of the 4 Enterprise Applications?", options: ["SCM", "CRM", "TPS", "KMS"], correct: 2, explanation: "TPS is not an enterprise application. The 4 are: Enterprise Systems, SCM, CRM, and KMS." },
+  { q: "Successful collaboration requires:", options: ["Technology tools only", "Strong command and control culture", "Both appropriate culture AND technology", "Only senior management approval"], correct: 2, explanation: "Figure 2-7 shows that successful collaboration requires BOTH appropriate organizational structure/culture AND collaboration technology." },
+  { q: "The voyage-estimating system is an example of which type of DSS?", options: ["Data-driven DSS", "Model-driven DSS", "Knowledge-driven DSS", "Document-driven DSS"], correct: 1, explanation: "The voyage-estimating system is a model-driven DSS used by managers to develop bids on shipping contracts." },
+  { q: "Who heads the Information Systems department?", options: ["CPO", "CSO", "CKO", "CIO"], correct: 3, explanation: "The CIO (Chief Information Officer) heads the IS department. CSO, CKO, and CPO are other senior positions within it." },
+  { q: "Social Business requires which key element to function?", options: ["Command and control hierarchy", "Information transparency", "Only external social platforms", "Executive approval for all communications"], correct: 1, explanation: "Social Business requires information transparency — driving the exchange of information without intervention from executives." },
+  { q: "Which enterprise application's goal is: 'right amount of products to destination with least time and lowest cost'?", options: ["ERP", "CRM", "KMS", "SCM"], correct: 3, explanation: "This is the stated goal of Supply Chain Management (SCM) systems." },
+  { q: "A videoconference between remote teams is which quadrant of the Time/Space Matrix?", options: ["Same time, same place", "Different time, same place", "Same time, different place", "Different time, different place"], correct: 2, explanation: "Videoconferencing is synchronous (same time) and remote (different place) — the same time/different place quadrant." },
+  { q: "IT Governance includes all EXCEPT:", options: ["Decision rights", "Accountability", "Employee salaries", "Organization of IS function"], correct: 2, explanation: "IT Governance covers strategies, policies, decision rights, accountability, and IS organization structure. Salaries are HR, not IT Governance." }
+];
+
+const recallItems = [
+  { q: "What are the 4 types of functional business processes?", a: "Manufacturing & Production (assembling), Sales & Marketing (identifying customers), Finance & Accounting (financial statements), Human Resources (hiring). Cross-functional example: Order Fulfillment spans all of them." },
+  { q: "How does IT enhance existing business processes?", a: "By automating manual steps (efficiency), enabling new processes, changing info flow, replacing sequential steps with parallel steps, eliminating decision delays, supporting new business models." },
+  { q: "What is the key difference between MIS and DSS in terms of decisions supported?", a: "MIS = routine, structured, predefined questions (little analytic capability). DSS = non-routine, what-if, complex scenarios using models and external data." },
+  { q: "List all 4 Enterprise Applications and what each manages.", a: "1. Enterprise System = firm-wide data in one repository. 2. SCM = supplier relationships + supply chain. 3. CRM = customer-facing processes (sales, marketing, service). 4. KMS = organizational knowledge and expertise." },
+  { q: "What is the hierarchy of IS systems from bottom to top?", a: "TPS (operational) → MIS (middle, reports) → DSS (middle, what-if) → ESS (senior, strategic). Each level feeds data upward." },
+  { q: "Distinguish E-Commerce from E-Business from E-Government.", a: "E-Commerce = buying/selling online (subset). E-Business = ALL digital-driven business processes (superset). E-Government = Internet tech for citizens/employees/businesses." },
+  { q: "What 6 reasons explain why collaboration is growing?", a: "1. Changing nature of work. 2. Growth of interaction jobs. 3. Changing firm organization. 4. Changing firm scope. 5. Emphasis on innovation. 6. Changing work culture." },
+  { q: "What are the requirements for successful collaboration (Figure 2-7)?", a: "Two requirements: (1) Appropriate organizational structure AND culture. (2) Appropriate collaboration technology. BOTH are essential — neither alone is sufficient." },
+  { q: "What roles exist in the IS department?", a: "CIO (head), CSO (security), CKO (knowledge), CPO (privacy), Programmers, Systems Analysts, IS Managers. End users are from other departments for whom apps are developed." },
+  { q: "What is IT Governance and what does it cover?", a: "IT Governance = strategies and policies for using IT. Covers: decision rights, accountability, and IS function organization (centralized vs. decentralized)." }
+];
+
+// ═══════════════════════════════════════ STATE ════════════════════════════
+let currentMode = 'study';
+let currentCard = 0;
+let isFlipped = false;
+let cardOrder = [...Array(flashcards.length).keys()];
+let quizIndex = 0;
+let quizCorrect = 0;
+let quizAnswered = 0;
+let answered = false;
+let revealedCount = 0;
+let totalRevealable = 0;
+
+// ═══════════════════════════════════════ INIT ════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  buildRecall();
+  buildFlashcard();
+  buildQuiz();
+  updateProgress();
+});
+
+// ═══════════════════════════════════════ SIDEBAR ════════════════
+function toggleSidebar() {
+  const s = document.getElementById('sidebar');
+  s.classList.toggle('open');
+}
+
+// ═══════════════════════════════════════ MODE ════════════════════════════
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById('study-mode').style.display = mode === 'study' ? 'block' : 'none';
+  document.getElementById('flashcard-mode').style.display = mode === 'flashcard' ? 'block' : 'none';
+  document.getElementById('quiz-mode').style.display = mode === 'quiz' ? 'block' : 'none';
+
+  document.querySelectorAll('.mode-tab').forEach((t, i) => {
+    t.classList.toggle('active', ['study','flashcard','quiz'][i] === mode);
+  });
+  document.querySelectorAll('.nav-item').forEach(t => {
+    const txt = t.textContent.toLowerCase();
+    if (mode === 'study' && txt.includes('study')) t.classList.add('active');
+    else if (mode === 'flashcard' && txt.includes('flash')) t.classList.add('active');
+    else if (mode === 'quiz' && txt.includes('quiz')) t.classList.add('active');
+    else t.classList.remove('active');
+  });
+
+  if (mode === 'flashcard') renderCard();
+  if (mode === 'quiz') renderQuestion();
+}
+
+// ═══════════════════════════════════════ COLLAPSE ════════════════════════
+function toggleCollapse(el) {
+  el.classList.toggle('open');
+  const body = el.nextElementSibling;
+  body.classList.toggle('open');
+  body.classList.toggle('closed');
+  updateProgress();
+}
+
+// ═══════════════════════════════════════ ESSAY ════════════════════════════
+function toggleEssay(el) {
+  el.classList.toggle('open');
+  const body = el.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+// ═══════════════════════════════════════ REVEAL ALL ════════════════════════
+function revealAll() {
+  document.querySelectorAll('.collapse-body').forEach(b => { b.classList.add('open'); b.classList.remove('closed'); });
+  document.querySelectorAll('.collapse-toggle').forEach(t => t.classList.add('open'));
+  document.querySelectorAll('.recall-a').forEach(a => a.classList.add('show'));
+  document.querySelectorAll('.essay-body').forEach(b => b.classList.add('open'));
+  revealedCount = document.querySelectorAll('.recall-a').length;
+  updateProgress();
+}
+
+function hideAll() {
+  document.querySelectorAll('.collapse-body').forEach(b => { b.classList.remove('open'); b.classList.add('closed'); });
+  document.querySelectorAll('.collapse-toggle').forEach(t => t.classList.remove('open'));
+  document.querySelectorAll('.recall-a').forEach(a => a.classList.remove('show'));
+  document.querySelectorAll('.essay-body').forEach(b => b.classList.remove('open'));
+  revealedCount = 0;
+  updateProgress();
+}
+
+// ═══════════════════════════════════════ RECALL ════════════════════════════
+function buildRecall() {
+  const container = document.getElementById('recall-list');
+  container.innerHTML = recallItems.map((item, i) => `
+    <div class="recall-item">
+      <div class="recall-q" onclick="toggleRecall(this, ${i})">
+        <span>Q${i+1}: ${item.q}</span>
+        <span style="color:var(--accent); font-size:0.75rem;">Tap to reveal ▼</span>
+      </div>
+      <div class="recall-a" id="recall-${i}">${item.a}</div>
+    </div>
+  `).join('');
+  totalRevealable = recallItems.length;
+}
+
+function toggleRecall(el, idx) {
+  const ans = document.getElementById(`recall-${idx}`);
+  const wasShown = ans.classList.contains('show');
+  ans.classList.toggle('show');
+  revealedCount += wasShown ? -1 : 1;
+  updateProgress();
+}
+
+// ═══════════════════════════════════════ FLASHCARDS ════════════════════════
+function buildFlashcard() {
+  renderCard();
+}
+
+function renderCard() {
+  const idx = cardOrder[currentCard];
+  const card = flashcards[idx];
+  document.getElementById('fcQuestion').textContent = card.q;
+  document.getElementById('fcAnswer').innerHTML = card.a;
+  document.getElementById('fcCounter').textContent = `${currentCard + 1} / ${flashcards.length}`;
+  isFlipped = false;
+  document.getElementById('flashcard').classList.remove('flipped');
+}
+
+function flipCard() {
+  isFlipped = !isFlipped;
+  document.getElementById('flashcard').classList.toggle('flipped', isFlipped);
+}
+
+function nextCard() {
+  currentCard = (currentCard + 1) % flashcards.length;
+  renderCard();
+}
+
+function prevCard() {
+  currentCard = (currentCard - 1 + flashcards.length) % flashcards.length;
+  renderCard();
+}
+
+function shuffleCards() {
+  for (let i = cardOrder.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cardOrder[i], cardOrder[j]] = [cardOrder[j], cardOrder[i]];
+  }
+  currentCard = 0;
+  renderCard();
+}
+
+// ═══════════════════════════════════════ QUIZ ════════════════════════════
+function buildQuiz() {
+  quizIndex = 0; quizCorrect = 0; quizAnswered = 0;
+  renderQuestion();
+}
+
+function renderQuestion() {
+  if (quizIndex >= quizQuestions.length) {
+    document.getElementById('quizQuestion').textContent = `🎉 Quiz Complete! Score: ${quizCorrect}/${quizQuestions.length} (${Math.round(quizCorrect/quizQuestions.length*100)}%)`;
+    document.getElementById('quizOptions').innerHTML = '';
+    document.getElementById('quizFeedback').style.display = 'none';
+    document.getElementById('quizNextBtn').style.display = 'none';
+    return;
+  }
+  const q = quizQuestions[quizIndex];
+  document.getElementById('quizQuestion').textContent = `Q${quizIndex+1}. ${q.q}`;
+  document.getElementById('quizProgress').textContent = `Question ${quizIndex+1} of ${quizQuestions.length}`;
+  document.getElementById('quizScore').textContent = `Score: ${quizCorrect}/${quizAnswered}`;
+  document.getElementById('quizFeedback').style.display = 'none';
+  document.getElementById('quizNextBtn').style.display = 'none';
+  document.getElementById('quizScoreFill').style.width = `${(quizIndex/quizQuestions.length)*100}%`;
+  answered = false;
+
+  const letters = ['A','B','C','D'];
+  document.getElementById('quizOptions').innerHTML = q.options.map((opt, i) => `
+    <li onclick="answerQuiz(${i})" id="opt-${i}">
+      <span class="quiz-opt-letter">${letters[i]}</span>
+      ${opt}
+    </li>
+  `).join('');
+}
+
+function answerQuiz(selected) {
+  if (answered) return;
+  answered = true;
+  const q = quizQuestions[quizIndex];
+  quizAnswered++;
+  const isCorrect = selected === q.correct;
+  if (isCorrect) quizCorrect++;
+
+  document.querySelectorAll('#quizOptions li').forEach((li, i) => {
+    if (i === q.correct) li.classList.add('correct');
+    else if (i === selected && !isCorrect) li.classList.add('wrong');
+    li.style.pointerEvents = 'none';
+  });
+
+  const fb = document.getElementById('quizFeedback');
+  fb.style.display = 'block';
+  fb.style.background = isCorrect ? 'rgba(6,214,160,0.1)' : 'rgba(239,35,60,0.1)';
+  fb.style.border = `1px solid ${isCorrect ? 'var(--green)' : 'var(--red)'}`;
+  fb.style.color = isCorrect ? 'var(--green)' : 'var(--red)';
+  fb.textContent = `${isCorrect ? '✅ Correct!' : '❌ Wrong!'} — ${q.explanation}`;
+
+  document.getElementById('quizScore').textContent = `Score: ${quizCorrect}/${quizAnswered}`;
+  document.getElementById('quizNextBtn').style.display = 'block';
+}
+
+function nextQuestion() {
+  quizIndex++;
+  renderQuestion();
+}
+
+function resetQuiz() {
+  buildQuiz();
+}
+
+// ═══════════════════════════════════════ PROGRESS ════════════════════════
+function updateProgress() {
+  const opens = document.querySelectorAll('.collapse-body.open').length;
+  const total = document.querySelectorAll('.collapse-body').length;
+  const pct = total > 0 ? Math.round((opens/total)*100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = pct + '%';
+}
+</script>
+</body>
+</html>
