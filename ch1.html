@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIS Chapter 1 — Exam Domination System</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #0a0b0e;
+    --bg2: #10131a;
+    --bg3: #161b26;
+    --card: #13161f;
+    --border: #1f2535;
+    --border2: #2a3045;
+    --text: #e8ecf4;
+    --muted: #7a8499;
+    --accent: #4f8ef7;
+    --accent2: #6c63ff;
+    --green: #2ecc8a;
+    --red: #ff4d6d;
+    --yellow: #f0b429;
+    --blue: #38bdf8;
+    --purple: #a78bfa;
+    --orange: #fb923c;
+    --glow-accent: rgba(79,142,247,0.15);
+    --glow-red: rgba(255,77,109,0.15);
+    --glow-yellow: rgba(240,180,41,0.12);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    position: fixed;
+    left: 0; top: 0;
+    width: 240px; height: 100vh;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    z-index: 100;
+    padding: 24px 0 40px;
+    transition: transform .3s ease;
+  }
+
+  #sidebar::-webkit-scrollbar { width: 4px; }
+  #sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+  .sidebar-logo {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+  .sidebar-logo h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .sidebar-logo p { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  .nav-section { padding: 0 12px 8px; }
+  .nav-section-title {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 8px 8px 4px;
+  }
+  .nav-item {
+    display: block;
+    padding: 7px 10px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    color: var(--muted);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all .2s;
+    border: 1px solid transparent;
+  }
+  .nav-item:hover, .nav-item.active {
+    background: var(--bg3);
+    color: var(--text);
+    border-color: var(--border);
+  }
+  .nav-item span { margin-right: 6px; }
+
+  /* ── MAIN ── */
+  #main {
+    margin-left: 240px;
+    min-height: 100vh;
+    padding: 0 0 80px;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(10,11,14,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .topbar h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    flex: 1;
+  }
+  .topbar h1 span { color: var(--accent); }
+
+  .btn {
+    padding: 7px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border2);
+    background: var(--bg3);
+    color: var(--text);
+    transition: all .2s;
+    font-family: 'Instrument Sans', sans-serif;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn-accent:hover { opacity: .85; color: #fff; }
+
+  /* ── SECTIONS ── */
+  .section { padding: 40px 40px 0; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-blue { background: rgba(56,189,248,0.12); }
+  .icon-purple { background: rgba(167,139,250,0.12); }
+  .icon-green { background: rgba(46,204,138,0.12); }
+  .icon-red { background: rgba(255,77,109,0.12); }
+  .icon-yellow { background: rgba(240,180,41,0.12); }
+  .icon-orange { background: rgba(251,146,60,0.12); }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+  }
+  .section-subtitle { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* ── CARDS ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: border-color .2s;
+  }
+  .card:hover { border-color: var(--border2); }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .tag-def { background: rgba(56,189,248,0.15); color: var(--blue); }
+  .tag-rule { background: rgba(240,180,41,0.15); color: var(--yellow); }
+  .tag-trap { background: rgba(255,77,109,0.15); color: var(--red); }
+  .tag-key { background: rgba(79,142,247,0.15); color: var(--accent); }
+  .tag-exam { background: rgba(46,204,138,0.15); color: var(--green); }
+
+  /* Highlight boxes */
+  .highlight {
+    border-left: 3px solid var(--accent);
+    background: var(--glow-accent);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 10px 0;
+    font-size: 13.5px;
+  }
+  .highlight-red {
+    border-left-color: var(--red);
+    background: var(--glow-red);
+  }
+  .highlight-yellow {
+    border-left-color: var(--yellow);
+    background: var(--glow-yellow);
+  }
+  .highlight-green {
+    border-left-color: var(--green);
+    background: rgba(46,204,138,0.08);
+  }
+
+  strong { color: var(--accent); }
+  .red { color: var(--red); }
+  .yellow { color: var(--yellow); }
+  .green { color: var(--green); }
+  .blue { color: var(--blue); }
+  .purple { color: var(--purple); }
+  .orange { color: var(--orange); }
+
+  /* ── OBJECTIVE LIST ── */
+  .obj-list { list-style: none; }
+  .obj-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13.5px;
+  }
+  .obj-list li:last-child { border: none; }
+  .obj-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── TABLE ── */
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 13px;
+  }
+  .comparison-table th {
+    background: var(--bg3);
+    padding: 10px 14px;
+    text-align: left;
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    border: 1px solid var(--border2);
+    color: var(--accent);
+  }
+  .comparison-table td {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  .comparison-table tr:hover td { background: var(--bg3); }
+
+  /* ── COLLAPSIBLE ── */
+  .collapsible-btn {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 16px;
+    text-align: left;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+    transition: all .2s;
+  }
+  .collapsible-btn:hover { border-color: var(--accent); }
+  .collapsible-btn .chevron { transition: transform .3s; font-style: normal; }
+  .collapsible-btn.open .chevron { transform: rotate(180deg); }
+  .collapsible-content {
+    display: none;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-top: none;
+    padding: 16px;
+    border-radius: 0 0 8px 8px;
+    margin-bottom: 12px;
+    font-size: 13.5px;
+  }
+  .collapsible-content.open { display: block; }
+
+  /* ── FLASHCARD ── */
+  .flashcard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .flashcard {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    min-height: 120px;
+    cursor: pointer;
+    padding: 18px;
+    position: relative;
+    transition: all .25s;
+  }
+  .flashcard:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .flashcard-q {
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--text);
+  }
+  .flashcard-a {
+    display: none;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border2);
+    font-size: 13px;
+    color: var(--green);
+    line-height: 1.6;
+  }
+  .flashcard.revealed .flashcard-a { display: block; }
+  .flashcard-hint {
+    font-size: 10px;
+    color: var(--muted);
+    position: absolute;
+    bottom: 10px;
+    right: 12px;
+  }
+  .flashcard.revealed .flashcard-hint { color: var(--green); }
+
+  /* ── QUIZ ── */
+  .quiz-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .quiz-q {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt {
+    padding: 10px 14px;
+    border-radius: 7px;
+    border: 1px solid var(--border2);
+    background: var(--bg3);
+    cursor: pointer;
+    font-size: 13px;
+    transition: all .2s;
+  }
+  .quiz-opt:hover { border-color: var(--accent); }
+  .quiz-opt.correct { border-color: var(--green); background: rgba(46,204,138,0.1); color: var(--green); }
+  .quiz-opt.wrong { border-color: var(--red); background: rgba(255,77,109,0.1); color: var(--red); }
+  .quiz-explain {
+    display: none;
+    margin-top: 12px;
+    padding: 12px;
+    background: rgba(79,142,247,0.08);
+    border-radius: 7px;
+    font-size: 13px;
+    border-left: 3px solid var(--accent);
+  }
+  .quiz-explain.show { display: block; }
+
+  /* ── DECISION ENGINE ── */
+  .decision-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    margin-bottom: 10px;
+    font-size: 13.5px;
+  }
+  .decision-if {
+    background: rgba(167,139,250,0.15);
+    color: var(--purple);
+    padding: 8px 14px;
+    border-radius: 7px 0 0 7px;
+    font-weight: 600;
+    font-size: 12px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+  .decision-condition {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    flex: 1;
+  }
+  .decision-arrow {
+    background: var(--bg3);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 10px;
+    color: var(--yellow);
+    font-size: 16px;
+    display: flex; align-items: center;
+  }
+  .decision-then {
+    background: rgba(46,204,138,0.1);
+    color: var(--green);
+    border: 1px solid rgba(46,204,138,0.2);
+    padding: 8px 14px;
+    border-radius: 0 7px 7px 0;
+    flex: 1.2;
+    font-size: 12.5px;
+  }
+
+  /* ── STRATEGIC OBJECTIVES ── */
+  .obj-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 14px; }
+  .obj-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .obj-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+  }
+  .obj-card.c1::before { background: var(--accent); }
+  .obj-card.c2::before { background: var(--green); }
+  .obj-card.c3::before { background: var(--purple); }
+  .obj-card.c4::before { background: var(--yellow); }
+  .obj-card.c5::before { background: var(--orange); }
+  .obj-card.c6::before { background: var(--red); }
+  .obj-card-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .obj-card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .obj-card p { font-size: 12.5px; color: #b8c0d4; line-height: 1.6; }
+  .obj-card .example {
+    margin-top: 8px;
+    font-size: 11.5px;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* ── TRAP BOX ── */
+  .trap-box {
+    background: var(--glow-red);
+    border: 1px solid rgba(255,77,109,0.3);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+  }
+  .trap-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--red);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .trap-box p { font-size: 13px; }
+
+  /* ── ESSAY BUILDER ── */
+  .essay-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .essay-header {
+    background: var(--bg3);
+    padding: 14px 20px;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex; justify-content: space-between; align-items: center;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+  }
+  .essay-body { padding: 20px; font-size: 13.5px; }
+  .essay-block { margin-bottom: 16px; }
+  .essay-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .essay-text {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.8;
+    font-style: italic;
+    color: #c8d0e4;
+  }
+
+  /* ── SUMMARY GRID ── */
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 12px; }
+  .summary-chip {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 12.5px;
+    text-align: center;
+  }
+  .summary-chip strong { display: block; font-family: 'Syne', sans-serif; font-size: 13px; margin-bottom: 4px; color: var(--blue); }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow { display: flex; align-items: center; gap: 0; flex-wrap: wrap; margin: 12px 0; }
+  .flow-box {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 7px;
+    padding: 8px 14px;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .flow-arrow {
+    font-size: 18px;
+    color: var(--accent);
+    padding: 0 6px;
+  }
+
+  /* HIDE/SHOW sections */
+  .page-section { display: none; }
+  .page-section.active { display: block; }
+
+  /* ── MNEMONIC ── */
+  .mnemonic {
+    background: rgba(108,99,255,0.12);
+    border: 1px solid rgba(108,99,255,0.25);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 12px 0;
+  }
+  .mnemonic-title { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent2); margin-bottom: 6px; }
+
+  ul.styled { padding-left: 20px; }
+  ul.styled li { margin-bottom: 6px; font-size: 13.5px; }
+
+  /* progress bar */
+  .progress-bar { height: 3px; background: var(--border); border-radius: 2px; margin-bottom: 20px; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 2px; transition: width .4s; }
+
+  /* chain */
+  .chain { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; align-items: center; }
+  .chain-item {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .chain-link { color: var(--accent); font-size: 14px; font-weight: 700; }
+
+  /* mobile toggle */
+  #sidebar-toggle {
+    display: none;
+    position: fixed;
+    bottom: 20px; right: 20px;
+    z-index: 200;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(79,142,247,0.4);
+  }
+
+  @media (max-width: 768px) {
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    #main { margin-left: 0; }
+    #sidebar-toggle { display: flex; align-items: center; justify-content: center; }
+    .topbar { padding: 10px 16px; }
+    .section { padding: 24px 16px 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <h2>MIS Ch.1</h2>
+    <p>Exam Domination System</p>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">Core Modules</div>
+    <a class="nav-item active" onclick="showPage('overview')"><span>🏠</span> Overview</a>
+    <a class="nav-item" onclick="showPage('knowledge')"><span>🧠</span> Core Knowledge</a>
+    <a class="nav-item" onclick="showPage('connections')"><span>🔗</span> Connection Matrix</a>
+    <a class="nav-item" onclick="showPage('compare')"><span>⚔️</span> Comparison Tables</a>
+    <a class="nav-item" onclick="showPage('decision')"><span>⚙️</span> Decision Engine</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Exam Prep</div>
+    <a class="nav-item" onclick="showPage('traps')"><span>⚠️</span> Exam Traps</a>
+    <a class="nav-item" onclick="showPage('essays')"><span>📝</span> Essay Builder</a>
+    <a class="nav-item" onclick="showPage('summary')"><span>⚡</span> Ultra Summary</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Active Recall</div>
+    <a class="nav-item" onclick="showPage('flashcards')"><span>🃏</span> Flashcards</a>
+    <a class="nav-item" onclick="showPage('quiz')"><span>🎯</span> Quiz Mode</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+  <div class="topbar">
+    <h1>Information Systems in <span>Business Today</span></h1>
+    <button class="btn" onclick="revealAll()">Reveal All</button>
+    <button class="btn btn-accent" onclick="showPage('quiz')">🎯 Start Quiz</button>
+  </div>
+
+  <!-- ════════════════════════════════
+       PAGE: OVERVIEW
+  ══════════════════════════════════ -->
+  <div id="page-overview" class="page-section active">
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon icon-blue">🏠</div>
+        <div>
+          <div class="section-title">Chapter 1 — Master Overview</div>
+          <div class="section-subtitle">Everything you need to dominate the exam</div>
+        </div>
+      </div>
+
+      <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+
+      <div class="mnemonic">
+        <div class="mnemonic-title">🔑 Master Mnemonic — 6 Strategic Business Objectives</div>
+        <strong style="color:var(--accent2); font-size:18px; letter-spacing:.1em;">O N C I C S</strong>
+        <p style="margin-top:8px; font-size:13px;">
+          <span class="purple">O</span>perational Excellence →
+          <span class="green">N</span>ew Products/Services/Models →
+          <span class="blue">C</span>ustomer & Supplier Intimacy →
+          <span class="yellow">I</span>mproved Decision Making →
+          <span class="orange">C</span>ompetitive Advantage →
+          <span class="red">S</span>urvival
+        </p>
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-title"><span class="tag tag-def">Definition</span> Information System</div>
+          <p style="font-size:13px;">A <strong>set of interrelated components</strong> that collect, process, store, and distribute information to support <strong>decision making, coordination, and control</strong> in an organization.</p>
+          <div class="flow" style="margin-top:12px;">
+            <div class="flow-box" style="border-color:var(--accent); color:var(--accent)">Input</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">Processing</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box" style="border-color:var(--green); color:var(--green)">Output</div>
+            <div class="flow-arrow">⟳</div>
+            <div class="flow-box" style="border-color:var(--yellow); color:var(--yellow)">Feedback</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="tag tag-def">Definition</span> Data vs Information</div>
+          <table class="comparison-table" style="margin:0;">
+            <tr><th>Data</th><th>Information</th></tr>
+            <tr><td>Raw, unprocessed facts<br><small style="color:var(--muted)">e.g. numbers at checkout</small></td><td>Data shaped into meaningful form<br><small style="color:var(--muted)">e.g. total detergent sales</small></td></tr>
+          </table>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="tag tag-rule">Rule</span> Three IS Dimensions</div>
+          <ul class="styled">
+            <li><strong>Organization</strong> — Hierarchy, functions, culture, politics</li>
+            <li><strong>Management</strong> — Strategy, creativity, re-creation</li>
+            <li><strong>Technology</strong> — Hardware, software, networks, IT infrastructure</li>
+          </ul>
+          <div class="highlight" style="margin-top:10px; font-size:12px;">IS = Org + Mgmt + Tech working TOGETHER</div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="tag tag-key">Key</span> Digital Firm</div>
+          <ul class="styled">
+            <li>Significant relationships <strong>digitally enabled & mediated</strong></li>
+            <li>Core processes through <strong>digital networks</strong></li>
+            <li>Key corporate assets <strong>managed digitally</strong></li>
+            <li>Benefits: <span class="green">Time shifting + Space shifting</span></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="tag tag-key">Key</span> Complementary Assets</div>
+          <p style="font-size:13px; margin-bottom:10px;">Assets required to <strong>derive value</strong> from a primary IT investment. Without them, IT investment fails to produce returns.</p>
+          <ul class="styled" style="font-size:12.5px;">
+            <li><span class="blue">Organizational:</span> Business model, efficient processes</li>
+            <li><span class="yellow">Managerial:</span> Innovation incentives, teamwork</li>
+            <li><span class="green">Social:</span> Internet infrastructure, tech standards</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="tag tag-rule">Approach</span> Sociotechnical View</div>
+          <p style="font-size:13px;">Optimal performance = <strong>jointly optimizing</strong> both social and technical systems. Tech and organization <em>mutually adjust</em> until satisfactory fit is obtained.</p>
+          <div class="highlight-yellow" style="margin-top:10px; font-size:12px;">
+            Avoids purely technological approach — people + processes matter equally.
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight" style="font-size:13px; margin-top:4px;">
+        <strong>IT Capital Investment:</strong> Grew from <span class="yellow">32%</span> to <span class="green">52%</span> of all invested capital between <strong>1980–2009</strong>. Proves IT is now central to business strategy.
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       PAGE: CORE KNOWLEDGE
+  ══════════════════════════════════ -->
+  <div id="page-knowledge" class="page-section">
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon icon-purple">🧠</div>
+        <div>
+          <div class="section-title">Core Knowledge Engine</div>
+          <div class="section-subtitle">Every concept — zero information loss</div>
+        </div>
+      </div>
+
+      <!-- Learning Objectives -->
+      <button class="collapsible-btn open" onclick="toggleCollapse(this)">
+        📋 Learning Objectives (All 6) <span class="chevron">▼</span>
+      </button>
+      <div class="collapsible-content open">
+        <ul class="obj-list">
+          <li><div class="obj-num">1</div>Understand effects of IS on business and their relationship to <strong>globalization</strong>.</li>
+          <li><div class="obj-num">2</div>Explain why IS are <strong>essential</strong> in business today.</li>
+          <li><div class="obj-num">3</div>Define IS and describe its <strong>management, organization, and technology</strong> components.</li>
+          <li><div class="obj-num">4</div>Define <strong>complementary assets</strong> and explain how they ensure genuine value.</li>
+          <li><div class="obj-num">5</div>Describe different academic disciplines studying IS and each one's contribution.</li>
+          <li><div class="obj-num">6</div>Explain the <strong>sociotechnical systems perspective</strong>.</li>
+        </ul>
+      </div>
+
+      <!-- 6 Strategic Objectives -->
+      <button class="collapsible-btn open" onclick="toggleCollapse(this)" style="margin-top:12px;">
+        🎯 Six Strategic Business Objectives — Full Detail <span class="chevron">▼</span>
+      </button>
+      <div class="collapsible-content open">
+        <div class="obj-cards">
+          <div class="obj-card c1">
+            <div class="obj-card-num">01 / ONCICS</div>
+            <div class="obj-card-title">Operational Excellence</div>
+            <p>Improving <strong>efficiency</strong> to attain higher profitability. IT is a key tool for greater efficiency and productivity.</p>
+            <p class="example">📌 Walmart's Retail Link — links suppliers to stores for superior replenishment.</p>
+          </div>
+          <div class="obj-card c2">
+            <div class="obj-card-num">02 / ONCICS</div>
+            <div class="obj-card-title">New Products, Services & Business Models</div>
+            <p><strong>Business model:</strong> describes how a company produces, delivers, and sells products/services to create wealth. IS enables new models.</p>
+            <p class="example">📌 Apple iPad, Google Android, Netflix</p>
+          </div>
+          <div class="obj-card c3">
+            <div class="obj-card-num">03 / ONCICS</div>
+            <div class="obj-card-title">Customer & Supplier Intimacy</div>
+            <p>Serving customers well → returning customers → <strong>higher revenue</strong>. Intimacy with suppliers → lower costs via vital inputs.</p>
+            <p class="example">📌 High-end hotels track preferences. JCPenney links sales to manufacturer.</p>
+          </div>
+          <div class="obj-card c4">
+            <div class="obj-card-num">04 / ONCICS</div>
+            <div class="obj-card-title">Improved Decision Making</div>
+            <p>Without accurate info: managers rely on guesses → overproduction, misallocation, poor response → <span class="red">higher costs, lost customers.</span></p>
+            <p class="example">📌 Verizon's Web-based digital dashboard: real-time data on complaints, network, outages.</p>
+          </div>
+          <div class="obj-card c5">
+            <div class="obj-card-num">05 / ONCICS</div>
+            <div class="obj-card-title">Competitive Advantage</div>
+            <p>Delivering better performance, charging less for superior products, responding to customers/suppliers <strong>in real time.</strong></p>
+            <p class="example">📌 Apple, Walmart, UPS</p>
+          </div>
+          <div class="obj-card c6">
+            <div class="obj-card-num">06 / ONCICS</div>
+            <div class="obj-card-title">Survival</div>
+            <p>IT as necessity — industry-level changes force adoption. Government regulations require record keeping.</p>
+            <p class="example">📌 Citibank ATMs. Toxic Substances Control Act. Sarbanes-Oxley Act.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- IS Functions -->
+      <button class="collapsible-btn" onclick="toggleCollapse(this)" style="margin-top:12px;">
+        ⚙️ IS Functions: Input → Processing → Output → Feedback <span class="chevron">▼</span>
+      </button>
+      <div class="collapsible-content">
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-title" style="color:var(--accent)">📥 Input</div>
+            <p style="font-size:13px;">Captures <strong>raw data</strong> from the organization or its external environment.</p>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color:var(--purple)">⚙️ Processing</div>
+            <p style="font-size:13px;">Converts raw data into a <strong>meaningful form</strong> (information).</p>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color:var(--green)">📤 Output</div>
+            <p style="font-size:13px;">Transfers processed information to the <strong>people or activities</strong> that use it.</p>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color:var(--yellow)">🔄 Feedback</div>
+            <p style="font-size:13px;">Output is <strong>returned</strong> to appropriate members to help <strong>evaluate or correct</strong> the input stage.</p>
+          </div>
+        </div>
+        <div class="highlight">Environmental actors that interact with IS: <strong>customers, suppliers, competitors, stockholders, regulatory agencies</strong></div>
+      </div>
+
+      <!-- Organizational Hierarchy -->
+      <button class="collapsible-btn" onclick="toggleCollapse(this)" style="margin-top:8px;">
+        🏢 Organizational Dimension — Hierarchy & Functions <span class="chevron">▼</span>
+      </button>
+      <div class="collapsible-content">
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-title">Hierarchy Levels</div>
+            <ul class="styled" style="font-size:13px;">
+              <li><strong>Senior Management</strong> — Strategic decisions</li>
+              <li><strong>Middle Management</strong> — Tactical (+ Knowledge Workers)</li>
+              <li><strong>Operational Management</strong> — Day-to-day</li>
+              <li><strong>Knowledge Workers</strong> — Design & information</li>
+              <li><strong>Data Workers</strong> — Process & distribute info</li>
+              <li><strong>Production/Service Workers</strong> — Make products/services</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">Business Functions</div>
+            <ul class="styled" style="font-size:13px;">
+              <li>Sales and Marketing</li>
+              <li>Human Resources</li>
+              <li>Finance and Accounting</li>
+              <li>Manufacturing and Production</li>
+            </ul>
+            <div class="highlight-yellow" style="margin-top:10px; font-size:12px;">
+              Each function has <strong>unique business processes, culture, and politics</strong>.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Academic Approaches -->
+      <button class="collapsible-btn" onclick="toggleCollapse(this)" style="margin-top:8px;">
+        📚 Academic Approaches to IS <span class="chevron">▼</span>
+      </button>
+      <div class="collapsible-content">
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-title" style="color:var(--blue)">Technical Approach</div>
+            <p style="font-size:13px;">Emphasizes <strong>mathematically based models</strong>.</p>
+            <p style="font-size:12.5px; color:var(--muted); margin-top:6px;">Disciplines: Computer Science, Management Science, Operations Research</p>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color:var(--purple)">Behavioral Approach</div>
+            <p style="font-size:13px;">Focuses on <strong>strategic integration, implementation</strong>, behavioral issues.</p>
+            <p style="font-size:12.5px; color:var(--muted); margin-top:6px;">Disciplines: Psychology, Economics, Sociology</p>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color:var(--green)">MIS (Combined)</div>
+            <p style="font-size:13px;">Combines computer science, management science, operations research <strong>+ practical behavioral issues</strong>.</p>
+            <p style="font-size:12px; color:var(--muted); margin-top:6px;">4 actors: Hardware/software suppliers, business firms, managers/employees, firm's environment (legal, social, cultural)</p>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color:var(--orange)">Sociotechnical View</div>
+            <p style="font-size:13px;">Optimal performance = <strong>jointly optimizing</strong> social AND technical systems. Avoids purely tech approach.</p>
+            <div class="flow" style="margin-top:8px;">
+              <div class="flow-box">Social</div>
+              <div class="flow-arrow">⇄</div>
+              <div class="flow-box">Technical</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-box" style="border-color:var(--green);color:var(--green)">Optimal Fit</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Globalization -->
+      <button class="collapsible-btn" onclick="toggleCollapse(this)" style="margin-top:8px;">
+        🌐 Globalization & IT Transformation <span class="chevron">▼</span>
+      </button>
+      <div class="collapsible-content">
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-title">How IS Transforms Business</div>
+            <ul class="styled" style="font-size:13px;">
+              <li>Emerging <strong>mobile digital platform</strong></li>
+              <li>Growing business use of <strong>"big data"</strong></li>
+              <li>Growth in <strong>cloud computing</strong></li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">Globalization Opportunities</div>
+            <ul class="styled" style="font-size:13px;">
+              <li>Internet <strong>drastically reduced costs</strong> of operating globally</li>
+              <li>Increases in foreign trade & outsourcing</li>
+              <li>Presents both <span class="green">opportunities</span> and <span class="red">challenges</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Business Value Chain -->
+      <button class="collapsible-btn" onclick="toggleCollapse(this)" style="margin-top:8px;">
+        💰 Business Information Value Chain <span class="chevron">▼</span>
+      </button>
+      <div class="collapsible-content">
+        <p style="font-size:13.5px; margin-bottom:12px;">From a business perspective, IS are part of a series of <strong>value-adding activities</strong> for acquiring, transforming, and distributing information.</p>
+        <div class="flow">
+          <div class="flow-box" style="border-color:var(--accent)">Raw Data Acquired</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">Transformed through stages</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box" style="border-color:var(--green)">Value Added</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box" style="border-color:var(--yellow)">Better Decisions</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box" style="border-color:var(--orange)">Higher Profits</div>
+        </div>
+        <div class="highlight-yellow" style="margin-top:12px; font-size:12.5px;">
+          Value of IS = determined by extent to which it leads to <strong>better decisions, greater efficiency, and higher profits</strong>.
+        </div>
+        <div class="highlight-red" style="margin-top:8px; font-size:12.5px;">
+          ⚠️ Investing in IT does NOT guarantee good returns — considerable variation exists. Depends on right business model + complementary assets.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       PAGE: CONNECTIONS
+  ══════════════════════════════════ -->
+  <div id="page-connections" class="page-section">
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon icon-green">🔗</div>
+        <div>
+          <div class="section-title">Connection Matrix</div>
+          <div class="section-subtitle">How every concept links to every other</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title">Core Causal Chain</div>
+        <div class="flow" style="flex-wrap:wrap; gap:6px;">
+          <div class="flow-box" style="border-color:var(--blue)">IT Investment</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">Complementary Assets</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box" style="border-color:var(--green)">IS Value</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box" style="border-color:var(--yellow)">Strategic Objectives</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box" style="border-color:var(--orange)">Competitive Advantage</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box" style="border-color:var(--purple)">Survival</div>
+        </div>
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-title">Data → Information → Decision</div>
+          <div class="chain">
+            <span class="chain-item">Raw Data</span><span class="chain-link">→</span>
+            <span class="chain-item">Input</span><span class="chain-link">→</span>
+            <span class="chain-item">Processing</span><span class="chain-link">→</span>
+            <span class="chain-item">Output</span><span class="chain-link">→</span>
+            <span class="chain-item">Information</span><span class="chain-link">→</span>
+            <span class="chain-item green">Better Decision</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">IS Components → Business Value</div>
+          <div class="chain">
+            <span class="chain-item blue">Org Dimension</span><span class="chain-link">+</span>
+            <span class="chain-item purple">Mgmt Dimension</span><span class="chain-link">+</span>
+            <span class="chain-item yellow">Tech Dimension</span><span class="chain-link">→</span>
+            <span class="chain-item green">IS Value</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Customer Intimacy → Revenue Loop</div>
+          <div class="chain">
+            <span class="chain-item">IS tracks preferences</span><span class="chain-link">→</span>
+            <span class="chain-item">Better service</span><span class="chain-link">→</span>
+            <span class="chain-item">Customers return</span><span class="chain-link">→</span>
+            <span class="chain-item green">Revenue ↑</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Supplier Intimacy → Cost Loop</div>
+          <div class="chain">
+            <span class="chain-item">IS links to supplier</span><span class="chain-link">→</span>
+            <span class="chain-item">Vital inputs on time</span><span class="chain-link">→</span>
+            <span class="chain-item green">Costs ↓</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">No Accurate Info → Failure Chain</div>
+          <div class="chain">
+            <span class="chain-item red">Guesses/Luck</span><span class="chain-link">→</span>
+            <span class="chain-item red">Overproduction</span><span class="chain-link">→</span>
+            <span class="chain-item red">Misallocation</span><span class="chain-link">→</span>
+            <span class="chain-item red">Poor response</span><span class="chain-link">→</span>
+            <span class="chain-item red">Lost customers</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Sociotechnical Fit Loop</div>
+          <div class="chain">
+            <span class="chain-item">Social System</span><span class="chain-link">⇄</span>
+            <span class="chain-item">Tech System</span><span class="chain-link">→</span>
+            <span class="chain-item">Mutual Adjustment</span><span class="chain-link">→</span>
+            <span class="chain-item green">Optimal Performance</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:4px;">
+        <div class="card-title">Interdependence: Business ↔ IT</div>
+        <p style="font-size:13.5px; line-height:1.8;">In contemporary systems, there is growing interdependence between a firm's IS and its business capabilities. <strong>Changes in strategy, rules, and business processes increasingly require changes in hardware, software, databases, and telecommunications.</strong> Often, what the organization would like to do <span class="red">depends on what its systems will permit it to do.</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       PAGE: COMPARISON TABLES
+  ══════════════════════════════════ -->
+  <div id="page-compare" class="page-section">
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon icon-orange">⚔️</div>
+        <div>
+          <div class="section-title">Comparison War Tables</div>
+          <div class="section-subtitle">Side-by-side — never confuse similar concepts</div>
+        </div>
+      </div>
+
+      <button class="collapsible-btn open" onclick="toggleCollapse(this)">
+        Data vs Information <span class="chevron">▼</span>
+      </button>
+      <div class="collapsible-content open">
+        <table class="comparison-table">
+          <tr><th>Feature</th><th>Data</th><th>Information</th></tr>
+          <tr><td>Definition</td><td>Streams of raw facts</td><td>Data shaped into meaningful form</td></tr>
+          <tr><td>Processed?</td><td>❌ No</td><td>✅ Yes</td></tr>
+          <tr><td>Useful directly?</td><td>Usually not</td><td>Yes — supports decisions</td></tr>
+          <tr><td>Example</td><td>Numbers at checkout scanner</td><td>Total detergent sales for the week</td></tr>
+        </table>
+      </div>
+
+      <button class="collapsible-btn" onclick="toggleCollapse(this)" style="margin-top:8px;">
+        Technical vs Behavioral Approach to IS <span class="chevron">▼</span>
+      </button>
+      <div class="collapsible-content">
+        <table class="comparison-table">
+          <tr><th>Feature</th><th>Technical Approach</th><th>Behavioral Approach</th></tr>
+          <tr><td>Focus</td><td>Mathematical models, algorithms</td><td>Human, organizational, social issues</td></tr>
+          <tr><td>Disciplines</td><td>Computer Science, Management Science, Operations Research</td><td>Psychology, Economics, Sociology</td></tr>
+          <tr><td>Questions asked</td><td>How does it work technically?</td><td>Why/how do people use it?</td></tr>
+          <tr><td>Limitation</td><td>Ignores human factors</td><td>Ignores technical complexity</td></tr>
+        </table>
+        <div class="highlight">MIS = <strong>BOTH combined</strong> for a complete picture.</div>
+      </div>
+
+      <button class="collapsible-btn" onclick="toggleCollapse(this)" style="margin-top:8px;">
+        Three Complementary Asset Types <span class="chevron">▼</span>
+      </button>
+      <div class="collapsible-content">
+        <table class="comparison-table">
+          <tr><th>Asset Type</th><th>Examples</th><th>Role</th></tr>
+          <tr><td><span class="blue">Organizational</span></td><td>Appropriate business model, efficient processes</td><td>Structure that supports IT use</td></tr>
+          <tr><td><span class="yellow">Managerial</span></td><td>Incentives for innovation, teamwork, collaborative environment</td><td>Human capital that drives IT adoption</td></tr>
+          <tr><td><span class="green">Social</span></td><td>Internet & telecom infrastructure, technology standards</td><td>External ecosystem enabling IS</td></tr>
+        </table>
+      </div>
+
+      <button class="collapsible-btn" onclick="toggleCollapse(this)" style="margin-top:8px;">
+        Computer/Software vs Information System <span class="chevron">▼</span>
+      </button>
+      <div class="collapsible-content">
+        <table class="comparison-table">
+          <tr><th>Feature</th><th>Computer + Software</th><th>Information System</th></tr>
+          <tr><td>What is it?</td><td>Technical foundation and tools</td><td>The complete system (tech + people + processes)</td></tr>
+          <tr><td>Analogy</td><td>Materials and tools to build a house</td><td>The complete house including people living in it</td></tr>
+          <tr><td>Includes people?</td><td>❌ No</td><td>✅ Yes</td></tr>
+          <tr><td>Includes management?</td><td>❌ No</td><td>✅ Yes</td></tr>
+        </table>
+      </div>
+
+      <button class="collapsible-btn" onclick="toggleCollapse(this)" style="margin-top:8px;">
+        Digital Firm vs Traditional Firm <span class="chevron">▼</span>
+      </button>
+      <div class="collapsible-content">
+        <table class="comparison-table">
+          <tr><th>Feature</th><th>Traditional Firm</th><th>Digital Firm</th></tr>
+          <tr><td>Business relationships</td><td>Physical, face-to-face</td><td>Digitally enabled and mediated</td></tr>
+          <tr><td>Core processes</td><td>Manual/paper-based</td><td>Accomplished through digital networks</td></tr>
+          <tr><td>Asset management</td><td>Physical records</td><td>Key assets managed digitally</td></tr>
+          <tr><td>Flexibility</td><td>Limited by geography/time</td><td>Time shifting + Space shifting</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       PAGE: DECISION ENGINE
+  ══════════════════════════════════ -->
+  <div id="page-decision" class="page-section">
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon icon-yellow">⚙️</div>
+        <div>
+          <div class="section-title">Decision Engine</div>
+          <div class="section-subtitle">IF exam question mentions X → THEN write Y</div>
+        </div>
+      </div>
+
+      <div class="highlight" style="margin-bottom:20px; font-size:13px;">
+        Use this as your <strong>exam trigger system</strong>. See a keyword → know exactly what to write.
+      </div>
+
+      <div class="decision-row">
+        <div class="decision-if">IF</div>
+        <div class="decision-condition">Question about IS <strong>definition</strong></div>
+        <div class="decision-arrow">→</div>
+        <div class="decision-then">Write: Set of interrelated components that collect, process, store, distribute info → support decision making, coordination, control</div>
+      </div>
+
+      <div class="decision-row">
+        <div class="decision-if">IF</div>
+        <div class="decision-condition">Question asks why IS is <strong>essential</strong></div>
+        <div class="decision-arrow">→</div>
+        <div class="decision-then">Write all 6 objectives: ONCICS mnemonic + explain each with real example</div>
+      </div>
+
+      <div class="decision-row">
+        <div class="decision-if">IF</div>
+        <div class="decision-condition">Question about IS <strong>components</strong></div>
+        <div class="decision-arrow">→</div>
+        <div class="decision-then">Three dimensions: Organization (hierarchy, functions, culture, politics) + Management (strategy, creativity) + Technology (hardware, software, networks, IT infrastructure)</div>
+      </div>
+
+      <div class="decision-row">
+        <div class="decision-if">IF</div>
+        <div class="decision-condition">Question about IT investment <strong>not producing returns</strong></div>
+        <div class="decision-arrow">→</div>
+        <div class="decision-then">Discuss: Right business model needed + Complementary assets (Org, Managerial, Social) must accompany IT investment</div>
+      </div>
+
+      <div class="decision-row">
+        <div class="decision-if">IF</div>
+        <div class="decision-condition">Question about <strong>complementary assets</strong></div>
+        <div class="decision-arrow">→</div>
+        <div class="decision-then">Define: assets required to derive value from primary IT investment. 3 types: Organizational, Managerial, Social with examples each</div>
+      </div>
+
+      <div class="decision-row">
+        <div class="decision-if">IF</div>
+        <div class="decision-condition">Question about <strong>sociotechnical view</strong></div>
+        <div class="decision-arrow">→</div>
+        <div class="decision-then">Optimal performance = jointly optimizing BOTH social and technical systems. They mutually adjust until satisfactory fit is obtained. Avoids purely technological approach.</div>
+      </div>
+
+      <div class="decision-row">
+        <div class="decision-if">IF</div>
+        <div class="decision-condition">Question about <strong>digital firm</strong></div>
+        <div class="decision-arrow">→</div>
+        <div class="decision-then">3 characteristics: relationships digitally mediated, processes through digital networks, assets managed digitally. PLUS: time shifting + space shifting</div>
+      </div>
+
+      <div class="decision-row">
+        <div class="decision-if">IF</div>
+        <div class="decision-condition">Question mentions <strong>Walmart</strong></div>
+        <div class="decision-arrow">→</div>
+        <div class="decision-then">Retail Link system → objective = Operational Excellence (efficiency) AND Competitive Advantage</div>
+      </div>
+
+      <div class="decision-row">
+        <div class="decision-if">IF</div>
+        <div class="decision-condition">Question mentions <strong>Verizon</strong></div>
+        <div class="decision-arrow">→</div>
+        <div class="decision-then">Web-based digital dashboard → objective = Improved Decision Making (real-time data)</div>
+      </div>
+
+      <div class="decision-row">
+        <div class="decision-if">IF</div>
+        <div class="decision-condition">Question about <strong>business model</strong></div>
+        <div class="decision-arrow">→</div>
+        <div class="decision-then">Definition: describes how company produces, delivers, and sells product/service to CREATE WEALTH → links to objective #2 (New Products/Services)</div>
+      </div>
+
+      <div class="decision-row">
+        <div class="decision-if">IF</div>
+        <div class="decision-condition">Question about IS <strong>academic approaches</strong></div>
+        <div class="decision-arrow">→</div>
+        <div class="decision-then">Technical (math models: CS, Mgmt Sci, Ops Research) + Behavioral (psychology, economics, sociology) → MIS combines both</div>
+      </div>
+
+      <div class="decision-row">
+        <div class="decision-if">IF</div>
+        <div class="decision-condition"><strong>Feedback</strong> in IS</div>
+        <div class="decision-arrow">→</div>
+        <div class="decision-then">Output returned to appropriate members to evaluate or CORRECT the INPUT stage — critical control mechanism</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       PAGE: EXAM TRAPS
+  ══════════════════════════════════ -->
+  <div id="page-traps" class="page-section">
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon icon-red">⚠️</div>
+        <div>
+          <div class="section-title">Exam Traps Detector</div>
+          <div class="section-subtitle">Common mistakes — and how to avoid them</div>
+        </div>
+      </div>
+
+      <div class="trap-box">
+        <div class="trap-title">🪤 TRAP 1: Computer = Information System</div>
+        <p><span class="red">❌ WRONG:</span> "A computer is an information system."</p>
+        <p style="margin-top:6px;"><span class="green">✅ CORRECT:</span> A computer is the <strong>technical foundation/tool</strong> of an IS. IS includes organization, management, AND technology. Like saying "materials = house."</p>
+      </div>
+
+      <div class="trap-box">
+        <div class="trap-title">🪤 TRAP 2: IT Investment Always = Value</div>
+        <p><span class="red">❌ WRONG:</span> "Investing in IT guarantees superior returns."</p>
+        <p style="margin-top:6px;"><span class="green">✅ CORRECT:</span> Returns vary considerably. You need the <strong>right business model + complementary assets</strong> (org, managerial, social).</p>
+      </div>
+
+      <div class="trap-box">
+        <div class="trap-title">🪤 TRAP 3: Data = Information</div>
+        <p><span class="red">❌ WRONG:</span> Using data and information interchangeably.</p>
+        <p style="margin-top:6px;"><span class="green">✅ CORRECT:</span> Data = raw facts. Information = data processed into meaningful form. The IS does the conversion.</p>
+      </div>
+
+      <div class="trap-box">
+        <div class="trap-title">🪤 TRAP 4: Sociotechnical = Only Technology</div>
+        <p><span class="red">❌ WRONG:</span> "Optimal IS performance is achieved by maximizing technology."</p>
+        <p style="margin-top:6px;"><span class="green">✅ CORRECT:</span> Both <strong>social AND technical</strong> systems must be jointly optimized. They mutually adjust to reach a fit.</p>
+      </div>
+
+      <div class="trap-box">
+        <div class="trap-title">🪤 TRAP 5: Only 3 IS Dimensions (forgetting one)</div>
+        <p><span class="red">❌ WRONG:</span> Listing only 2 of the 3 dimensions.</p>
+        <p style="margin-top:6px;"><span class="green">✅ CORRECT:</span> Always write all 3: <strong>Organization + Management + Technology</strong>. Each is distinct.</p>
+      </div>
+
+      <div class="trap-box">
+        <div class="trap-title">🪤 TRAP 6: Confusing the 6 Strategic Objectives</div>
+        <p><span class="red">❌ WRONG:</span> Saying ATMs = Operational Excellence.</p>
+        <p style="margin-top:6px;"><span class="green">✅ CORRECT:</span> Citibank ATMs = <strong>Survival</strong> (industry-level change forced by competition). Match examples to correct objective.</p>
+      </div>
+
+      <div class="trap-box">
+        <div class="trap-title">🪤 TRAP 7: Forgetting Feedback in IS Model</div>
+        <p><span class="red">❌ WRONG:</span> Describing IS as only Input → Processing → Output.</p>
+        <p style="margin-top:6px;"><span class="green">✅ CORRECT:</span> There are FOUR activities: Input → Processing → Output → <strong>Feedback</strong>. Feedback is what makes the system self-correcting.</p>
+      </div>
+
+      <div class="trap-box">
+        <div class="trap-title">🪤 TRAP 8: Complementary Assets = Optional</div>
+        <p><span class="red">❌ WRONG:</span> "Complementary assets help but aren't required."</p>
+        <p style="margin-top:6px;"><span class="green">✅ CORRECT:</span> They are <strong>required</strong> to derive value from primary IT investment. Without them = IT investment wasted.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       PAGE: ESSAY BUILDER
+  ══════════════════════════════════ -->
+  <div id="page-essays" class="page-section">
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon icon-green">📝</div>
+        <div>
+          <div class="section-title">Essay Builder Pro Max</div>
+          <div class="section-subtitle">Perfect intro → body → conclusion for every major topic</div>
+        </div>
+      </div>
+
+      <!-- Essay 1 -->
+      <div class="essay-section">
+        <div class="essay-header" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
+          📝 Essay: Why Are Information Systems Essential in Business Today?
+          <span>▼</span>
+        </div>
+        <div class="essay-body">
+          <div class="essay-block">
+            <div class="essay-label">🟢 Introduction</div>
+            <div class="essay-text">In the modern business environment, information systems (IS) have become indispensable tools for organizational survival and growth. As businesses increasingly operate in a globalized, digital economy, the ability to collect, process, and distribute information effectively determines competitive position. This essay examines the six strategic objectives that make IS essential to business today.</div>
+          </div>
+          <div class="essay-block">
+            <div class="essay-label">🔵 Body — Point 1</div>
+            <div class="essay-text"><strong>Operational Excellence:</strong> IS enable firms to achieve higher efficiency and productivity, directly improving profitability. Walmart's Retail Link system exemplifies this, connecting suppliers to stores to optimize inventory replenishment.</div>
+          </div>
+          <div class="essay-block">
+            <div class="essay-label">🔵 Body — Point 2</div>
+            <div class="essay-text"><strong>New Products, Services, and Business Models:</strong> IS act as major enabling tools for innovation. A business model describes how a company creates wealth; IT enables entirely new models — as demonstrated by Apple's iPad, Google's Android OS, and Netflix's streaming service.</div>
+          </div>
+          <div class="essay-block">
+            <div class="essay-label">🔵 Body — Point 3</div>
+            <div class="essay-text"><strong>Customer and Supplier Intimacy:</strong> IS that track customer preferences lead to repeat business and higher revenues. Simultaneously, IS that link to suppliers (like JCPenney's system) ensure timely inputs and lower costs.</div>
+          </div>
+          <div class="essay-block">
+            <div class="essay-label">🔵 Body — Point 4</div>
+            <div class="essay-text"><strong>Improved Decision Making:</strong> Without accurate, real-time information, managers resort to guesswork — leading to overproduction, misallocation of resources, and poor response times. Verizon's digital dashboard provides managers with real-time operational data, enabling superior decisions.</div>
+          </div>
+          <div class="essay-block">
+            <div class="essay-label">🔵 Body — Points 5 & 6</div>
+            <div class="essay-text"><strong>Competitive Advantage:</strong> IS enable firms to deliver better performance at lower cost, responding to customers in real time (e.g., Apple, UPS, Walmart). <strong>Survival:</strong> IS have become a necessity — industry changes (Citibank ATMs) and government regulations (Sarbanes-Oxley Act) force adoption.</div>
+          </div>
+          <div class="essay-block">
+            <div class="essay-label">🔴 Conclusion</div>
+            <div class="essay-text">In conclusion, information systems are not merely operational tools — they are strategic assets that define a firm's ability to compete, innovate, and survive. The six strategic objectives demonstrate that IS touch every dimension of modern business, making their effective implementation a prerequisite for organizational success.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Essay 2 -->
+      <div class="essay-section">
+        <div class="essay-header" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
+          📝 Essay: What Are Complementary Assets and Why Do They Matter?
+          <span>▼</span>
+        </div>
+        <div class="essay-body" style="display:none">
+          <div class="essay-block">
+            <div class="essay-label">🟢 Introduction</div>
+            <div class="essay-text">While investment in information technology is growing rapidly — reaching 52% of all invested capital by 2009 — research shows that returns vary considerably across firms. The key determinant is whether organizations invest in complementary assets alongside their IT investments.</div>
+          </div>
+          <div class="essay-block">
+            <div class="essay-label">🔵 Body — Definition</div>
+            <div class="essay-text"><strong>Complementary assets</strong> are assets required to derive genuine value from a primary IT investment. Without them, technology investments fail to produce superior returns. They fall into three categories.</div>
+          </div>
+          <div class="essay-block">
+            <div class="essay-label">🔵 Body — Three Types</div>
+            <div class="essay-text"><strong>1. Organizational Assets:</strong> An appropriate business model and efficient business processes that align with the technology. <br><br><strong>2. Managerial Assets:</strong> Incentives for management innovation, teamwork culture, and collaborative work environments that encourage adoption. <br><br><strong>3. Social Assets:</strong> The broader infrastructure — Internet and telecommunications, and industry-wide technology standards that enable interoperability.</div>
+          </div>
+          <div class="essay-block">
+            <div class="essay-label">🔴 Conclusion</div>
+            <div class="essay-text">Complementary assets explain why identical technology investments yield different returns across firms. Organizations that couple IT investment with appropriate organizational, managerial, and social assets extract genuine value — while those that invest in technology alone often see diminishing returns.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Essay 3 -->
+      <div class="essay-section">
+        <div class="essay-header" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
+          📝 Essay: Describe the Sociotechnical Systems Perspective
+          <span>▼</span>
+        </div>
+        <div class="essay-body" style="display:none">
+          <div class="essay-block">
+            <div class="essay-label">🟢 Introduction</div>
+            <div class="essay-text">The study of information systems draws on both technical and behavioral disciplines. The sociotechnical perspective represents the most comprehensive approach, recognizing that optimal IS performance requires attention to both human and technological factors simultaneously.</div>
+          </div>
+          <div class="essay-block">
+            <div class="essay-label">🔵 Body — Core Argument</div>
+            <div class="essay-text">The sociotechnical view holds that <strong>optimal organizational performance is achieved by jointly optimizing both the social and technical systems</strong> used in production. This means technology and organization must mutually adjust to each other until a satisfactory fit is obtained — neither side dominates.</div>
+          </div>
+          <div class="essay-block">
+            <div class="essay-label">🔵 Body — Why It Matters</div>
+            <div class="essay-text">A purely technical approach (computer science, management science, operations research) focuses on mathematical models but ignores human behavior. A purely behavioral approach (psychology, economics, sociology) understands people but neglects technical realities. MIS combines both, and the sociotechnical view ensures neither is sacrificed.</div>
+          </div>
+          <div class="essay-block">
+            <div class="essay-label">🔴 Conclusion</div>
+            <div class="essay-text">The sociotechnical perspective is fundamental to successful IS implementation. By treating technology and people as equally important, organizations avoid the common failure of deploying technically superior systems that users reject — or building human processes around inadequate technology. The mutual adjustment process is what produces genuinely optimal outcomes.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       PAGE: ULTRA SUMMARY
+  ══════════════════════════════════ -->
+  <div id="page-summary" class="page-section">
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon icon-yellow">⚡</div>
+        <div>
+          <div class="section-title">Ultra Smart Summary</div>
+          <div class="section-subtitle">Extreme compression — all meaning preserved</div>
+        </div>
+      </div>
+
+      <div class="highlight" style="margin-bottom:20px;">
+        <strong>THE BIG PICTURE:</strong> IS = (Org + Mgmt + Tech) system that processes Data→Information to achieve 6 strategic objectives (ONCICS) → Creates business value when paired with complementary assets (Org/Mgmt/Social).
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-chip"><strong>IS Definition</strong>Interrelated components: collect, process, store, distribute info → support decisions</div>
+        <div class="summary-chip"><strong>Data</strong>Raw facts (unprocessed)</div>
+        <div class="summary-chip"><strong>Information</strong>Data shaped into meaningful form</div>
+        <div class="summary-chip"><strong>Input</strong>Capture raw data from org/environment</div>
+        <div class="summary-chip"><strong>Processing</strong>Convert data → meaningful form</div>
+        <div class="summary-chip"><strong>Output</strong>Transfer info to users</div>
+        <div class="summary-chip"><strong>Feedback</strong>Output returned to correct input</div>
+        <div class="summary-chip"><strong>Org Dimension</strong>Hierarchy, functions, culture, politics</div>
+        <div class="summary-chip"><strong>Mgmt Dimension</strong>Strategy, creativity, re-creation</div>
+        <div class="summary-chip"><strong>Tech Dimension</strong>HW, SW, networks, IT infrastructure</div>
+        <div class="summary-chip"><strong>Digital Firm</strong>Digital relationships, processes, assets + time/space shifting</div>
+        <div class="summary-chip"><strong>Business Model</strong>How company produces, delivers, sells to create wealth</div>
+        <div class="summary-chip"><strong>Complementary Assets</strong>Assets required to extract value from IT investment</div>
+        <div class="summary-chip"><strong>Org Assets</strong>Right business model + efficient processes</div>
+        <div class="summary-chip"><strong>Managerial Assets</strong>Innovation incentives + teamwork</div>
+        <div class="summary-chip"><strong>Social Assets</strong>Internet infra + tech standards</div>
+        <div class="summary-chip"><strong>Technical Approach</strong>Math models; CS, Mgmt Sci, Ops Research</div>
+        <div class="summary-chip"><strong>Behavioral Approach</strong>Human factors; Psychology, Econ, Sociology</div>
+        <div class="summary-chip"><strong>Sociotechnical</strong>Jointly optimize social + technical → mutual adjustment → optimal fit</div>
+        <div class="summary-chip"><strong>IT Capital Investment</strong>32% → 52% of all invested capital (1980→2009)</div>
+      </div>
+
+      <div style="margin-top:24px;">
+        <div class="mnemonic">
+          <div class="mnemonic-title">🧠 ONCICS Mnemonic — 6 Strategic Objectives</div>
+          <div style="font-size:14px; letter-spacing:.08em; margin-bottom:8px;"><span class="accent" style="color:var(--accent)">O</span><span class="green">N</span><span class="purple">C</span><span class="yellow">I</span><span class="orange">C</span><span class="red">S</span></div>
+          <ul class="styled" style="font-size:13px;">
+            <li><strong style="color:var(--accent)">O</strong>perational Excellence — Walmart Retail Link</li>
+            <li><strong style="color:var(--green)">N</strong>ew Products/Services/Models — Apple, Google, Netflix</li>
+            <li><strong style="color:var(--purple)">C</strong>ustomer & Supplier Intimacy — Hotels, JCPenney</li>
+            <li><strong style="color:var(--yellow)">I</strong>mproved Decision Making — Verizon dashboard</li>
+            <li><strong style="color:var(--orange)">C</strong>ompetitive Advantage — Apple, Walmart, UPS</li>
+            <li><strong style="color:var(--red)">S</strong>urvival — Citibank ATMs, Sarbanes-Oxley</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       PAGE: FLASHCARDS
+  ══════════════════════════════════ -->
+  <div id="page-flashcards" class="page-section">
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon icon-purple">🃏</div>
+        <div>
+          <div class="section-title">Flashcard System</div>
+          <div class="section-subtitle">Click each card to reveal the answer</div>
+        </div>
+      </div>
+      <div style="margin-bottom:12px; display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="btn" onclick="revealAllFlashcards()">Reveal All</button>
+        <button class="btn" onclick="hideAllFlashcards()">Hide All</button>
+      </div>
+      <div class="flashcard-grid" id="flashcardGrid"></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       PAGE: QUIZ
+  ══════════════════════════════════ -->
+  <div id="page-quiz" class="page-section">
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon icon-orange">🎯</div>
+        <div>
+          <div class="section-title">Quiz Mode</div>
+          <div class="section-subtitle">Test yourself before the exam</div>
+        </div>
+      </div>
+      <div id="quizContainer"></div>
+    </div>
+  </div>
+
+</div><!-- end #main -->
+
+<button id="sidebar-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+
+<script>
+// ── PAGE NAVIGATION ──
+function showPage(id) {
+  document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  event.target.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ── COLLAPSIBLE ──
+function toggleCollapse(btn) {
+  btn.classList.toggle('open');
+  const content = btn.nextElementSibling;
+  content.classList.toggle('open');
+}
+
+// ── REVEAL ALL ──
+function revealAll() {
+  document.querySelectorAll('.collapsible-content').forEach(c => { c.classList.add('open'); c.previousElementSibling.classList.add('open'); });
+  document.querySelectorAll('.flashcard').forEach(c => c.classList.add('revealed'));
+  document.querySelectorAll('.quiz-explain').forEach(e => e.classList.add('show'));
+}
+
+// ── FLASHCARDS DATA ──
+const flashcardsData = [
+  { q: "Define Information System", a: "Set of interrelated components that collect, process, store, and distribute information to support decision making, coordination, and control." },
+  { q: "What is the difference between Data and Information?", a: "Data = streams of raw facts. Information = data shaped into a meaningful form useful for decision making." },
+  { q: "Name the 4 activities of an Information System", a: "Input (capture raw data) → Processing (convert to meaningful form) → Output (transfer to users) → Feedback (returned to correct input)." },
+  { q: "What are the 3 dimensions of Information Systems?", a: "1. Organizational (hierarchy, functions, culture, politics) 2. Management (strategy, creativity) 3. Technology (HW, SW, networks, IT infrastructure)" },
+  { q: "What is a Digital Firm?", a: "A firm where: significant relationships are digitally enabled, core processes are accomplished through digital networks, and key assets are managed digitally. Enables time shifting + space shifting." },
+  { q: "What are the 6 Strategic Business Objectives? (Mnemonic: ONCICS)", a: "O-perational Excellence, N-ew Products/Services/Models, C-ustomer & Supplier Intimacy, I-mproved Decision Making, C-ompetitive Advantage, S-urvival" },
+  { q: "What is Operational Excellence? Give an example.", a: "Improving efficiency to achieve higher profitability. Example: Walmart's Retail Link system links suppliers directly to stores for superior replenishment." },
+  { q: "What is a Business Model?", a: "Describes how a company produces, delivers, and sells a product or service to create wealth. IS/IT is a major enabling tool for new business models." },
+  { q: "What are Complementary Assets?", a: "Assets required to derive value from a primary IT investment. Three types: Organizational (business model, processes), Managerial (innovation incentives, teamwork), Social (internet infrastructure, tech standards)." },
+  { q: "Why doesn't IT investment always guarantee returns?", a: "Returns vary considerably. Firms need: (1) the right business model and (2) complementary assets (org, managerial, social) to support the IT investment." },
+  { q: "What is the Technical Approach to studying IS?", a: "Emphasizes mathematically based models. Disciplines: Computer Science, Management Science, Operations Research." },
+  { q: "What is the Behavioral Approach to studying IS?", a: "Focuses on behavioral issues like strategic integration and implementation. Disciplines: Psychology, Economics, Sociology." },
+  { q: "What is the Sociotechnical View?", a: "Optimal organizational performance is achieved by jointly optimizing BOTH social and technical systems. They mutually adjust until a satisfactory fit is obtained." },
+  { q: "How has IT capital investment changed from 1980 to 2009?", a: "Grew from 32% to 52% of all invested capital — showing IT has become central to business strategy." },
+  { q: "What happens without accurate information in decision making?", a: "Managers must use forecasts, best guesses, luck → overproduction, underproduction, misallocation of resources, poor response times → higher costs, lost customers." },
+  { q: "Give an example of Improved Decision Making in practice.", a: "Verizon's Web-based digital dashboard: provides managers with real-time data on customer complaints, network performance, and line outages." },
+  { q: "What IS objective does Citibank ATMs represent?", a: "Survival — an industry-level change that forced all banks to adopt ATMs to remain competitive and meet customer expectations." },
+  { q: "What is IT Infrastructure?", a: "The platform that an information system is built on. Includes hardware, software, data management technology, networking, and telecommunications." },
+  { q: "Name the 4 main actors in MIS.", a: "1. Suppliers of hardware and software 2. Business firms 3. Managers and employees 4. Firm's environment (legal, social, cultural context)" },
+  { q: "What is the Business Information Value Chain?", a: "IS are part of value-adding activities that acquire, transform, and distribute information → enable better decisions → improve organizational performance → increase profitability." },
+];
+
+function buildFlashcards() {
+  const grid = document.getElementById('flashcardGrid');
+  flashcardsData.forEach((card, i) => {
+    const el = document.createElement('div');
+    el.className = 'flashcard';
+    el.innerHTML = `<div class="flashcard-q">${card.q}</div><div class="flashcard-a">${card.a}</div><div class="flashcard-hint">Click to reveal</div>`;
+    el.onclick = () => { el.classList.toggle('revealed'); el.querySelector('.flashcard-hint').textContent = el.classList.contains('revealed') ? '✓ Revealed' : 'Click to reveal'; };
+    grid.appendChild(el);
+  });
+}
+
+function revealAllFlashcards() {
+  document.querySelectorAll('.flashcard').forEach(c => { c.classList.add('revealed'); c.querySelector('.flashcard-hint').textContent = '✓ Revealed'; });
+}
+function hideAllFlashcards() {
+  document.querySelectorAll('.flashcard').forEach(c => { c.classList.remove('revealed'); c.querySelector('.flashcard-hint').textContent = 'Click to reveal'; });
+}
+
+// ── QUIZ DATA ──
+const quizData = [
+  {
+    q: "Which of the following BEST defines an Information System?",
+    opts: ["A computer program that stores data", "A set of interrelated components that collect, process, store, and distribute information", "A database management tool for organizations", "Hardware and software used by a company"],
+    correct: 1,
+    explain: "An IS is defined as a SET OF INTERRELATED COMPONENTS that collect, process, store, and distribute information to support decision making, coordination, and control. It includes organization, management, AND technology — not just hardware/software."
+  },
+  {
+    q: "Walmart's Retail Link system primarily achieves which strategic business objective?",
+    opts: ["Customer Intimacy", "Improved Decision Making", "Operational Excellence", "New Products and Services"],
+    correct: 2,
+    explain: "Retail Link links suppliers directly to stores for superior replenishment — this is about EFFICIENCY and PRODUCTIVITY = Operational Excellence."
+  },
+  {
+    q: "The sociotechnical view holds that optimal IS performance is achieved by:",
+    opts: ["Maximizing investment in the latest technology", "Focusing entirely on user training and behavior", "Jointly optimizing both social and technical systems", "Implementing industry best-practice software"],
+    correct: 2,
+    explain: "The sociotechnical view says BOTH social (people, processes) AND technical systems must be jointly optimized. They mutually adjust until a satisfactory fit is obtained."
+  },
+  {
+    q: "Which of the following is NOT a complementary asset for IT investment?",
+    opts: ["Appropriate business model", "Teamwork and collaborative work environments", "Latest generation microprocessors", "Internet and telecommunications infrastructure"],
+    correct: 2,
+    explain: "Microprocessors are part of the IT investment itself, not a complementary asset. Complementary assets are ORGANIZATIONAL (business model, processes), MANAGERIAL (teamwork, incentives), and SOCIAL (internet infra, standards)."
+  },
+  {
+    q: "Citibank's introduction of ATMs is an example of which strategic objective?",
+    opts: ["Competitive Advantage", "Operational Excellence", "Customer Intimacy", "Survival"],
+    correct: 3,
+    explain: "ATMs represent SURVIVAL — an industry-level change that forced adoption. Banks that didn't adopt ATMs risked losing customers to those that did."
+  },
+  {
+    q: "In an IS, what is the role of FEEDBACK?",
+    opts: ["To convert data into information", "To capture data from the external environment", "To transfer output to users", "Output returned to appropriate members to evaluate or correct input"],
+    correct: 3,
+    explain: "Feedback is output that is RETURNED to appropriate people to help EVALUATE OR CORRECT the input stage — it's the self-correcting mechanism of an IS."
+  },
+  {
+    q: "Which statement about IT investment and business value is TRUE?",
+    opts: ["All firms receive equal returns from IT investment", "IT investment alone guarantees superior returns", "Returns vary considerably and depend on complementary assets", "IT investment is only valuable for large corporations"],
+    correct: 2,
+    explain: "There is CONSIDERABLE VARIATION in returns from IT investment. Success depends on (1) adopting the right business model and (2) investing in complementary assets — not the IT alone."
+  },
+  {
+    q: "The behavioral approach to studying IS draws from which disciplines?",
+    opts: ["Computer Science, Management Science, Operations Research", "Psychology, Economics, Sociology", "Engineering, Mathematics, Statistics", "Business Law, Finance, Accounting"],
+    correct: 1,
+    explain: "The BEHAVIORAL approach focuses on human and organizational issues — it draws from Psychology, Economics, and Sociology."
+  },
+];
+
+function buildQuiz() {
+  const container = document.getElementById('quizContainer');
+  quizData.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'quiz-card';
+    const optsHtml = q.opts.map((opt, oi) =>
+      `<div class="quiz-opt" onclick="answerQuiz(this, ${qi}, ${oi}, ${q.correct})">${opt}</div>`
+    ).join('');
+    card.innerHTML = `
+      <div class="quiz-q">Q${qi+1}. ${q.q}</div>
+      <div class="quiz-opts">${optsHtml}</div>
+      <div class="quiz-explain" id="qex-${qi}">💡 ${q.explain}</div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function answerQuiz(el, qi, chosen, correct) {
+  const opts = el.parentElement.querySelectorAll('.quiz-opt');
+  opts.forEach(o => o.style.pointerEvents = 'none');
+  if (chosen === correct) {
+    el.classList.add('correct');
+  } else {
+    el.classList.add('wrong');
+    opts[correct].classList.add('correct');
+  }
+  document.getElementById('qex-' + qi).classList.add('show');
+}
+
+// ── INIT ──
+buildFlashcards();
+buildQuiz();
+</script>
+</body>
+</html>
