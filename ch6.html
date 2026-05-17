@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 6 — Business Intelligence & Databases | Exam Prep</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root[data-theme="dark"] {
+    --bg: #0a0c10;
+    --bg2: #111318;
+    --bg3: #1a1e26;
+    --border: #242832;
+    --text: #e8eaf0;
+    --text2: #9aa0b0;
+    --text3: #5a6070;
+    --accent: #4fc3f7;
+    --accent2: #f7c94f;
+    --accent3: #a78bfa;
+    --accent4: #4ade80;
+    --danger: #f87171;
+    --card: #13161d;
+    --glow: rgba(79,195,247,0.15);
+  }
+  :root[data-theme="light"] {
+    --bg: #f4f6fb;
+    --bg2: #ffffff;
+    --bg3: #eef1f8;
+    --border: #d4d9e8;
+    --text: #1a1e2e;
+    --text2: #4a5068;
+    --text3: #8890a8;
+    --accent: #0284c7;
+    --accent2: #d97706;
+    --accent3: #7c3aed;
+    --accent4: #16a34a;
+    --danger: #dc2626;
+    --card: #ffffff;
+    --glow: rgba(2,132,199,0.08);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Lora', serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.75;
+    transition: background 0.3s, color 0.3s;
+  }
+  /* ── HEADER ── */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; gap: 1.5rem;
+    height: 60px;
+    backdrop-filter: blur(12px);
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1rem;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .logo span { color: var(--accent2); }
+  nav {
+    display: flex; gap: 0.25rem;
+    overflow-x: auto; flex: 1;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 0.35rem 0.85rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    background: transparent;
+    color: var(--text2);
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .nav-btn:hover, .nav-btn.active {
+    background: var(--bg3);
+    border-color: var(--border);
+    color: var(--accent);
+  }
+  .theme-btn {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem; font-weight: 700;
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    color: var(--text);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .theme-btn:hover { border-color: var(--accent); color: var(--accent); }
+  /* ── SECTIONS ── */
+  section { display: none; }
+  section.active { display: block; }
+  .container { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; }
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 4rem 2rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 50% at 50% 0%, var(--glow), transparent);
+    pointer-events: none;
+  }
+  .chapter-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.15em;
+    color: var(--accent);
+    background: var(--glow);
+    border: 1px solid var(--accent);
+    border-radius: 20px;
+    padding: 0.3rem 1rem;
+    display: inline-block; margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    letter-spacing: -0.03em;
+  }
+  .hero h1 em { color: var(--accent); font-style: normal; }
+  .hero p { color: var(--text2); font-size: 1rem; max-width: 550px; margin: 0 auto; }
+  /* ── CARDS & CONTENT ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--accent); }
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem; font-weight: 700;
+    margin-bottom: 1.25rem;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  h2 .icon { font-size: 1.1rem; }
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700;
+    color: var(--accent2);
+    margin: 1.25rem 0 0.5rem;
+    letter-spacing: 0.02em;
+  }
+  p { margin-bottom: 0.85rem; color: var(--text); font-size: 0.95rem; }
+  .highlight { color: var(--accent); font-weight: 600; }
+  .kw { 
+    background: var(--glow);
+    color: var(--accent);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85em;
+    font-weight: 500;
+  }
+  ul.clean { list-style: none; padding: 0; }
+  ul.clean li {
+    padding: 0.5rem 0 0.5rem 1.5rem;
+    position: relative;
+    font-size: 0.93rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  ul.clean li:last-child { border-bottom: none; }
+  ul.clean li::before {
+    content: '→';
+    position: absolute; left: 0;
+    color: var(--accent); font-weight: 700;
+  }
+  .callout {
+    background: var(--bg3);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+    font-size: 0.92rem;
+  }
+  .callout.warn { border-color: var(--accent2); }
+  .callout.success { border-color: var(--accent4); }
+  .callout.purple { border-color: var(--accent3); }
+  .tag {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; font-weight: 500;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    margin-right: 0.3rem; margin-bottom: 0.3rem;
+  }
+  .tag.blue { background: rgba(79,195,247,0.12); color: var(--accent); border: 1px solid rgba(79,195,247,0.3); }
+  .tag.yellow { background: rgba(247,201,79,0.12); color: var(--accent2); border: 1px solid rgba(247,201,79,0.3); }
+  .tag.purple { background: rgba(167,139,250,0.12); color: var(--accent3); border: 1px solid rgba(167,139,250,0.3); }
+  .tag.green { background: rgba(74,222,128,0.12); color: var(--accent4); border: 1px solid rgba(74,222,128,0.3); }
+  /* ── TABLE ── */
+  .tbl-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); margin: 1rem 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 0.9rem 1rem;
+    background: var(--bg3);
+    color: var(--accent);
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg3); color: var(--text); }
+  /* ── COLLAPSIBLE ── */
+  .collapsible { border: 1px solid var(--border); border-radius: 12px; margin-bottom: 0.75rem; overflow: hidden; }
+  .coll-header {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem; font-weight: 700;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--bg3);
+    color: var(--text);
+    transition: background 0.2s;
+    user-select: none;
+  }
+  .coll-header:hover { background: var(--card); }
+  .coll-header .arrow { transition: transform 0.3s; font-size: 0.7rem; color: var(--accent); }
+  .coll-header.open .arrow { transform: rotate(90deg); }
+  .coll-body { display: none; padding: 1.25rem; background: var(--card); border-top: 1px solid var(--border); font-size: 0.92rem; }
+  .coll-body.open { display: block; animation: slideDown 0.25s ease; }
+  @keyframes slideDown { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+  /* ── MCQ ── */
+  .mcq-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    transition: border-color 0.2s;
+  }
+  .mcq-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; color: var(--text3);
+    letter-spacing: 0.1em; margin-bottom: 0.6rem;
+  }
+  .mcq-q {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.97rem; font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+  .mcq-options { display: flex; flex-direction: column; gap: 0.5rem; }
+  .opt-btn {
+    text-align: left;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    color: var(--text2);
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-family: 'Lora', serif;
+    transition: all 0.2s;
+    line-height: 1.4;
+  }
+  .opt-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--text); background: var(--bg); }
+  .opt-btn.correct { border-color: var(--accent4); color: var(--accent4); background: rgba(74,222,128,0.08); }
+  .opt-btn.wrong { border-color: var(--danger); color: var(--danger); background: rgba(248,113,113,0.08); }
+  .opt-btn:disabled { cursor: default; }
+  .mcq-explanation {
+    display: none;
+    margin-top: 1rem;
+    padding: 0.9rem 1.1rem;
+    background: var(--bg3);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 10px 10px 0;
+    font-size: 0.86rem;
+    color: var(--text2);
+    animation: slideDown 0.25s ease;
+  }
+  .mcq-explanation.show { display: block; }
+  .diff-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem; font-weight: 500;
+    padding: 0.15rem 0.5rem;
+    border-radius: 20px;
+    float: right;
+  }
+  .easy { background: rgba(74,222,128,0.15); color: var(--accent4); }
+  .med { background: rgba(247,201,79,0.15); color: var(--accent2); }
+  .hard { background: rgba(248,113,113,0.15); color: var(--danger); }
+  /* ── PROGRESS ── */
+  .score-bar {
+    display: flex; align-items: center; gap: 1rem;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    margin-bottom: 2rem;
+    padding: 1rem 1.5rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .score-track { flex: 1; height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
+  .score-fill { height: 100%; background: var(--accent4); border-radius: 3px; transition: width 0.4s; }
+  /* ── WRITTEN ── */
+  .wq-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    margin-bottom: 1.25rem;
+  }
+  .wq-type { 
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.67rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent3);
+    margin-bottom: 0.5rem;
+  }
+  .wq-q {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .show-answer-btn {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.78rem; font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 0.5rem 1.1rem;
+    border-radius: 8px;
+    border: 1px solid var(--accent3);
+    background: transparent;
+    color: var(--accent3);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .show-answer-btn:hover { background: rgba(167,139,250,0.1); }
+  .model-answer {
+    display: none;
+    margin-top: 1.2rem;
+    padding: 1.2rem;
+    background: var(--bg3);
+    border-radius: 10px;
+    border: 1px solid var(--accent3);
+    font-size: 0.9rem;
+    line-height: 1.8;
+    animation: slideDown 0.25s ease;
+  }
+  .model-answer.show { display: block; }
+  .model-answer strong { color: var(--accent); }
+  /* ── REVISION ── */
+  .revision-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+  .rev-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.25rem;
+  }
+  .rev-box h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem; font-weight: 800;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 0.75rem;
+  }
+  .rev-box ul { list-style: none; padding: 0; }
+  .rev-box li { 
+    font-size: 0.83rem; padding: 0.3rem 0;
+    border-bottom: 1px dashed var(--border);
+    color: var(--text2);
+  }
+  .rev-box li:last-child { border-bottom: none; }
+  .rev-box li strong { color: var(--text); }
+  .mono {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    background: var(--bg3);
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    color: var(--accent4);
+    margin: 0.4rem 0;
+    display: block;
+  }
+  /* ── SECTION TITLE ── */
+  .section-hero {
+    text-align: center;
+    padding: 2.5rem 1rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .section-hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.4rem;
+  }
+  .section-hero p { color: var(--text3); font-size: 0.9rem; }
+  /* ── MNEMONIC ── */
+  .mnemonic {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+    font-weight: 700;
+    color: var(--accent2);
+    text-align: center;
+    padding: 1rem;
+    border: 2px dashed var(--accent2);
+    border-radius: 10px;
+    margin: 0.75rem 0;
+  }
+  /* ── ANIMATIONS ── */
+  section.active .card, section.active .mcq-card, section.active .wq-card, section.active .rev-box, section.active .collapsible {
+    animation: fadeUp 0.35s ease both;
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  section.active .card:nth-child(2) { animation-delay: 0.05s; }
+  section.active .card:nth-child(3) { animation-delay: 0.1s; }
+  section.active .card:nth-child(4) { animation-delay: 0.15s; }
+  section.active .card:nth-child(5) { animation-delay: 0.2s; }
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    header { padding: 0 1rem; gap: 0.75rem; }
+    .container { padding: 2rem 1rem; }
+    .revision-grid { grid-template-columns: 1fr; }
+  }
+  /* ── HOME ── */
+  .phase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem; }
+  .phase-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .phase-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 24px var(--glow); }
+  .phase-card .ph-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+  .phase-card h3 { font-size: 0.85rem; color: var(--text); margin: 0; }
+  .phase-card p { font-size: 0.78rem; color: var(--text3); margin-top: 0.25rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">CH<span>6</span> BI</div>
+  <nav>
+    <button class="nav-btn active" onclick="showSection('home')">Home</button>
+    <button class="nav-btn" onclick="showSection('explain')">📖 Explanation</button>
+    <button class="nav-btn" onclick="showSection('summary')">🧾 Summary</button>
+    <button class="nav-btn" onclick="showSection('memory')">🧩 Memory</button>
+    <button class="nav-btn" onclick="showSection('mcq')">❓ MCQs</button>
+    <button class="nav-btn" onclick="showSection('written')">✍️ Written</button>
+    <button class="nav-btn" onclick="showSection('revision')">⚡ Revision</button>
+  </nav>
+  <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">☀ Light</button>
+</header>
+
+<!-- ════════════════════════════════════════════
+     HOME
+════════════════════════════════════════════ -->
+<section id="home" class="active">
+  <div class="hero">
+    <div class="chapter-tag">MIS · CHAPTER 6 · EXAM PREP SYSTEM</div>
+    <h1>Foundations of <em>Business Intelligence</em><br>Databases & Information Management</h1>
+    <p>A complete exam preparation system — from deep understanding to MCQ training. Built for maximum exam performance.</p>
+  </div>
+  <div class="container">
+    <div class="phase-grid">
+      <div class="phase-card" onclick="showSection('explain')">
+        <div class="ph-icon">📖</div>
+        <h3>Deep Explanation</h3>
+        <p>Full concept breakdown with analogies</p>
+      </div>
+      <div class="phase-card" onclick="showSection('summary')">
+        <div class="ph-icon">🧾</div>
+        <h3>Smart Summary</h3>
+        <p>High-yield bullet-point notes</p>
+      </div>
+      <div class="phase-card" onclick="showSection('memory')">
+        <div class="ph-icon">🧩</div>
+        <h3>Memory Tools</h3>
+        <p>Mnemonics, comparisons & traps</p>
+      </div>
+      <div class="phase-card" onclick="showSection('mcq')">
+        <div class="ph-icon">❓</div>
+        <h3>30 MCQs</h3>
+        <p>Easy → Hard with explanations</p>
+      </div>
+      <div class="phase-card" onclick="showSection('written')">
+        <div class="ph-icon">✍️</div>
+        <h3>Written Questions</h3>
+        <p>Short & long answer with model answers</p>
+      </div>
+      <div class="phase-card" onclick="showSection('revision')">
+        <div class="ph-icon">⚡</div>
+        <h3>Rapid Revision</h3>
+        <p>Night-before cheat sheet</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     EXPLANATION
+════════════════════════════════════════════ -->
+<section id="explain">
+<div class="container">
+  <div class="section-hero">
+    <h1>📖 Deep Explanation</h1>
+    <p>Every concept explained clearly with real-world analogies</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">🏗️</span> 1. The Data Hierarchy — Building Blocks of Information</h2>
+    <p>Think of data like a <span class="highlight">Lego structure</span>. The smallest piece is a single plastic nub — in computing, that's a <span class="kw">bit</span> (a 0 or 1). Stack 8 bits together and you get a <span class="kw">byte</span>, which can represent one character (e.g., the letter "A"). Keep building:</p>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Level</th><th>Description</th><th>Example</th></tr>
+        <tr><td><strong>Bit</strong></td><td>Smallest unit — 0 or 1</td><td>1</td></tr>
+        <tr><td><strong>Byte</strong></td><td>8 bits = 1 character</td><td>"A"</td></tr>
+        <tr><td><strong>Field</strong></td><td>Group of characters (one attribute)</td><td>"Smith"</td></tr>
+        <tr><td><strong>Record</strong></td><td>Group of related fields</td><td>John Smith, Age 30, Dept: HR</td></tr>
+        <tr><td><strong>File</strong></td><td>Group of records of same type</td><td>All employee records</td></tr>
+        <tr><td><strong>Database</strong></td><td>Group of related files</td><td>HR + Payroll + Inventory files</td></tr>
+      </table>
+    </div>
+    <div class="callout">
+      <strong>🎯 Exam tip:</strong> Know the order from smallest to largest: <strong>Bit → Byte → Field → Record → File → Database</strong>. The question might ask "what is above a record?" Answer: File.
+    </div>
+    <p>An <span class="kw">entity</span> is any person, place, or thing we store information about (e.g., STUDENT, COURSE). Each characteristic of that entity is an <span class="kw">attribute</span> (e.g., STUDENT's attributes: StudentID, Name, GPA).</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">⚠️</span> 2. Traditional File Environment — Why It Failed</h2>
+    <p>Imagine each department in a company keeps its own Excel spreadsheet for employees. HR has one, Payroll has another, Finance has a third. They all contain slightly different data. This is the <span class="highlight">traditional file environment</span>, and it causes 5 serious problems:</p>
+    <div class="collapsible">
+      <div class="coll-header" onclick="toggleColl(this)"><span>1. Data Redundancy</span><span class="arrow">▶</span></div>
+      <div class="coll-body"><p><strong>Definition:</strong> The same data is stored in multiple places. Example: "John Smith" exists in 3 department files. This wastes storage and creates maintenance nightmares — update one, forget the others.</p></div>
+    </div>
+    <div class="collapsible">
+      <div class="coll-header" onclick="toggleColl(this)"><span>2. Data Inconsistency</span><span class="arrow">▶</span></div>
+      <div class="coll-body"><p><strong>Definition:</strong> The same attribute has different values in different files. Example: HR says John's salary is $50,000; Payroll says $52,000. Which is correct? Nobody knows. This causes poor decision-making.</p></div>
+    </div>
+    <div class="collapsible">
+      <div class="coll-header" onclick="toggleColl(this)"><span>3. Program-Data Dependence</span><span class="arrow">▶</span></div>
+      <div class="coll-body"><p><strong>Definition:</strong> When the data format changes, every program that uses that data must also be updated. If the payroll system changes how it stores dates, all programs reading that file must be rewritten. This is extremely costly.</p></div>
+    </div>
+    <div class="collapsible">
+      <div class="coll-header" onclick="toggleColl(this)"><span>4. Lack of Flexibility</span><span class="arrow">▶</span></div>
+      <div class="coll-body"><p>Creating new types of reports or queries requires building entirely new programs, because data is locked in rigid file structures.</p></div>
+    </div>
+    <div class="collapsible">
+      <div class="coll-header" onclick="toggleColl(this)"><span>5. Poor Security & Lack of Data Sharing</span><span class="arrow">▶</span></div>
+      <div class="coll-body"><p>No central control means no uniform security policy. Different departments hoard their data, preventing company-wide analysis.</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">🗄️</span> 3. The Database Approach — The Solution</h2>
+    <p>A <span class="kw">database</span> centralizes data, so instead of 5 department files, there's ONE shared repository. A <span class="kw">Database Management System (DBMS)</span> is the software that acts as a middleman between applications and the actual data.</p>
+    <h3>How DBMS Solves the Old Problems</h3>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Old Problem</th><th>DBMS Solution</th></tr>
+        <tr><td>Redundancy</td><td>Centralized storage — data stored once</td></tr>
+        <tr><td>Inconsistency</td><td>Single source of truth for all departments</td></tr>
+        <tr><td>Program-data dependence</td><td>Separates logical view from physical storage</td></tr>
+        <tr><td>Poor security</td><td>Central control over who accesses what</td></tr>
+        <tr><td>No sharing</td><td>All departments query the same database</td></tr>
+      </table>
+    </div>
+    <div class="callout warn">
+      <strong>Key concept — Logical vs. Physical view:</strong> Logical view = what the user sees (e.g., "show me the salary column"). Physical view = how data is actually stored on disk. The DBMS handles the translation. This separation is why changing storage doesn't break applications.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">📊</span> 4. Relational DBMS — The Dominant Model</h2>
+    <p>A <span class="kw">relational DBMS</span> organizes data into <strong>two-dimensional tables</strong> (like Excel sheets). Each table represents one entity.</p>
+    <h3>Key Terminology</h3>
+    <ul class="clean">
+      <li><strong>Table (Relation):</strong> A grid of rows and columns representing one entity</li>
+      <li><strong>Row (Tuple/Record):</strong> One instance of the entity (e.g., one specific supplier)</li>
+      <li><strong>Column (Field/Attribute):</strong> One characteristic (e.g., SupplierName)</li>
+      <li><strong>Primary Key:</strong> A field that <em>uniquely</em> identifies every row — no duplicates allowed (e.g., SupplierID)</li>
+      <li><strong>Foreign Key:</strong> A primary key from one table that appears in another table to link them (e.g., SupplierID in the PART table)</li>
+    </ul>
+    <div class="callout">
+      <strong>Analogy:</strong> Primary key = your national ID number. Only you have it. Foreign key = a form that asks for your national ID number to look you up.
+    </div>
+    <h3>Three Core Relational Operations</h3>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Operation</th><th>What It Does</th><th>SQL Equivalent</th><th>Example</th></tr>
+        <tr><td><strong>SELECT</strong></td><td>Filters <em>rows</em> — extracts records meeting criteria</td><td>WHERE clause</td><td>Show only customers from Cairo</td></tr>
+        <tr><td><strong>PROJECT</strong></td><td>Filters <em>columns</em> — shows only specified attributes</td><td>SELECT columns</td><td>Show only Name and Salary (not all columns)</td></tr>
+        <tr><td><strong>JOIN</strong></td><td>Combines two tables into one using a common key</td><td>JOIN clause</td><td>Combine SUPPLIER + PART to see what each supplier provides</td></tr>
+      </table>
+    </div>
+    <div class="callout warn">
+      <strong>⚠️ Trick question alert:</strong> SELECT in relational operations means filtering ROWS, NOT columns. In SQL syntax, SELECT also picks columns — don't confuse the two uses!
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">🔧</span> 5. DBMS Capabilities</h2>
+    <h3>Data Definition Capability</h3>
+    <p>Specifies the structure of database content — used to create tables and define field characteristics (data type, size, constraints). The result is stored in a <span class="kw">Data Dictionary</span>.</p>
+    <h3>Data Dictionary</h3>
+    <p>An automated or manual file storing definitions of all data elements and their characteristics. Think of it as the <em>encyclopedia of your database</em> — it documents what every field means, its format, who owns it, and who uses it.</p>
+    <h3>Data Manipulation Language (DML)</h3>
+    <p>Used to add, change, delete, and retrieve data. The most important DML is <span class="kw">SQL (Structured Query Language)</span> — the standard language for relational databases. Microsoft Access provides user-friendly tools that generate SQL automatically.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">📐</span> 6. Database Design — Normalization & ERDs</h2>
+    <h3>Normalization</h3>
+    <p>Normalization is the process of <strong>streamlining complex data groupings</strong> to minimize redundancy and eliminate awkward many-to-many relationships. The goal is to break large tables into smaller, logical ones.</p>
+    <p><strong>Example:</strong> An ORDER table might contain repeating groups (multiple parts per order). Normalization breaks it into separate tables: ORDER, LINE_ITEM, PART, SUPPLIER — each with a clear purpose.</p>
+    <div class="callout success">
+      <strong>Why it matters:</strong> Unnormalized tables cause update anomalies. If a supplier's name appears in 1,000 order rows, changing it requires 1,000 updates. Normalized tables: change it once.
+    </div>
+    <h3>Referential Integrity</h3>
+    <p>Rules enforced by the RDBMS to ensure relationships between tables remain consistent. Example: You cannot add a record in the PART table with a SupplierID that doesn't exist in the SUPPLIER table.</p>
+    <h3>Entity-Relationship Diagram (ERD)</h3>
+    <p>A visual tool used by database designers to document the data model and illustrate relationships between entities. It shows entities as rectangles, attributes, and the connections (1-to-many, many-to-many) between them. <strong>Getting the data model wrong means the system won't serve the business well.</strong></p>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">🔮</span> 7. NoSQL & Cloud Databases</h2>
+    <p><span class="kw">NoSQL (Non-relational) databases</span> are designed for the modern web era. Unlike relational databases, they use a flexible data model — data can be stored as documents, key-value pairs, graphs, etc.</p>
+    <h3>Why NoSQL?</h3>
+    <ul class="clean">
+      <li>Handles massive volumes of <strong>unstructured data</strong> (social media posts, images, sensor data)</li>
+      <li>Data sets spread across <strong>distributed machines</strong> (cheaper, more scalable)</li>
+      <li><strong>Easier to scale</strong> horizontally (add more servers)</li>
+    </ul>
+    <h3>Cloud Databases</h3>
+    <p>Examples: <strong>Amazon Relational Database Service (RDS)</strong> and <strong>Microsoft SQL Azure</strong>. These allow companies to run databases in the cloud without managing physical hardware.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">📦</span> 8. Big Data & Business Intelligence Infrastructure</h2>
+    <p><span class="kw">Big Data</span> refers to massive datasets — petabytes, exabytes — that traditional DBMS tools cannot handle. Sources include web traffic, social media, IoT sensors, and more.</p>
+    <div class="mnemonic">1024: Bit → Byte → KB → MB → GB → TB → PB → EB → ZB → YB</div>
+    <h3>Contemporary BI Tools</h3>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Tool</th><th>What It Does</th><th>Key Feature</th></tr>
+        <tr><td><strong>Data Warehouse</strong></td><td>Stores current + historical data from all operational systems</td><td>Consolidated; read-only; enterprise-wide</td></tr>
+        <tr><td><strong>Data Mart</strong></td><td>Subset of data warehouse for a specific group</td><td>Focused on one department/subject</td></tr>
+        <tr><td><strong>Hadoop</strong></td><td>Distributed parallel processing across cheap computers</td><td>Handles massive big data (Facebook, Yahoo)</td></tr>
+        <tr><td><strong>In-Memory Computing</strong></td><td>Stores data in RAM instead of disk</td><td>Reduces hours of processing to seconds</td></tr>
+        <tr><td><strong>Analytic Platforms</strong></td><td>High-speed platforms using relational + non-relational tools</td><td>Optimized for large datasets</td></tr>
+      </table>
+    </div>
+    <div class="callout">
+      <strong>Data Warehouse vs Data Mart:</strong> Warehouse = entire supermarket. Mart = one aisle (e.g., just the bakery section).
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">🔍</span> 9. Analytical Tools — Finding Meaning in Data</h2>
+    <h3>OLAP (Online Analytical Processing)</h3>
+    <p>Supports <strong>multidimensional data analysis</strong>. Each aspect of a business (product, region, time, cost) is a separate dimension. OLAP lets you "rotate" data like a cube to answer questions like: "How many washers sold in the East region in June vs. other regions?"</p>
+    <h3>Data Mining</h3>
+    <p>Uses algorithms to <strong>find hidden patterns and relationships</strong> in large datasets, then infers rules to predict future behavior.</p>
+    <ul class="clean">
+      <li><strong>Associations:</strong> "Customers who buy diapers also buy beer" (market basket analysis)</li>
+      <li><strong>Sequences:</strong> Customer buys a PC, then a printer, then ink — in that order</li>
+      <li><strong>Classification:</strong> Sort customers into categories (high-value, low-value)</li>
+      <li><strong>Clustering:</strong> Discover natural groupings without predefined categories</li>
+      <li><strong>Forecasting:</strong> Predict future sales based on historical patterns</li>
+    </ul>
+    <h3>Text Mining</h3>
+    <p>Extracts key elements from unstructured text data (emails, call center transcripts, legal documents, patent descriptions). <strong>Sentiment analysis</strong> software mines emails, blogs, and social media to detect opinions and attitudes.</p>
+    <h3>Web Mining</h3>
+    <p>Discovers patterns and information from the Web — three types:</p>
+    <ul class="clean">
+      <li><strong>Web Content Mining:</strong> Analyzes content of web pages</li>
+      <li><strong>Web Structure Mining:</strong> Analyzes links to and from pages (like Google's PageRank)</li>
+      <li><strong>Web Usage Mining:</strong> Mines user interaction data recorded by the web server (clicks, paths)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">🌐</span> 10. Databases & the Web</h2>
+    <p>Companies make internal databases accessible via the web using a 3-tier architecture:</p>
+    <ul class="clean">
+      <li><strong>Web Server:</strong> Handles HTTP requests from browser</li>
+      <li><strong>Application Server (middleware):</strong> Processes business logic, connects web to database</li>
+      <li><strong>Database Server:</strong> Hosts the DBMS and actual data</li>
+    </ul>
+    <p><strong>Why use web for database access?</strong> Browser is easy to use, requires few changes to the existing database, and is inexpensive to implement.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">📋</span> 11. Managing Data Resources — Policies & Quality</h2>
+    <h3>Information Policy</h3>
+    <p>A firm's rules, procedures, and roles for sharing, managing, and standardizing data across the organization.</p>
+    <h3>Data Administration vs. Database Administration</h3>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Role</th><th>Focus</th></tr>
+        <tr><td><strong>Data Administration</strong></td><td>Establishes policies and procedures to manage data enterprise-wide</td></tr>
+        <tr><td><strong>Data Governance</strong></td><td>Policies for availability, usability, integrity, security — especially for government regulations</td></tr>
+        <tr><td><strong>Database Administration</strong></td><td>Technical role: creating and maintaining the actual database</td></tr>
+      </table>
+    </div>
+    <h3>Data Quality</h3>
+    <div class="callout warn">
+      <strong>⚠️ Shocking statistic for exams:</strong> More than 25% of critical data in Fortune 1000 company databases is inaccurate or incomplete!
+    </div>
+    <ul class="clean">
+      <li><strong>Data Quality Audit:</strong> Structured survey of accuracy and completeness — either surveys data files directly or surveys end users</li>
+      <li><strong>Data Cleansing:</strong> Software that detects and corrects data that is incorrect, incomplete, improperly formatted, or redundant. Enforces consistency across different information systems.</li>
+    </ul>
+  </div>
+</div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     SUMMARY
+════════════════════════════════════════════ -->
+<section id="summary">
+<div class="container">
+  <div class="section-hero">
+    <h1>🧾 Smart Summary</h1>
+    <p>High-yield information organized for maximum retention</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">🏗️</span> Data Hierarchy</h2>
+    <ul class="clean">
+      <li><span class="tag blue">Smallest→Largest</span> Bit → Byte → Field → Record → File → Database</li>
+      <li><span class="tag yellow">Entity</span> Person/place/thing we store info about (e.g., COURSE, STUDENT)</li>
+      <li><span class="tag yellow">Attribute</span> Characteristic of an entity (e.g., DATE, GRADE for COURSE)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">⚠️</span> Traditional File Problems (5 Key Problems)</h2>
+    <ul class="clean">
+      <li><span class="tag blue">1</span> <strong>Data Redundancy</strong> — duplicate data in multiple files</li>
+      <li><span class="tag blue">2</span> <strong>Data Inconsistency</strong> — same attribute, different values</li>
+      <li><span class="tag blue">3</span> <strong>Program-Data Dependence</strong> — changing data requires changing programs</li>
+      <li><span class="tag blue">4</span> <strong>Lack of Flexibility</strong> — rigid file structures limit reporting</li>
+      <li><span class="tag blue">5</span> <strong>Poor Security + No Sharing</strong> — departmental silos</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">🗄️</span> DBMS Key Points</h2>
+    <ul class="clean">
+      <li><strong>Interfaces</strong> between applications and physical data files</li>
+      <li>Separates <strong>logical view</strong> (what user sees) from <strong>physical view</strong> (how stored)</li>
+      <li><strong>Relational DBMS</strong> = data in 2D tables; rows = records; columns = attributes</li>
+      <li><strong>Primary Key</strong> = uniquely identifies each row; <strong>Foreign Key</strong> = links tables</li>
+      <li>3 operations: <strong>SELECT</strong> (filter rows), <strong>PROJECT</strong> (filter columns), <strong>JOIN</strong> (combine tables)</li>
+      <li>DML used to add/change/delete/retrieve → most common: <strong>SQL</strong></li>
+      <li><strong>Data Dictionary</strong> = stores definitions of all data elements</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">📐</span> Database Design</h2>
+    <ul class="clean">
+      <li><strong>Conceptual design</strong> = abstract/logical model from business view</li>
+      <li><strong>Physical design</strong> = how stored on disk</li>
+      <li><strong>Normalization</strong> = reduce redundancy; break tables into smaller logical tables</li>
+      <li><strong>Referential integrity</strong> = RDBMS ensures relationships stay consistent</li>
+      <li><strong>ERD</strong> = visual diagram of entities and their relationships</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">📦</span> BI Infrastructure & Big Data</h2>
+    <ul class="clean">
+      <li><strong>Data Warehouse</strong> = centralized historical data; read-only; enterprise-wide</li>
+      <li><strong>Data Mart</strong> = subset of warehouse; single subject/department</li>
+      <li><strong>Hadoop</strong> = distributed parallel processing for big data (cheap computers)</li>
+      <li><strong>In-Memory Computing</strong> = RAM storage → hours become seconds</li>
+      <li><strong>NoSQL</strong> = flexible, distributed, handles unstructured data</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">🔍</span> Analytical Tools</h2>
+    <ul class="clean">
+      <li><strong>OLAP</strong> = multidimensional analysis; "rotating a cube" of data; ad hoc queries</li>
+      <li><strong>Data Mining</strong> = hidden patterns → types: Associations, Sequences, Classification, Clustering, Forecasting</li>
+      <li><strong>Text Mining</strong> = unstructured text; sentiment analysis</li>
+      <li><strong>Web Mining</strong> = Content (pages) + Structure (links) + Usage (server logs)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">📋</span> Data Management</h2>
+    <ul class="clean">
+      <li><strong>Information Policy</strong> = firm's rules for managing/sharing data</li>
+      <li><strong>Data Administration</strong> = enterprise policies for data management</li>
+      <li><strong>Data Governance</strong> = availability, usability, integrity, security + regulations</li>
+      <li><strong>Database Administration</strong> = creating and maintaining the database</li>
+      <li><strong>&gt;25% of Fortune 1000 data</strong> is inaccurate or incomplete</li>
+      <li><strong>Data Quality Audit</strong> = surveys accuracy/completeness</li>
+      <li><strong>Data Cleansing</strong> = software to detect/correct bad data</li>
+    </ul>
+  </div>
+</div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     MEMORY
+════════════════════════════════════════════ -->
+<section id="memory">
+<div class="container">
+  <div class="section-hero">
+    <h1>🧩 Memory Optimization</h1>
+    <p>Mnemonics, comparisons, and common exam traps</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">🔠</span> Mnemonics</h2>
+    <h3>Data Hierarchy — "Big Fish Rarely Remember Bytes"</h3>
+    <div class="mnemonic">B · F · R · R · F · D</div>
+    <p style="text-align:center; color:var(--text2); font-size:0.85rem;">Bit → Field → Record → Record (Row) → File → Database</p>
+    <p style="text-align:center; color:var(--text3); font-size:0.8rem;">Alternate: <strong>"Bits Build Fine Records For Databases"</strong></p>
+
+    <h3>5 Problems of Traditional File Environment — "DRILL"</h3>
+    <div class="mnemonic">D · R · I · L · L</div>
+    <div class="callout">
+      <strong>D</strong>ata inconsistency &nbsp;·&nbsp; <strong>R</strong>edundancy &nbsp;·&nbsp; <strong>I</strong>nflexibility &nbsp;·&nbsp; <strong>L</strong>ack of security &nbsp;·&nbsp; <strong>L</strong>ack of sharing (+ program-data dependence)
+    </div>
+
+    <h3>3 DBMS Relational Operations — "SPJ"</h3>
+    <div class="mnemonic">S · P · J</div>
+    <p style="text-align:center; color:var(--text2); font-size:0.85rem;"><strong>S</strong>elect (rows) · <strong>P</strong>roject (columns) · <strong>J</strong>oin (tables)</p>
+
+    <h3>5 Data Mining Types — "ASCFC"</h3>
+    <div class="mnemonic">A · S · C · C · F</div>
+    <p style="text-align:center; color:var(--text2); font-size:0.85rem;"><strong>A</strong>ssociations · <strong>S</strong>equences · <strong>C</strong>lassification · <strong>C</strong>lustering · <strong>F</strong>orecasting</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">⚖️</span> Comparison Tables</h2>
+    <h3>Data Warehouse vs. Data Mart</h3>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Feature</th><th>Data Warehouse</th><th>Data Mart</th></tr>
+        <tr><td>Scope</td><td>Entire enterprise</td><td>Single department/subject</td></tr>
+        <tr><td>Size</td><td>Very large</td><td>Smaller (subset)</td></tr>
+        <tr><td>Users</td><td>All business users</td><td>Specific user group</td></tr>
+        <tr><td>Analogy</td><td>Full supermarket</td><td>One aisle in the supermarket</td></tr>
+      </table>
+    </div>
+    <h3>Relational vs. NoSQL</h3>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Feature</th><th>Relational (SQL)</th><th>NoSQL</th></tr>
+        <tr><td>Data Model</td><td>Rigid tables (rows/columns)</td><td>Flexible (document, key-value, graph)</td></tr>
+        <tr><td>Data Type</td><td>Structured</td><td>Unstructured + Structured</td></tr>
+        <tr><td>Scaling</td><td>Vertical (bigger server)</td><td>Horizontal (more servers)</td></tr>
+        <tr><td>Use Case</td><td>Traditional business transactions</td><td>Web, social media, big data</td></tr>
+        <tr><td>Example</td><td>Oracle, MySQL, SQL Server</td><td>MongoDB, Cassandra</td></tr>
+      </table>
+    </div>
+    <h3>Data Administration vs. Database Administration</h3>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Aspect</th><th>Data Administration</th><th>Database Administration</th></tr>
+        <tr><td>Level</td><td>Strategic/Policy</td><td>Technical/Operational</td></tr>
+        <tr><td>Focus</td><td>Policies + procedures</td><td>Creating + maintaining DB</td></tr>
+        <tr><td>Scope</td><td>Enterprise-wide</td><td>Specific database</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">🪤</span> Common Exam Traps & Mistakes</h2>
+    <div class="collapsible">
+      <div class="coll-header" onclick="toggleColl(this)"><span>⚠️ Trap 1: SELECT means rows, not columns</span><span class="arrow">▶</span></div>
+      <div class="coll-body"><p>In relational operations, SELECT filters <strong>rows</strong>. PROJECT filters <strong>columns</strong>. In SQL the SELECT statement selects columns — but as a relational operation, SELECT = row filtering. Exams love this confusion.</p></div>
+    </div>
+    <div class="collapsible">
+      <div class="coll-header" onclick="toggleColl(this)"><span>⚠️ Trap 2: Primary key vs. Foreign key</span><span class="arrow">▶</span></div>
+      <div class="coll-body"><p>Primary key uniquely identifies a row in its OWN table. Foreign key is that same primary key appearing in a DIFFERENT table to create a link. A foreign key can repeat (multiple parts can have the same supplier).</p></div>
+    </div>
+    <div class="collapsible">
+      <div class="coll-header" onclick="toggleColl(this)"><span>⚠️ Trap 3: Data warehouse data can be altered</span><span class="arrow">▶</span></div>
+      <div class="coll-body"><p><strong>FALSE.</strong> Data in a data warehouse CANNOT be altered. It is read-only. It consolidates historical data for analysis, not for live editing.</p></div>
+    </div>
+    <div class="collapsible">
+      <div class="coll-header" onclick="toggleColl(this)"><span>⚠️ Trap 4: Hadoop needs expensive computers</span><span class="arrow">▶</span></div>
+      <div class="coll-body"><p><strong>FALSE.</strong> Hadoop runs on inexpensive (commodity) computers. This is one of its key advantages over traditional big-iron servers.</p></div>
+    </div>
+    <div class="collapsible">
+      <div class="coll-header" onclick="toggleColl(this)"><span>⚠️ Trap 5: OLAP vs. Data Mining</span><span class="arrow">▶</span></div>
+      <div class="coll-body"><p>OLAP answers questions you <em>already know to ask</em> (ad hoc queries). Data mining finds patterns you <em>didn't know existed</em>. OLAP = known question → quick answer. Mining = exploration → discovery.</p></div>
+    </div>
+    <div class="collapsible">
+      <div class="coll-header" onclick="toggleColl(this)"><span>⚠️ Trap 6: Normalization means combining tables</span><span class="arrow">▶</span></div>
+      <div class="coll-body"><p><strong>FALSE.</strong> Normalization means BREAKING large tables INTO smaller ones to reduce redundancy. Not combining.</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">🧠</span> Chunking — Key Groups to Remember</h2>
+    <div class="callout purple">
+      <strong>GROUP 1 — Traditional File Problems (5):</strong> Redundancy, Inconsistency, Program-data dependence, Inflexibility, Poor security/sharing
+    </div>
+    <div class="callout">
+      <strong>GROUP 2 — Relational Operations (3):</strong> SELECT, PROJECT, JOIN
+    </div>
+    <div class="callout warn">
+      <strong>GROUP 3 — BI Tools (5):</strong> Data Warehouse, Data Mart, Hadoop, In-Memory Computing, Analytic Platforms
+    </div>
+    <div class="callout success">
+      <strong>GROUP 4 — Data Mining Types (5):</strong> Associations, Sequences, Classification, Clustering, Forecasting
+    </div>
+    <div class="callout purple">
+      <strong>GROUP 5 — Web Mining Types (3):</strong> Content, Structure, Usage
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     MCQ
+════════════════════════════════════════════ -->
+<section id="mcq">
+<div class="container">
+  <div class="section-hero">
+    <h1>❓ MCQ Training</h1>
+    <p>30 questions — Easy, Medium & Hard — click an option to see the answer</p>
+  </div>
+  <div class="score-bar">
+    <span id="scoreText" style="font-size:0.85rem; white-space:nowrap;">Score: 0 / 30</span>
+    <div class="score-track"><div class="score-fill" id="scoreFill" style="width:0%"></div></div>
+    <button onclick="resetMCQ()" style="font-family:'Syne',sans-serif;font-size:0.72rem;font-weight:700;padding:0.35rem 0.8rem;border-radius:6px;border:1px solid var(--border);background:var(--bg3);color:var(--text2);cursor:pointer;">Reset</button>
+  </div>
+  <div id="mcq-container"></div>
+</div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     WRITTEN
+════════════════════════════════════════════ -->
+<section id="written">
+<div class="container">
+  <div class="section-hero">
+    <h1>✍️ Written Questions</h1>
+    <p>Short answer & long-form questions with model answers</p>
+  </div>
+  <div id="written-container"></div>
+</div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     REVISION
+════════════════════════════════════════════ -->
+<section id="revision">
+<div class="container">
+  <div class="section-hero">
+    <h1>⚡ Rapid Revision</h1>
+    <p>The night-before cheat sheet — everything critical at a glance</p>
+  </div>
+  <div class="callout warn" style="margin-bottom:2rem;">
+    <strong>⚡ Read this the night before your exam. Each box = one exam-critical topic.</strong>
+  </div>
+  <div class="revision-grid">
+    <div class="rev-box">
+      <h4>📊 Data Hierarchy</h4>
+      <ul>
+        <li>Bit → Byte → <strong>Field</strong></li>
+        <li>Field → <strong>Record</strong> → File</li>
+        <li>File → <strong>Database</strong></li>
+        <li><strong>Entity</strong> = person/place/thing</li>
+        <li><strong>Attribute</strong> = characteristic</li>
+      </ul>
+    </div>
+    <div class="rev-box">
+      <h4>⚠️ File Environment Problems</h4>
+      <ul>
+        <li><strong>Redundancy</strong> = duplicate data</li>
+        <li><strong>Inconsistency</strong> = different values</li>
+        <li><strong>Program-data depend.</strong></li>
+        <li><strong>Inflexibility</strong></li>
+        <li><strong>Poor security/sharing</strong></li>
+      </ul>
+    </div>
+    <div class="rev-box">
+      <h4>🗄️ DBMS Solves</h4>
+      <ul>
+        <li>Centralizes data</li>
+        <li>Controls redundancy</li>
+        <li>Logical/physical separation</li>
+        <li>Central security control</li>
+        <li>Enables data sharing</li>
+      </ul>
+    </div>
+    <div class="rev-box">
+      <h4>🔑 Keys</h4>
+      <ul>
+        <li><strong>Primary Key</strong> = uniquely IDs row in own table</li>
+        <li><strong>Foreign Key</strong> = PK from another table</li>
+        <li>Foreign key creates table links</li>
+        <li>Referential integrity enforces consistency</li>
+      </ul>
+    </div>
+    <div class="rev-box">
+      <h4>📐 3 Operations</h4>
+      <ul>
+        <li><strong>SELECT</strong> = filter rows</li>
+        <li><strong>PROJECT</strong> = filter columns</li>
+        <li><strong>JOIN</strong> = combine tables</li>
+      </ul>
+      <span class="mono">SELECT → rows</span>
+      <span class="mono">PROJECT → cols</span>
+    </div>
+    <div class="rev-box">
+      <h4>🏗️ Design Concepts</h4>
+      <ul>
+        <li><strong>Normalization</strong> = break big table into small ones</li>
+        <li><strong>ERD</strong> = visual data model</li>
+        <li>Data Dictionary = field definitions</li>
+        <li>SQL = standard DML</li>
+      </ul>
+    </div>
+    <div class="rev-box">
+      <h4>📦 BI Tools</h4>
+      <ul>
+        <li><strong>Warehouse</strong> = enterprise, read-only</li>
+        <li><strong>Mart</strong> = dept. subset</li>
+        <li><strong>Hadoop</strong> = cheap distributed</li>
+        <li><strong>In-Memory</strong> = RAM, super fast</li>
+        <li><strong>NoSQL</strong> = flexible, scalable</li>
+      </ul>
+    </div>
+    <div class="rev-box">
+      <h4>🔍 Analytics</h4>
+      <ul>
+        <li><strong>OLAP</strong> = multidimensional cube</li>
+        <li><strong>Data Mining</strong> = hidden patterns</li>
+        <li><strong>Text Mining</strong> = unstructured text</li>
+        <li><strong>Sentiment Analysis</strong> ⊂ text mining</li>
+        <li><strong>Web Mining</strong> = Content/Structure/Usage</li>
+      </ul>
+    </div>
+    <div class="rev-box">
+      <h4>⛏️ Data Mining Types</h4>
+      <ul>
+        <li><strong>Associations</strong> = co-purchases</li>
+        <li><strong>Sequences</strong> = order of events</li>
+        <li><strong>Classification</strong> = put in categories</li>
+        <li><strong>Clustering</strong> = find natural groups</li>
+        <li><strong>Forecasting</strong> = predict future</li>
+      </ul>
+    </div>
+    <div class="rev-box">
+      <h4>📋 Data Quality</h4>
+      <ul>
+        <li><strong>&gt;25%</strong> Fortune 1000 data is bad</li>
+        <li><strong>Audit</strong> = survey accuracy</li>
+        <li><strong>Cleansing</strong> = detect + fix bad data</li>
+        <li>Data Governance = compliance</li>
+        <li>Data Admin ≠ DB Admin</li>
+      </ul>
+    </div>
+    <div class="rev-box">
+      <h4>🌐 Web Architecture</h4>
+      <ul>
+        <li>Web Server → App Server → DB Server</li>
+        <li>Browser = universal client</li>
+        <li>Cheap to add web interface</li>
+        <li>Cloud: AWS RDS, MS SQL Azure</li>
+      </ul>
+    </div>
+    <div class="rev-box">
+      <h4>🪤 Don't Forget</h4>
+      <ul>
+        <li>Warehouse data = <strong>READ-ONLY</strong></li>
+        <li>Hadoop = <strong>cheap</strong> computers</li>
+        <li>SELECT = <strong>rows</strong> (not columns)</li>
+        <li>Normalization = <strong>split</strong>, not merge</li>
+        <li>NoSQL = more flexible than relational</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</section>
+
+<script>
+// ════════════════ NAVIGATION ════════════════
+function showSection(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    if (b.textContent.toLowerCase().includes(id.substring(0,3)) || 
+        (id === 'home' && b.textContent === 'Home') ||
+        (id === 'explain' && b.textContent.includes('Explanation')) ||
+        (id === 'summary' && b.textContent.includes('Summary')) ||
+        (id === 'memory' && b.textContent.includes('Memory')) ||
+        (id === 'mcq' && b.textContent.includes('MCQ')) ||
+        (id === 'written' && b.textContent.includes('Written')) ||
+        (id === 'revision' && b.textContent.includes('Revision'))) {
+      b.classList.add('active');
+    }
+  });
+  window.scrollTo(0, 0);
+}
+
+// ════════════════ THEME ════════════════
+function toggleTheme() {
+  const html = document.documentElement;
+  const btn = document.getElementById('themeBtn');
+  if (html.getAttribute('data-theme') === 'dark') {
+    html.setAttribute('data-theme', 'light');
+    btn.textContent = '🌙 Dark';
+  } else {
+    html.setAttribute('data-theme', 'dark');
+    btn.textContent = '☀ Light';
+  }
+}
+
+// ════════════════ COLLAPSIBLE ════════════════
+function toggleColl(header) {
+  const body = header.nextElementSibling;
+  header.classList.toggle('open');
+  body.classList.toggle('open');
+}
+
+// ════════════════ MCQ DATA ════════════════
+const mcqs = [
+  // EASY
+  { q: "What is the correct order of the data hierarchy from smallest to largest?", opts: ["Record → File → Field → Byte → Bit → Database", "Bit → Byte → Field → Record → File → Database", "Byte → Bit → Record → Field → File → Database", "File → Record → Field → Byte → Bit → Database"], ans: 1, diff: "easy", exp: "The correct hierarchy is: Bit (0/1) → Byte (8 bits, 1 character) → Field (group of characters) → Record (group of fields) → File (group of records) → Database (group of files)." },
+  { q: "Which of the following best describes an 'entity' in database terminology?", opts: ["A single 0 or 1 value stored in a field", "A person, place, or thing about which we store information", "A group of related records in a file", "A characteristic or quality that describes a record"], ans: 1, diff: "easy", exp: "An entity is any person, place, or thing about which we store and maintain information, such as STUDENT, COURSE, or EMPLOYEE." },
+  { q: "A database management system (DBMS) primarily interfaces between:", opts: ["The user and the keyboard", "Applications and physical data files", "The CPU and main memory", "The operating system and network"], ans: 1, diff: "easy", exp: "A DBMS acts as the middleman — it interfaces between application programs and the physical data files, shielding applications from physical storage details." },
+  { q: "In a relational database, a 'primary key' is:", opts: ["Any field that can store numbers", "A field used to uniquely identify each record in a table", "A field shared between two tables", "The first field listed in any table"], ans: 1, diff: "easy", exp: "A primary key is a field (or combination of fields) that uniquely identifies every record in a table. No two rows can have the same primary key value." },
+  { q: "What does SQL stand for?", opts: ["System Query Logic", "Structured Query Language", "Sequential Queue Language", "Standard Query List"], ans: 1, diff: "easy", exp: "SQL stands for Structured Query Language — the standard language used to add, change, delete, and retrieve data from relational databases." },
+  { q: "Data redundancy in a traditional file environment refers to:", opts: ["Data that is encrypted in multiple locations", "The presence of duplicate data in multiple files", "Missing data fields in a record", "Data that is stored only once"], ans: 1, diff: "easy", exp: "Data redundancy occurs when the same data is stored in multiple separate files across different departments, wasting storage and creating update problems." },
+  { q: "A data mart is best described as:", opts: ["A type of NoSQL database", "The entire enterprise data warehouse", "A subset of a data warehouse for a specific department or subject", "Software for cleaning data errors"], ans: 2, diff: "easy", exp: "A data mart is a subset of the data warehouse, containing summarized or focused data for use by a specific department or business line, not the entire enterprise." },
+  // MEDIUM
+  { q: "Which relational database operation creates a subset by selecting specific COLUMNS from a table?", opts: ["SELECT", "JOIN", "PROJECT", "QUERY"], ans: 2, diff: "med", exp: "PROJECT creates a subset of columns. SELECT creates a subset of rows (records meeting criteria). JOIN combines two tables. This is a common exam trap!" },
+  { q: "The separation of 'logical view' from 'physical view' in a DBMS is important because:", opts: ["It makes the database smaller", "Changes to physical storage don't require changes to application programs", "It allows the database to run faster", "It prevents users from accessing the database"], ans: 1, diff: "med", exp: "This separation (program-data independence) means that if you change how data is physically stored on disk, the applications that use the data don't need to be rewritten." },
+  { q: "A foreign key in a relational database is:", opts: ["A key that encrypts data between tables", "A primary key of one table that appears in another table to create a link", "A key that identifies records in a file, not a database", "An automatically generated unique number"], ans: 1, diff: "med", exp: "A foreign key is a primary key from Table A that appears in Table B. It creates a relationship between the two tables and is used to look up records in the original table." },
+  { q: "Normalization in database design primarily aims to:", opts: ["Combine multiple tables into one large table", "Add more attributes to existing records", "Streamline data groupings and minimize redundant data elements", "Speed up data retrieval by duplicating data"], ans: 2, diff: "med", exp: "Normalization breaks down complex, redundant tables into smaller, logical tables. This minimizes redundancy and eliminates awkward many-to-many relationships." },
+  { q: "Which of the following is NOT a problem associated with the traditional file environment?", opts: ["Data redundancy", "Program-data dependence", "Data inconsistency", "Centralized data control"], ans: 3, diff: "med", exp: "Centralized data control is a BENEFIT of the database approach, not a problem of the traditional file environment. The traditional approach has decentralized, department-specific files." },
+  { q: "Hadoop is designed to:", opts: ["Store data in RAM for fast processing", "Enable distributed parallel processing of big data across inexpensive computers", "Replace relational databases entirely", "Manage only structured data in table format"], ans: 1, diff: "med", exp: "Hadoop is a framework for distributed parallel processing of massive datasets across clusters of inexpensive commodity computers. It uses HDFS for storage and MapReduce for processing." },
+  { q: "In-memory computing improves performance primarily by:", opts: ["Using multiple CPUs simultaneously", "Storing data in main memory (RAM) to avoid disk retrieval delays", "Compressing data to reduce its size", "Distributing data across multiple geographic locations"], ans: 1, diff: "med", exp: "In-memory computing stores data in RAM (main memory) rather than on disk. Since RAM access is orders of magnitude faster than disk I/O, it can reduce processing time from hours to seconds." },
+  { q: "Which type of data mining discovers that customers who buy product A also tend to buy product B?", opts: ["Classification", "Sequences", "Associations", "Clustering"], ans: 2, diff: "med", exp: "Associations discover relationships between variables in the same transaction — the classic 'market basket analysis' (e.g., diapers and beer). Sequences look at order over time." },
+  { q: "An entity-relationship diagram (ERD) is used by database designers to:", opts: ["Write SQL queries for data retrieval", "Document the data model and illustrate relationships between entities", "Monitor database performance", "Encrypt sensitive data fields"], ans: 1, diff: "med", exp: "An ERD is a visual tool that documents the data model, showing entities, their attributes, and the relationships (one-to-many, many-to-many) between them." },
+  { q: "Sentiment analysis software is a type of:", opts: ["Web structure mining", "OLAP tool", "Text mining", "Data cleansing software"], ans: 2, diff: "med", exp: "Sentiment analysis is a form of text mining. It mines emails, blogs, and social media posts to detect opinions, attitudes, and emotions expressed by users." },
+  // HARD
+  { q: "A company finds that its HR database lists employee John's salary as $50,000 while the Payroll database shows $52,000. This is an example of:", opts: ["Data redundancy only", "Program-data dependence", "Data inconsistency (and possibly redundancy)", "Normalization failure"], ans: 2, diff: "hard", exp: "This is data inconsistency — the same attribute (salary) has different values in different files. It may also involve redundancy (salary stored in multiple places). Both are problems of the traditional file environment." },
+  { q: "Which of the following statements about data warehouses is CORRECT?", opts: ["Data in a warehouse can be freely altered by users", "A data warehouse focuses on data from a single department", "A data warehouse stores current and historical data that cannot be altered", "Data warehouses use NoSQL exclusively"], ans: 2, diff: "hard", exp: "A data warehouse stores current AND historical data from multiple operational systems, is consolidated across the enterprise, and crucially — data in a warehouse CANNOT be altered. It is read-only for analysis." },
+  { q: "OLAP (Online Analytical Processing) differs from Data Mining primarily in that:", opts: ["OLAP finds patterns users didn't know existed; mining answers known questions", "OLAP answers specific known questions rapidly; mining finds unknown hidden patterns", "OLAP only works with unstructured data; mining requires structured data", "OLAP requires Hadoop; mining uses SQL only"], ans: 1, diff: "hard", exp: "OLAP is for answering specific ad hoc queries the analyst already knows to ask (e.g., 'sales by region by quarter'). Data mining discovers hidden patterns and relationships the analyst didn't know to look for." },
+  { q: "Referential integrity in a relational DBMS ensures that:", opts: ["All primary keys are numeric", "Data cannot be deleted from any table", "Foreign key values in one table correspond to existing primary key values in the related table", "All tables have the same number of columns"], ans: 2, diff: "hard", exp: "Referential integrity rules ensure relationships between tables stay consistent. You cannot insert a record with a foreign key value that doesn't exist as a primary key in the parent table." },
+  { q: "Which combination correctly describes the THREE types of web mining?", opts: ["Content, Context, and Configuration mining", "Content, Structure, and Usage mining", "Client, Server, and Database mining", "Query, Log, and Page mining"], ans: 1, diff: "hard", exp: "Web mining has three types: (1) Content mining — analyzes content of web pages; (2) Structure mining — analyzes links to/from pages; (3) Usage mining — mines user interaction data from web server logs." },
+  { q: "A data quality audit is BEST described as:", opts: ["Software that automatically fixes incorrect data", "A structured survey of the accuracy and completeness of data in an information system", "A policy that restricts who can enter data", "The process of normalizing database tables"], ans: 1, diff: "hard", exp: "A data quality audit is a structured survey (not automatic software) that assesses the accuracy and completeness of data, either by sampling files directly or surveying end-user perceptions." },
+  { q: "Data cleansing differs from a data quality audit in that data cleansing:", opts: ["Only identifies problems without fixing them", "Is a manual process done by database administrators", "Uses software to actively detect and correct incorrect, incomplete, or redundant data", "Only works on structured relational databases"], ans: 2, diff: "hard", exp: "Data cleansing uses software to actively detect AND correct problematic data. A data quality audit identifies and measures the problem. Data cleansing is the remediation step." },
+  { q: "A company migrates from a traditional file system to a DBMS. Which benefit is demonstrated when the Payroll department can generate a new type of bonus report without rewriting their core program?", opts: ["Elimination of data redundancy", "Improved program-data independence and flexibility", "Better data normalization", "Enhanced referential integrity"], ans: 1, diff: "hard", exp: "Program-data independence (flexibility) is demonstrated. Because the DBMS separates logical view from physical storage, new reports can be created by querying the centralized database without rewriting application programs." },
+  { q: "The statistic that 'more than 25% of critical data in Fortune 1000 databases is inaccurate or incomplete' highlights the importance of:", opts: ["Switching from relational to NoSQL databases", "Data quality management — auditing and cleansing", "Implementing more complex normalization rules", "Using in-memory computing for all databases"], ans: 1, diff: "hard", exp: "This statistic (a key exam fact) underscores the critical importance of data quality management — specifically data quality audits and data cleansing — to ensure reliable data for business decision-making." },
+  { q: "Which BI infrastructure component would a financial analyst most likely use to answer the question: 'How did our Q3 product sales in Africa compare to Asia, broken down by product line?'", opts: ["Hadoop", "Data cleansing software", "OLAP (Online Analytical Processing)", "Referential integrity rules"], ans: 2, diff: "hard", exp: "OLAP is designed for exactly this kind of multidimensional analysis — analyzing data across multiple dimensions (time: Q3, region: Africa vs Asia, product line). It enables rapid answers to ad hoc analytical queries." },
+  { q: "Data governance is distinct from data administration primarily because data governance:", opts: ["Focuses on the technical creation of database tables", "Specifically deals with policies and processes for managing availability, usability, integrity, and security — especially regarding government regulations", "Is only relevant to cloud databases", "Eliminates the need for a data dictionary"], ans: 1, diff: "hard", exp: "Data governance is specifically concerned with availability, usability, integrity, and security of data — particularly regarding compliance with government regulations (like GDPR, HIPAA). Data administration is broader enterprise-wide data policies." },
+  { q: "In a 3-tier web-database architecture, which component connects the web server to the database server?", opts: ["The browser", "The firewall", "The application server (middleware)", "The data dictionary"], ans: 2, diff: "hard", exp: "In a 3-tier architecture: Web Server handles browser requests → Application Server/middleware contains business logic and connects web to database → Database Server hosts the DBMS. The middleware is the critical link between the web and data layers." },
+  { q: "An unnormalized ORDER table contains repeating groups of Part_Number and Part_Name for each order. After normalization, the best action is to:", opts: ["Keep all data in one table and add a 'count' column", "Delete the repeating fields and store them in a separate LINE_ITEM table linked by Order_Number", "Store duplicate order information in every part record", "Convert the table to a NoSQL document format"], ans: 1, diff: "hard", exp: "Normalization removes repeating groups by creating separate tables. Part data moves to a LINE_ITEM table (with a concatenated key of Order_Number + Part_Number), linked to the ORDER table via a foreign key — eliminating redundancy." },
+];
+
+let scores = new Array(mcqs.length).fill(null);
+let correct = 0;
+
+function buildMCQs() {
+  const container = document.getElementById('mcq-container');
+  container.innerHTML = '';
+  mcqs.forEach((q, i) => {
+    const diffClass = q.diff === 'easy' ? 'easy' : q.diff === 'med' ? 'med' : 'hard';
+    const diffLabel = q.diff === 'easy' ? '🟢 Easy' : q.diff === 'med' ? '🟡 Medium' : '🔴 Hard';
+    let optsHTML = q.opts.map((o, j) => 
+      `<button class="opt-btn" id="opt-${i}-${j}" onclick="selectMCQ(${i},${j})">${String.fromCharCode(65+j)}. ${o}</button>`
+    ).join('');
+    container.innerHTML += `
+      <div class="mcq-card" id="mcq-${i}">
+        <div class="mcq-num">QUESTION ${i+1} OF ${mcqs.length} <span class="diff-badge ${diffClass}">${diffLabel}</span></div>
+        <div class="mcq-q">${q.q}</div>
+        <div class="mcq-options">${optsHTML}</div>
+        <div class="mcq-explanation" id="exp-${i}">💡 <strong>Explanation:</strong> ${q.exp}</div>
+      </div>`;
+  });
+}
+
+function selectMCQ(qi, oi) {
+  if (scores[qi] !== null) return;
+  const q = mcqs[qi];
+  scores[qi] = oi;
+  const correct_idx = q.ans;
+  for (let j = 0; j < q.opts.length; j++) {
+    const btn = document.getElementById(`opt-${qi}-${j}`);
+    btn.disabled = true;
+    if (j === correct_idx) btn.classList.add('correct');
+    else if (j === oi && oi !== correct_idx) btn.classList.add('wrong');
+  }
+  document.getElementById(`exp-${qi}`).classList.add('show');
+  updateScore();
+}
+
+function updateScore() {
+  correct = scores.filter((s, i) => s === mcqs[i].ans).length;
+  const answered = scores.filter(s => s !== null).length;
+  document.getElementById('scoreText').textContent = `Score: ${correct} / ${answered} answered (${mcqs.length} total)`;
+  document.getElementById('scoreFill').style.width = `${(correct / mcqs.length) * 100}%`;
+}
+
+function resetMCQ() {
+  scores = new Array(mcqs.length).fill(null);
+  correct = 0;
+  document.getElementById('scoreText').textContent = `Score: 0 / ${mcqs.length}`;
+  document.getElementById('scoreFill').style.width = '0%';
+  buildMCQs();
+}
+
+// ════════════════ WRITTEN DATA ════════════════
+const written = [
+  { type: "SHORT ANSWER", q: "Explain the difference between data redundancy and data inconsistency in a traditional file environment. Give one example of each.", ans: "<strong>Data Redundancy</strong> occurs when the same data is duplicated and stored in multiple files. For example, an employee's address might be stored separately in the HR file, the Payroll file, and the Benefits file — three copies of the same information, wasting storage space.<br><br><strong>Data Inconsistency</strong> occurs when the same attribute has different values in different files. For example, if John's salary is updated in the Payroll file to $55,000 but remains $50,000 in the HR file, the two files now contain contradictory (inconsistent) values for the same attribute. Inconsistency is often a consequence of redundancy — when data exists in multiple places, it's easy for updates to be applied to some but not all copies." },
+  { type: "SHORT ANSWER", q: "What is a foreign key and how does it differ from a primary key? Explain using an example.", ans: "<strong>Primary Key:</strong> A field that uniquely identifies every record in its own table. No two rows can share the same primary key value. Example: SupplierID in the SUPPLIER table — each supplier has a unique ID.<br><br><strong>Foreign Key:</strong> A primary key from one table that appears in a second table to create a link between them. Example: SupplierID appears in the PART table as a foreign key to indicate which supplier provides each part.<br><br>The key difference: a primary key enforces uniqueness in its home table; a foreign key references a primary key in another table and can repeat (multiple parts can have the same SupplierID)." },
+  { type: "SHORT ANSWER", q: "Distinguish between the three relational database operations: SELECT, PROJECT, and JOIN.", ans: "<strong>SELECT:</strong> Creates a subset of ROWS (records) that meet specified criteria. Example: SELECT all employees WHERE department = 'HR'. Only rows satisfying the condition are returned.<br><br><strong>PROJECT:</strong> Creates a subset of COLUMNS (attributes). Example: PROJECT to show only Name and Salary columns, hiding all other attributes. This limits which data fields are visible.<br><br><strong>JOIN:</strong> Combines two related tables into a single result set using a common key. Example: JOIN the SUPPLIER table and PART table on SupplierID to see each part along with its supplier's name and location. This is the most powerful operation for extracting cross-table information." },
+  { type: "SHORT ANSWER", q: "What is normalization and why is it important in database design?", ans: "Normalization is the process of streamlining complex groupings of data to minimize redundant data elements and eliminate awkward many-to-many relationships. It involves breaking large, complex tables into smaller, more focused tables that are linked through keys.<br><br><strong>Why it matters:</strong><br>• Reduces redundancy: Each piece of data is stored in only one place<br>• Prevents update anomalies: Changing a supplier's name requires only one update, not hundreds<br>• Improves data integrity: Fewer places where inconsistencies can develop<br>• Makes the database easier to maintain and expand<br><br>For example, an unnormalized ORDER table with repeating part information would be broken into separate ORDER, LINE_ITEM, PART, and SUPPLIER tables after normalization." },
+  { type: "LONG ANSWER", q: "Compare and contrast the traditional file environment with the database approach to data management. In your answer, address: (a) the problems of the traditional approach, (b) how the database approach solves each problem, and (c) what specific capabilities a DBMS provides.", ans: "<strong>(a) Problems of the Traditional File Environment:</strong><br>The traditional approach involves each department maintaining separate, specialized data files. This creates five major problems:<br>1. <strong>Data Redundancy:</strong> The same data exists in multiple department files<br>2. <strong>Data Inconsistency:</strong> Redundant data gets updated unevenly, creating conflicting values<br>3. <strong>Program-Data Dependence:</strong> When data formats change, all programs accessing that data must be rewritten<br>4. <strong>Lack of Flexibility:</strong> Generating new reports requires creating entirely new programs<br>5. <strong>Poor Security and Lack of Sharing:</strong> Departmental data silos prevent company-wide analysis<br><br><strong>(b) How the Database Approach Solves These Problems:</strong><br>A database centralizes data in a single repository managed by a DBMS. A DBMS:<br>• Controls redundancy by storing data once and sharing it across departments<br>• Eliminates inconsistency because there is a single source of truth<br>• Solves program-data dependence by separating logical view (what the app sees) from physical view (how data is stored), so storage changes don't break programs<br>• Provides flexibility through powerful query languages (SQL) for ad-hoc reporting<br>• Centralizes security control and enables organization-wide data sharing<br><br><strong>(c) DBMS Capabilities:</strong><br>• <strong>Data Definition Capability:</strong> Creates tables and defines field characteristics<br>• <strong>Data Dictionary:</strong> Stores definitions of all data elements — the database's encyclopedia<br>• <strong>Data Manipulation Language (SQL):</strong> Adds, changes, deletes, and retrieves data<br>• <strong>Report Generation:</strong> Creates polished reports (e.g., Crystal Reports)<br>• <strong>Multiple Views:</strong> Different users see different subsets of the same data based on their role" },
+  { type: "LONG ANSWER", q: "Explain the concept of 'Big Data' and describe the business intelligence infrastructure tools organizations use to manage and analyze it. Include data warehouses, data marts, Hadoop, and in-memory computing in your answer.", ans: "<strong>Big Data Defined:</strong><br>Big Data refers to massive datasets — in the petabyte and exabyte range — generated from web traffic, social media, IoT sensors, mobile devices, and other sources. Volumes are too great for traditional DBMS tools to capture, store, and analyze effectively. Big data often includes both structured and unstructured/semi-structured data.<br><br><strong>Business Intelligence Infrastructure Tools:</strong><br><br><strong>1. Data Warehouse:</strong> A centralized repository that stores current and historical data from all core operational systems (sales, HR, finance, supply chain). Data is consolidated, standardized, and cannot be altered — it is read-only for analysis. It serves the entire enterprise and provides analysis and reporting tools.<br><br><strong>2. Data Mart:</strong> A subset of the data warehouse containing summarized or focused data for a specific department or business line. For example, a Marketing data mart would contain only the data relevant to marketing analysts. It's faster and simpler to work with than the full warehouse.<br><br><strong>3. Hadoop:</strong> An open-source framework that enables distributed parallel processing of massive big data sets across clusters of inexpensive commodity computers. Its three core components are Hadoop Common, Hadoop Distributed File System (HDFS), and Hadoop MapReduce. Used by organizations like Facebook and Yahoo to process terabytes of web and social data daily.<br><br><strong>4. In-Memory Computing:</strong> Stores data in a computer's main memory (RAM) rather than on disk storage. Since RAM access is dramatically faster than disk I/O, complex analyses that would take hours or days can be completed in seconds. Requires specialized, optimized hardware.<br><br><strong>5. Analytic Platforms:</strong> High-speed platforms that combine both relational and non-relational tools, optimized for analyzing large datasets quickly." },
+  { type: "LONG ANSWER", q: "Discuss the role of data quality in organizational data management. Why is data quality a critical concern, what are the main causes of poor data quality, and what mechanisms exist to address it?", ans: "<strong>Why Data Quality is Critical:</strong><br>Data quality is one of the most important — and often underestimated — challenges in information management. A shocking statistic: more than 25% of critical data in Fortune 1000 company databases is inaccurate or incomplete. When business decisions are made based on bad data, the consequences include poor strategic decisions, financial losses, regulatory violations, and damaged customer relationships. Data is only valuable when it is accurate, complete, and consistent.<br><br><strong>Main Causes of Poor Data Quality:</strong><br>• <strong>Redundant Data:</strong> Data stored in multiple places can become inconsistent when updates are applied unevenly<br>• <strong>Inconsistent Data:</strong> Same attribute has different values in different systems<br>• <strong>Faulty Data Input:</strong> Human entry errors, incorrect formats, missing values<br>• <strong>System Integration Issues:</strong> Different systems use different formats, codes, and conventions<br>• <strong>Lack of Standards:</strong> No common definitions or formats across departments<br><br><strong>Mechanisms to Address Data Quality:</strong><br><br>1. <strong>Information Policy:</strong> Establishing firm-wide rules, procedures, and roles for managing, sharing, and standardizing data<br><br>2. <strong>Data Administration:</strong> A function responsible for establishing policies and procedures to manage data as an organizational resource<br><br>3. <strong>Data Governance:</strong> Deals with policies and processes for managing data availability, usability, integrity, and security — particularly important for complying with government regulations<br><br>4. <strong>Data Quality Audit:</strong> A structured survey of the accuracy and completeness of data in an information system. This can be done by surveying sample data from files, or by surveying end users about their perceptions of data quality<br><br>5. <strong>Data Cleansing:</strong> Software tools that automatically detect and correct data that is incorrect, incomplete, improperly formatted, or redundant. Data cleansing also enforces consistency among data from different source systems." },
+];
+
+function buildWritten() {
+  const container = document.getElementById('written-container');
+  container.innerHTML = '';
+  written.forEach((q, i) => {
+    container.innerHTML += `
+      <div class="wq-card">
+        <div class="wq-type">${q.type} · Q${i+1}</div>
+        <div class="wq-q">${q.q}</div>
+        <button class="show-answer-btn" onclick="toggleAnswer(${i})">▶ Show Model Answer</button>
+        <div class="model-answer" id="wa-${i}">${q.ans}</div>
+      </div>`;
+  });
+}
+
+function toggleAnswer(i) {
+  const el = document.getElementById(`wa-${i}`);
+  const btn = el.previousElementSibling;
+  if (el.classList.contains('show')) {
+    el.classList.remove('show');
+    btn.textContent = '▶ Show Model Answer';
+  } else {
+    el.classList.add('show');
+    btn.textContent = '▼ Hide Answer';
+  }
+}
+
+// ════════════════ INIT ════════════════
+buildMCQs();
+buildWritten();
+</script>
+</body>
+</html>
