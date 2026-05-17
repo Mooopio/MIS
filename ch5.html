@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Infrastructure – Exam Prep System</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --bg2: #13161e;
+    --bg3: #1a1e2a;
+    --card: #1e2330;
+    --border: #2a3045;
+    --accent: #4f8ef7;
+    --accent2: #7c5cfc;
+    --accent3: #f7934f;
+    --green: #3dd68c;
+    --red: #f76f6f;
+    --yellow: #f7d44f;
+    --text: #e8ecf5;
+    --text2: #9aa3bc;
+    --text3: #5d6680;
+    --glow: 0 0 24px rgba(79,142,247,0.18);
+  }
+  .light {
+    --bg: #f4f6fb;
+    --bg2: #eef1f8;
+    --bg3: #e5e9f4;
+    --card: #ffffff;
+    --border: #d0d7eb;
+    --text: #14182a;
+    --text2: #4a5170;
+    --text3: #8a91ad;
+    --glow: 0 0 24px rgba(79,142,247,0.10);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+    backdrop-filter: blur(12px);
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.1rem;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+  .logo span { color: var(--text); }
+  nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  nav button {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem; font-weight: 500;
+    padding: 6px 14px; border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer; transition: all 0.2s;
+    background: transparent; color: var(--text2);
+  }
+  nav button:hover { background: var(--bg3); color: var(--text); }
+  nav button.active {
+    background: var(--accent); color: #fff;
+    border-color: var(--accent);
+    box-shadow: 0 0 16px rgba(79,142,247,0.3);
+  }
+  .theme-btn {
+    font-size: 1.1rem; background: var(--bg3);
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: 6px 10px; cursor: pointer; color: var(--text);
+    transition: all 0.2s; margin-left: 8px;
+  }
+
+  /* SECTIONS */
+  .section { display: none; padding: 2rem; max-width: 1000px; margin: 0 auto; }
+  .section.active { display: block; animation: fadeIn 0.35s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* HERO BAND */
+  .hero {
+    background: linear-gradient(135deg, var(--bg3) 0%, var(--bg2) 100%);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 2.5rem;
+    margin-bottom: 2rem; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(79,142,247,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif; font-size: 1.9rem; font-weight: 800;
+    line-height: 1.2; margin-bottom: 0.6rem;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero p { color: var(--text2); font-size: 0.95rem; max-width: 600px; }
+  .tag {
+    display: inline-block; font-size: 0.7rem; font-weight: 600;
+    padding: 3px 10px; border-radius: 20px; margin-bottom: 1rem;
+    background: rgba(79,142,247,0.15); color: var(--accent);
+    border: 1px solid rgba(79,142,247,0.3); letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem; margin-bottom: 1.2rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover { border-color: var(--accent); box-shadow: var(--glow); }
+  .card-title {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem;
+    margin-bottom: 1rem; color: var(--text);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .card-title .icon {
+    width: 30px; height: 30px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; flex-shrink: 0;
+  }
+  .icon-blue { background: rgba(79,142,247,0.15); }
+  .icon-purple { background: rgba(124,92,252,0.15); }
+  .icon-orange { background: rgba(247,147,79,0.15); }
+  .icon-green { background: rgba(61,214,140,0.15); }
+
+  h2.section-title {
+    font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800;
+    margin-bottom: 1.5rem; color: var(--text);
+    border-left: 3px solid var(--accent); padding-left: 1rem;
+  }
+  h3.sub { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--accent); margin: 1.2rem 0 0.6rem; }
+  p { color: var(--text2); line-height: 1.75; margin-bottom: 0.75rem; font-size: 0.93rem; }
+  strong { color: var(--text); }
+  .highlight { background: rgba(79,142,247,0.12); border-left: 3px solid var(--accent); padding: 0.8rem 1rem; border-radius: 0 8px 8px 0; margin: 0.8rem 0; }
+  .highlight p { margin: 0; }
+  .analogy {
+    background: rgba(247,147,79,0.08); border: 1px dashed rgba(247,147,79,0.4);
+    padding: 0.8rem 1rem; border-radius: 8px; margin: 0.8rem 0;
+    font-style: italic; color: var(--text2); font-size: 0.9rem;
+  }
+  .analogy::before { content: '💡 Analogy: '; font-style: normal; color: var(--accent3); font-weight: 600; }
+  ul { list-style: none; padding-left: 0; }
+  li { padding: 4px 0 4px 1.4rem; position: relative; color: var(--text2); font-size: 0.93rem; line-height: 1.7; }
+  li::before { content: '▸'; position: absolute; left: 0; color: var(--accent); }
+  .badge {
+    display: inline-block; font-size: 0.68rem; font-weight: 600;
+    padding: 2px 8px; border-radius: 4px; margin-left: 6px;
+    vertical-align: middle; font-family: 'JetBrains Mono', monospace;
+  }
+  .badge-exam { background: rgba(247,79,79,0.15); color: var(--red); border: 1px solid rgba(247,79,79,0.3); }
+  .badge-key { background: rgba(61,214,140,0.15); color: var(--green); border: 1px solid rgba(61,214,140,0.3); }
+
+  /* TABLE */
+  .tbl-wrap { overflow-x: auto; margin: 1rem 0; border-radius: 10px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th {
+    background: var(--bg3); color: var(--text); font-family: 'Syne', sans-serif;
+    font-weight: 700; padding: 10px 14px; text-align: left; font-size: 0.82rem;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 10px 14px; color: var(--text2); border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg3); color: var(--text); }
+
+  /* COLLAPSIBLE */
+  .collapsible-header {
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; user-select: none; padding: 0.5rem 0;
+  }
+  .collapsible-header:hover .collapse-icon { color: var(--accent); }
+  .collapse-icon { transition: transform 0.25s; color: var(--text3); font-size: 0.8rem; }
+  .collapsible-body { overflow: hidden; transition: max-height 0.35s ease; max-height: 0; }
+  .collapsible-body.open { max-height: 2000px; }
+
+  /* SUMMARY BULLETS */
+  .summary-tree { padding-left: 0; }
+  .summary-tree > li { font-weight: 600; color: var(--text); padding-left: 0; margin: 0.9rem 0 0.3rem; font-size: 0.95rem; }
+  .summary-tree > li::before { display: none; }
+  .summary-tree > li .sub-list { padding-left: 1.4rem; }
+  .summary-tree > li .sub-list li { font-weight: 400; }
+  .memory { background: rgba(124,92,252,0.1); border: 1px solid rgba(124,92,252,0.3); border-radius: 8px; padding: 0.7rem 1rem; margin: 0.5rem 0; font-size: 0.87rem; color: var(--text2); }
+  .memory::before { content: '🧠 Memory: '; color: var(--accent2); font-weight: 600; }
+  .trap { background: rgba(247,79,79,0.08); border: 1px solid rgba(247,79,79,0.3); border-radius: 8px; padding: 0.7rem 1rem; margin: 0.5rem 0; font-size: 0.87rem; color: var(--text2); }
+  .trap::before { content: '⚠️ Common Trap: '; color: var(--red); font-weight: 600; }
+
+  /* MCQ */
+  .mcq-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.4rem; margin-bottom: 1.2rem;
+    transition: border-color 0.2s;
+  }
+  .mcq-q { font-weight: 500; color: var(--text); margin-bottom: 1rem; line-height: 1.6; font-size: 0.93rem; }
+  .mcq-num { font-family: 'JetBrains Mono', monospace; color: var(--accent); font-size: 0.85rem; margin-bottom: 0.5rem; }
+  .mcq-diff { font-size: 0.68rem; font-family: 'JetBrains Mono', monospace; padding: 2px 8px; border-radius: 4px; margin-left: 8px; }
+  .diff-easy { background: rgba(61,214,140,0.15); color: var(--green); }
+  .diff-med { background: rgba(247,212,79,0.15); color: var(--yellow); }
+  .diff-hard { background: rgba(247,79,79,0.15); color: var(--red); }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt {
+    padding: 9px 14px; border-radius: 8px; cursor: pointer;
+    border: 1px solid var(--border); color: var(--text2); font-size: 0.88rem;
+    transition: all 0.18s; background: var(--bg2);
+  }
+  .opt:hover { border-color: var(--accent); color: var(--text); background: var(--bg3); }
+  .opt.correct { background: rgba(61,214,140,0.12); border-color: var(--green); color: var(--green); }
+  .opt.wrong { background: rgba(247,79,79,0.10); border-color: var(--red); color: var(--red); }
+  .explanation {
+    margin-top: 1rem; padding: 0.8rem 1rem; border-radius: 8px;
+    background: rgba(79,142,247,0.08); border: 1px solid rgba(79,142,247,0.2);
+    color: var(--text2); font-size: 0.87rem; display: none;
+  }
+  .explanation.show { display: block; animation: fadeIn 0.25s ease; }
+  .mcq-score-bar {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 1.2rem 1.5rem; margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+  }
+  .score-val { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--accent); }
+  .score-label { color: var(--text2); font-size: 0.85rem; }
+  .progress-wrap { flex: 1; min-width: 120px; }
+  .progress-bg { background: var(--bg3); border-radius: 99px; height: 8px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, var(--accent), var(--accent2)); height: 100%; border-radius: 99px; transition: width 0.4s ease; }
+  .reset-btn {
+    font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 0.85rem;
+    padding: 8px 18px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--bg3); color: var(--text); cursor: pointer; transition: all 0.2s;
+  }
+  .reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* WRITTEN */
+  .wq-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.4rem; margin-bottom: 1.2rem;
+  }
+  .wq-type { font-size: 0.68rem; font-family: 'JetBrains Mono', monospace; color: var(--accent2); background: rgba(124,92,252,0.12); border: 1px solid rgba(124,92,252,0.25); padding: 2px 8px; border-radius: 4px; margin-bottom: 0.6rem; display: inline-block; }
+  .wq-q { font-weight: 500; color: var(--text); margin: 0.5rem 0 1rem; line-height: 1.6; font-size: 0.93rem; }
+  .model-answer-btn {
+    font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 500;
+    padding: 7px 16px; border-radius: 7px; border: 1px solid var(--accent);
+    background: rgba(79,142,247,0.08); color: var(--accent); cursor: pointer; transition: all 0.2s;
+  }
+  .model-answer-btn:hover { background: var(--accent); color: #fff; }
+  .model-answer { display: none; margin-top: 1rem; padding: 1rem 1.1rem; background: var(--bg3); border-radius: 8px; border: 1px solid var(--border); font-size: 0.88rem; color: var(--text2); line-height: 1.75; }
+  .model-answer.show { display: block; animation: fadeIn 0.25s ease; }
+  .model-answer h4 { color: var(--accent); font-family: 'Syne', sans-serif; font-size: 0.88rem; margin-bottom: 0.5rem; }
+
+  /* REVISION */
+  .rev-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .rev-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem;
+  }
+  .rev-card h4 { font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--accent); margin-bottom: 0.7rem; }
+  .rev-card li { font-size: 0.83rem; }
+  .mono-block {
+    background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem;
+    color: var(--green); line-height: 1.8; margin: 0.5rem 0;
+  }
+  .cheat-header {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .cheat-header h2 { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; color: #fff; margin: 0; }
+  .cheat-header p { color: rgba(255,255,255,0.75); font-size: 0.82rem; margin: 0; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg2); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+  @media (max-width: 640px) {
+    header { padding: 0 1rem; flex-wrap: wrap; height: auto; padding: 0.6rem 1rem; gap: 6px; }
+    nav { gap: 3px; }
+    nav button { font-size: 0.7rem; padding: 5px 10px; }
+    .section { padding: 1rem; }
+    .hero h1 { font-size: 1.4rem; }
+    .rev-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">IT<span>Infra</span> <span style="color:var(--text3);font-weight:400;font-size:0.85rem;">| Exam Prep</span></div>
+  <nav>
+    <button class="active" onclick="showSection('explain')">📖 Explain</button>
+    <button onclick="showSection('summary')">📋 Summary</button>
+    <button onclick="showSection('mcq')">❓ MCQ</button>
+    <button onclick="showSection('written')">✍️ Written</button>
+    <button onclick="showSection('revision')">⚡ Revision</button>
+  </nav>
+  <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">🌓</button>
+</header>
+
+<!-- ===================== SECTION 1: EXPLANATION ===================== -->
+<div id="explain" class="section active">
+  <div class="hero">
+    <div class="tag">Chapter 5 · MIS</div>
+    <h1>IT Infrastructure &amp;<br>Emerging Technologies</h1>
+    <p>A complete, deeply explained guide to every concept, definition, and relationship in this chapter — optimized for understanding and exam performance.</p>
+  </div>
+
+  <!-- 1. Definition -->
+  <div class="card">
+    <div class="card-title"><div class="icon icon-blue">🏗️</div> What is IT Infrastructure?</div>
+    <p>IT Infrastructure is the <strong>foundation that supports all of a firm's information systems</strong>. Think of it like the plumbing and electrical grid of a building — invisible when it works, critical when it doesn't.</p>
+    <p>It consists of two layers:</p>
+    <ul>
+      <li><strong>Physical layer:</strong> Hardware devices, cables, servers, data centers</li>
+      <li><strong>Software/Service layer:</strong> Operating systems, enterprise apps, data management, telecom services</li>
+    </ul>
+    <div class="highlight"><p><strong>Key insight:</strong> IT infrastructure is a <em>service platform</em> — it enables the firm to offer services to customers, employees, and suppliers. More infrastructure capability = more business capability.</p></div>
+    <h3 class="sub">The 6 Core Infrastructure Services</h3>
+    <ul>
+      <li><strong>Computing platforms</strong> — servers, cloud, processing power</li>
+      <li><strong>Telecommunications</strong> — networking, internet, communication</li>
+      <li><strong>Data management</strong> — databases, storage systems</li>
+      <li><strong>Application software</strong> — ERP, CRM, enterprise apps</li>
+      <li><strong>Physical facilities management</strong> — data centers, cabling</li>
+      <li><strong>IT management, education, and other services</strong> — IT staff, training, consulting</li>
+    </ul>
+  </div>
+
+  <!-- 2. Evolution -->
+  <div class="card">
+    <div class="card-title"><div class="icon icon-purple">📅</div> 5 Eras of IT Infrastructure Evolution <span class="badge badge-exam">EXAM FAVORITE</span></div>
+
+    <div class="collapsible-header" onclick="toggleCollapse(this)">
+      <h3 class="sub" style="margin:0">Era 1: General-Purpose Mainframe &amp; Minicomputer (1959–present)</h3>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="collapsible-body open">
+      <p><strong>1958:</strong> IBM introduced the first mainframes — massive, room-sized computers owned by large corporations and governments. <strong>1965:</strong> DEC introduced cheaper minicomputers, bringing computing to mid-sized businesses.</p>
+      <div class="analogy">A mainframe is like a giant factory that processes everything centrally. All the "workers" (terminals) send requests to it; it does the work and sends results back.</div>
+    </div>
+
+    <div class="collapsible-header" onclick="toggleCollapse(this)">
+      <h3 class="sub" style="margin:0">Era 2: Personal Computer Era (1981–present)</h3>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="collapsible-body open">
+      <p><strong>1981:</strong> IBM introduced the PC. Proliferation in the '80s and '90s led to mass adoption of personal productivity software (Word, Excel, etc.). Computing power moved to individuals' desks.</p>
+    </div>
+
+    <div class="collapsible-header" onclick="toggleCollapse(this)">
+      <h3 class="sub" style="margin:0">Era 3: Client/Server Era (1983–present)</h3>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="collapsible-body open">
+      <p>Desktop <strong>clients</strong> (your PC) are networked to <strong>servers</strong>. Processing is split between them. Architectures:</p>
+      <ul>
+        <li><strong>Two-tier:</strong> Client talks directly to one server</li>
+        <li><strong>N-tier (multi-tier):</strong> Multiple server layers — web server → application server → database server</li>
+      </ul>
+      <div class="analogy">Like a restaurant: the customer (client) orders food. A waiter (web server) takes the order, the kitchen (application server) cooks it, and the pantry (database server) stores the ingredients.</div>
+    </div>
+
+    <div class="collapsible-header" onclick="toggleCollapse(this)">
+      <h3 class="sub" style="margin:0">Era 4: Enterprise Computing Era (1992–present)</h3>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="collapsible-body open">
+      <p>Companies needed to <strong>integrate</strong> all their separate systems. The Internet provided common standards (TCP/IP, HTTP) that allowed different systems to talk to each other. Enterprise applications (SAP, Oracle ERP) unified business processes.</p>
+    </div>
+
+    <div class="collapsible-header" onclick="toggleCollapse(this)">
+      <h3 class="sub" style="margin:0">Era 5: Cloud &amp; Mobile Computing (2000–present)</h3>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="collapsible-body open">
+      <p><strong>Cloud computing</strong> delivers computing power and software over the Internet on demand — like electricity from a utility. This is the <strong>fastest-growing form of computing</strong>. Mobile devices (smartphones, tablets) put computing in everyone's pocket.</p>
+      <div class="analogy">Cloud = renting electricity vs. owning a generator. You pay for what you use; someone else maintains the infrastructure.</div>
+    </div>
+  </div>
+
+  <!-- 3. Technology Drivers -->
+  <div class="card">
+    <div class="card-title"><div class="icon icon-orange">⚙️</div> Technology Drivers of Infrastructure Evolution <span class="badge badge-exam">EXAM FAVORITE</span></div>
+    <h3 class="sub">1. Moore's Law</h3>
+    <p><strong>Computing power doubles every 18 months</strong> while costs stay the same (or fall). This exponential growth has driven the entire digital revolution. More than 2 billion transistors now fit on a single microprocessor, achieving 500,000+ MIPS (millions of instructions per second).</p>
+    <p><strong>Nanotechnology</strong> extends Moore's Law further — shrinking transistors to sizes comparable to a virus. Nanotubes (carbon tubes 10,000× thinner than a human hair) act as microscopic wires.</p>
+
+    <h3 class="sub">2. Law of Mass Digital Storage</h3>
+    <p><strong>The amount of digital storage doubles every year</strong> while the cost per kilobyte falls exponentially. Since the first magnetic storage device (1955), data storage has become millions of times cheaper.</p>
+
+    <h3 class="sub">3. Metcalfe's Law</h3>
+    <p><strong>Network value grows exponentially with the number of members.</strong> If a network has n members, it has n(n-1)/2 potential connections. The more people join, the more valuable it becomes — driving even more people to join (network effects).</p>
+    <div class="analogy">A phone network with 1 person is useless. With 2, there's 1 connection. With 10, there are 45 connections. With 1,000 — almost 500,000 connections!</div>
+
+    <h3 class="sub">4. Declining Communication Costs</h3>
+    <p>As of the textbook's writing, ~2.3 billion people had Internet access. The cost per kilobit of Internet access has fallen <strong>exponentially since 1995</strong>. DSL and cable deliver a kilobit for ~2 cents retail. As costs approach zero, utilization <strong>explodes</strong>.</p>
+
+    <h3 class="sub">5. Technology Standards</h3>
+    <p>Standards are <strong>agreed-upon specifications</strong> that ensure products from different manufacturers work together. They create <strong>economies of scale</strong> (manufacturers focus on one standard → mass production → lower prices) and <strong>network effects</strong>. Examples: TCP/IP, HTML, USB, Bluetooth.</p>
+  </div>
+
+  <!-- 4. Infrastructure Components -->
+  <div class="card">
+    <div class="card-title"><div class="icon icon-green">🧩</div> 7 Components of IT Infrastructure <span class="badge badge-key">KEY LIST</span></div>
+
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>#</th><th>Component</th><th>Key Technologies / Vendors</th></tr>
+        <tr><td>1</td><td><strong>Computer Hardware Platforms</strong></td><td>IBM, HP, Dell, Sun; Intel, AMD, IBM chips; Blade servers, Mainframes</td></tr>
+        <tr><td>2</td><td><strong>Operating System Platforms</strong></td><td>Servers: Unix/Linux (65%), Windows (35%); Clients: Windows (~90%), Android, iOS</td></tr>
+        <tr><td>3</td><td><strong>Enterprise Software Applications</strong></td><td>SAP, Oracle (enterprise); IBM, Oracle (middleware)</td></tr>
+        <tr><td>4</td><td><strong>Data Management &amp; Storage</strong></td><td>DB: IBM DB2, Oracle, SQL Server, MySQL; Storage: EMC, Seagate, Western Digital; SANs</td></tr>
+        <tr><td>5</td><td><strong>Networking / Telecommunications</strong></td><td>AT&T, Verizon; Cisco, Alcatel-Lucent, Juniper; Windows Server, Linux, Unix</td></tr>
+        <tr><td>6</td><td><strong>Internet Platforms</strong></td><td>IBM, Dell, HP (servers); Microsoft .NET, Java, Adobe (development tools)</td></tr>
+        <tr><td>7</td><td><strong>Consulting &amp; System Integration</strong></td><td>Accenture, IBM Global Services, EDS, Infosys, Wipro</td></tr>
+      </table>
+    </div>
+    <div class="highlight"><p>💡 <strong>Blade servers</strong> are ultrathin computers stored in racks — many blades in one chassis, sharing power/cooling. IBM mainframes are so powerful they're equivalent to <em>thousands of blade servers</em>.</p></div>
+    <p><strong>SANs (Storage Area Networks)</strong> connect multiple storage devices on a dedicated private network — separate from the main LAN — for high-speed, high-availability data storage.</p>
+    <p><strong>Legacy systems</strong> are older transaction processing systems (TPS) created for mainframes. They are not replaced because it would be <em>too costly</em> — but they must be integrated with new infrastructure.</p>
+  </div>
+
+  <!-- 5. Hardware Trends -->
+  <div class="card">
+    <div class="card-title"><div class="icon icon-blue">📱</div> Contemporary Hardware Platform Trends</div>
+    <h3 class="sub">Mobile Digital Platform</h3>
+    <p>Smartphones (iPhone, Android, BlackBerry), netbooks, tablets (iPad), and e-readers (Kindle, Nook) are now primary computing devices for many workers. They handle web, email, IM, and data tasks.</p>
+    <p><strong>BYOD (Bring Your Own Device):</strong> Employees use personal devices at work. This is part of the broader <strong>consumerization of IT</strong> — where technology emerges in consumer markets first, then spreads to business, forcing IT departments to rethink acquisition and management strategies.</p>
+
+    <h3 class="sub">Grid Computing</h3>
+    <p>Connects <strong>geographically distributed computers</strong> into a single virtual network, combining their processing power into a virtual supercomputer. Benefits: cost savings, speed, agility. Often used for scientific research, financial modeling.</p>
+
+    <h3 class="sub">Virtualization</h3>
+    <p>Software allows a <strong>single physical machine to run multiple virtual machines</strong> (each with its own OS). Benefits: fewer physical servers needed, lower energy/hardware costs, easier centralization and management.</p>
+
+    <h3 class="sub">Cloud Computing</h3>
+    <p>On-demand computing services over a network. Three service models:</p>
+    <ul>
+      <li><strong>IaaS (Infrastructure as a Service):</strong> Raw compute/storage (e.g., AWS EC2)</li>
+      <li><strong>PaaS (Platform as a Service):</strong> Development platform (e.g., Google App Engine)</li>
+      <li><strong>SaaS (Software as a Service):</strong> Ready-to-use applications (e.g., Salesforce, Gmail)</li>
+    </ul>
+    <p>Cloud can be <strong>public</strong> (shared, vendor-managed) or <strong>private</strong> (dedicated, firm-managed). A <strong>hybrid cloud</strong> combines both. <strong>Drawbacks:</strong> security concerns, reliability/uptime dependency on vendor.</p>
+
+    <h3 class="sub">Green Computing</h3>
+    <p>Practices for environmentally responsible manufacturing, using, and disposing of computing hardware. Includes energy-efficient processors and data centers.</p>
+
+    <h3 class="sub">Autonomic Computing</h3>
+    <p>Industry-wide effort to build systems that can <strong>self-configure, self-heal, self-protect</strong> (like antivirus auto-updates). Reduces need for human IT management.</p>
+  </div>
+
+  <!-- 6. Software Trends -->
+  <div class="card">
+    <div class="card-title"><div class="icon icon-purple">💻</div> Contemporary Software Platform Trends</div>
+    <h3 class="sub">Open-Source Software</h3>
+    <p>Produced by a community of programmers, <strong>free to use and modify</strong>. Key examples: <strong>Apache</strong> (web server), <strong>Firefox</strong> (browser), <strong>OpenOffice</strong> (productivity), <strong>Linux</strong> (OS). Linux runs on mobile devices, servers, and supercomputers.</p>
+
+    <h3 class="sub">Java &amp; HTML5</h3>
+    <p><strong>Java:</strong> Object-oriented, OS-independent programming language — "write once, run anywhere." Used for web apps and enterprise systems.</p>
+    <p><strong>HTML5:</strong> Latest web page language evolution. Adds native animation and video (previously required Flash or other plugins).</p>
+
+    <h3 class="sub">Web Services &amp; XML</h3>
+    <p><strong>Web services</strong> are software components that exchange information using standard web protocols. They allow different applications (even from different vendors) to communicate.</p>
+    <p><strong>XML (Extensible Markup Language)</strong> is more powerful than HTML — it uses tags that computers can process automatically to understand meaning, not just display.</p>
+    <div class="analogy">HTML says "make this text bold." XML says "this text IS a price" — so a computer can add it up, compare it, or process it without human help.</div>
+
+    <h3 class="sub">SOA (Service-Oriented Architecture)</h3>
+    <p>A software design approach where applications are built from <strong>reusable, self-contained services</strong> that communicate with each other. One "invoice service" can be used by multiple departments instead of building separate billing systems.</p>
+    <p><strong>Example:</strong> Dollar Rent A Car uses web services to link its booking system with Southwest Airlines' website — without building a custom connection to each airline.</p>
+
+    <h3 class="sub">Software Outsourcing &amp; Cloud Services</h3>
+    <p>Firms get software from three external sources:</p>
+    <ul>
+      <li><strong>Software packages:</strong> Off-the-shelf enterprise software (SAP, Oracle)</li>
+      <li><strong>Software outsourcing:</strong> Contracting outside firms to develop custom software</li>
+      <li><strong>SaaS (Cloud-based):</strong> Accessed via web browser; governed by <strong>SLAs (Service Level Agreements)</strong></li>
+    </ul>
+    <p><strong>Mashups</strong> combine two or more online applications (e.g., Google Maps + local business data). <strong>Apps</strong> are small software pieces running on internet, PCs, or mobile devices (iOS, Android).</p>
+  </div>
+
+  <!-- 7. Management Issues -->
+  <div class="card">
+    <div class="card-title"><div class="icon icon-orange">🎯</div> Management Issues</div>
+    <h3 class="sub">Scalability</h3>
+    <p>Infrastructure must be <strong>flexible and scalable</strong> — able to expand as the firm grows. Cloud computing and mobile platforms require new policies for management and contracting.</p>
+
+    <h3 class="sub">Management &amp; Governance</h3>
+    <ul>
+      <li><strong>Centralized IT:</strong> Central IT department makes all decisions — consistent standards, but less flexibility</li>
+      <li><strong>Decentralized IT:</strong> Each business unit controls its own IT — more flexibility, but less coordination</li>
+    </ul>
+
+    <h3 class="sub">Total Cost of Ownership (TCO)</h3>
+    <p><strong>TCO</strong> measures ALL costs of an IT asset — direct and indirect. Crucially: <strong>hardware and software are only ~20% of TCO</strong>. The remaining 80% includes:</p>
+    <ul>
+      <li>Installation, training, support, maintenance</li>
+      <li>Infrastructure, downtime, space, energy</li>
+    </ul>
+    <div class="highlight"><p>TCO can be reduced through cloud services, centralization, and standardization of hardware/software.</p></div>
+
+    <h3 class="sub">Competitive Forces Model for IT Investment</h3>
+    <p>Six factors determine how much to spend on IT infrastructure:</p>
+    <ul>
+      <li>1. Market demand for the firm's services</li>
+      <li>2. Firm's business strategy</li>
+      <li>3. Firm's IT strategy, infrastructure &amp; cost</li>
+      <li>4. Information technology assessment</li>
+      <li>5. Competitor firm services</li>
+      <li>6. Competitor firm IT infrastructure investments</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== SECTION 2: SUMMARY ===================== -->
+<div id="summary" class="section">
+  <div class="hero">
+    <div class="tag">Phase 2</div>
+    <h1>Smart Summary</h1>
+    <p>High-yield information organized for maximum retention. Bold = keywords. 🧠 = memory triggers.</p>
+  </div>
+
+  <h2 class="section-title">Core Concepts at a Glance</h2>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-blue">📌</div> IT Infrastructure — Definition &amp; Role</div>
+    <ul class="summary-tree">
+      <li>🏗️ <strong>IT Infrastructure</strong> = physical devices + software + services running the enterprise
+        <ul class="sub-list">
+          <li>"<strong>Service platform</strong>" perspective = focus on what business value it enables</li>
+          <li>Direct connection: infrastructure capability → business capability → customer service</li>
+          <li>6 service types: computing, telecom, data mgmt, app software, facilities, IT mgmt</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="memory">CPDA-FI = Computing, Platforms, Data, Applications, Facilities, IT-management</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-purple">📅</div> 5 Eras of IT Evolution</div>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Era</th><th>Period</th><th>Key Feature</th><th>Key Event</th></tr>
+        <tr><td>Mainframe/Mini</td><td>1959–now</td><td>Centralized processing</td><td>IBM mainframe 1958; DEC mini 1965</td></tr>
+        <tr><td>Personal Computer</td><td>1981–now</td><td>Individual computing</td><td>IBM PC 1981</td></tr>
+        <tr><td>Client/Server</td><td>1983–now</td><td>Distributed processing</td><td>N-tier architecture</td></tr>
+        <tr><td>Enterprise</td><td>1992–now</td><td>Integration via Internet</td><td>SAP, Oracle ERP, TCP/IP</td></tr>
+        <tr><td>Cloud &amp; Mobile</td><td>2000–now</td><td>On-demand, anywhere</td><td>Fastest growing form</td></tr>
+      </table>
+    </div>
+    <div class="memory">MMM-PCE = Mainframe → Mini → Mobile/PC → Client/Server → Enterprise → Cloud</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-orange">⚙️</div> 5 Technology Drivers</div>
+    <ul class="summary-tree">
+      <li>⚡ <strong>Moore's Law</strong> — computing power doubles every <strong>18 months</strong>; nanotechnology extends it
+        <ul class="sub-list"><li>Nanotubes = 10,000× thinner than human hair</li></ul>
+      </li>
+      <li>💾 <strong>Law of Mass Digital Storage</strong> — data stored doubles <strong>every year</strong>; cost falls exponentially
+        <ul class="sub-list"><li>First magnetic storage: 1955</li></ul>
+      </li>
+      <li>🌐 <strong>Metcalfe's Law</strong> — network value grows <strong>exponentially</strong> with members (network effects)</li>
+      <li>📡 <strong>Declining Communication Costs</strong> — 2.3B internet users; ~2 cents/kilobit via DSL/cable</li>
+      <li>📐 <strong>Technology Standards</strong> — compatibility specs → economies of scale → lower prices</li>
+    </ul>
+    <div class="memory">MMMDS = Moore, Mass Storage, Metcalfe, Declining costs, Standards</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-green">☁️</div> Cloud Computing — 3 Service Models</div>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Model</th><th>What you get</th><th>Analogy</th></tr>
+        <tr><td><strong>IaaS</strong></td><td>Raw computing + storage infrastructure</td><td>Renting land to build on</td></tr>
+        <tr><td><strong>PaaS</strong></td><td>Development platform + tools</td><td>Renting a kitchen to cook in</td></tr>
+        <tr><td><strong>SaaS</strong></td><td>Ready-to-use applications via browser</td><td>Ordering food delivered</td></tr>
+      </table>
+    </div>
+    <div class="memory">IPS = Infrastructure (lowest) → Platform → Software (highest abstraction)</div>
+    <div class="trap">Students confuse IaaS with PaaS. IaaS = raw servers/storage. PaaS = development environment on top of that.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-blue">🧩</div> 7 Infrastructure Components</div>
+    <div class="memory">CH-OS-ES-DM-NT-IP-CS = Hardware, OS, Enterprise SW, Data Mgmt, Networks, Internet, Consulting</div>
+    <ul>
+      <li><strong>1. Hardware:</strong> IBM, HP, Dell; Intel/AMD/IBM chips; blades, mainframes</li>
+      <li><strong>2. OS:</strong> Server: 65% Unix/Linux, 35% Windows; Client: 90% Windows; Mobile: Android, iOS</li>
+      <li><strong>3. Enterprise SW:</strong> SAP, Oracle (ERP); IBM, Oracle (middleware)</li>
+      <li><strong>4. Data:</strong> IBM DB2, Oracle, MySQL; EMC, Seagate; SANs</li>
+      <li><strong>5. Networks:</strong> AT&amp;T, Verizon; Cisco, Juniper; Windows Server/Linux</li>
+      <li><strong>6. Internet:</strong> IBM/Dell/HP servers; Microsoft .NET, Java, Adobe tools</li>
+      <li><strong>7. Consulting:</strong> Accenture, IBM Global Services, Infosys, Wipro</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-purple">💡</div> Hardware &amp; Software Trends — Quick List</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      <div>
+        <h4 style="color:var(--accent);font-family:'Syne',sans-serif;font-size:0.9rem;margin-bottom:0.5rem;">Hardware Trends</h4>
+        <ul>
+          <li>Mobile digital platform (smartphones, tablets)</li>
+          <li>BYOD + Consumerization of IT</li>
+          <li>Grid computing (virtual supercomputer)</li>
+          <li>Virtualization (one physical = many virtual)</li>
+          <li>Cloud computing (IaaS/PaaS/SaaS)</li>
+          <li>Green computing</li>
+          <li>Autonomic computing (self-managing)</li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="color:var(--accent2);font-family:'Syne',sans-serif;font-size:0.9rem;margin-bottom:0.5rem;">Software Trends</h4>
+        <ul>
+          <li>Open-source (Linux, Apache, Firefox)</li>
+          <li>Java (OS-independent)</li>
+          <li>HTML5 (replaces Flash)</li>
+          <li>Web services + XML</li>
+          <li>SOA (reusable service components)</li>
+          <li>Software outsourcing</li>
+          <li>SaaS + Mashups + Apps</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-orange">🎯</div> Management Issues — Critical Numbers</div>
+    <ul>
+      <li><strong>TCO:</strong> Hardware + software = only <strong>~20%</strong> of total cost</li>
+      <li><strong>US firms software spend (2012):</strong> $279 billion total; ~35% from outside firm; ~4% from SaaS</li>
+      <li><strong>Server OS:</strong> Linux/Unix = 65% of servers</li>
+      <li><strong>Client OS:</strong> Windows = ~90% of client machines</li>
+      <li><strong>Internet users:</strong> ~2.3 billion (at textbook time)</li>
+      <li><strong>Internet cost:</strong> ~2 cents per kilobit (DSL/cable)</li>
+      <li><strong>Competitive forces:</strong> 6 factors for IT investment decisions</li>
+    </ul>
+    <div class="trap">TCO Trap: Many students think hardware = most of IT cost. WRONG. Hardware + software is only 20%. Installation, training, support, downtime account for the other 80%.</div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 3: MCQ ===================== -->
+<div id="mcq" class="section">
+  <div class="hero">
+    <div class="tag">Phase 4 · MCQ</div>
+    <h1>Multiple Choice Questions</h1>
+    <p>Click an option to check your answer. Green = correct, Red = wrong. Explanation appears after selection.</p>
+  </div>
+
+  <div class="mcq-score-bar">
+    <div>
+      <div class="score-val" id="score-val">0/30</div>
+      <div class="score-label">Questions answered</div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-bg"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      <div style="margin-top:6px;font-size:0.78rem;color:var(--text3)"><span id="correct-count">0</span> correct · <span id="wrong-count">0</span> wrong</div>
+    </div>
+    <button class="reset-btn" onclick="resetMCQ()">↺ Reset All</button>
+  </div>
+
+  <div id="mcq-container"></div>
+</div>
+
+<!-- ===================== SECTION 4: WRITTEN ===================== -->
+<div id="written" class="section">
+  <div class="hero">
+    <div class="tag">Phase 4 · Written</div>
+    <h1>Written Questions</h1>
+    <p>Short answer and long-form questions with model answers. Click "Show Model Answer" after attempting each question.</p>
+  </div>
+
+  <h2 class="section-title">Short Answer Questions</h2>
+  <div id="short-qa"></div>
+
+  <h2 class="section-title" style="margin-top:2rem">Long-Form / Essay Questions</h2>
+  <div id="long-qa"></div>
+</div>
+
+<!-- ===================== SECTION 5: REVISION ===================== -->
+<div id="revision" class="section">
+  <div class="cheat-header">
+    <div>
+      <h2>⚡ Night Before Exam — Cheat Sheet</h2>
+      <p>Everything you need in one place. Review this 30 minutes before your exam.</p>
+    </div>
+  </div>
+
+  <div class="rev-grid">
+    <div class="rev-card">
+      <h4>IT Infrastructure Definition</h4>
+      <ul>
+        <li>Physical devices + software + <strong>services</strong></li>
+        <li>= "Service platform" for the enterprise</li>
+        <li>Links business strategy ↔ IT ↔ capabilities</li>
+      </ul>
+    </div>
+    <div class="rev-card">
+      <h4>5 Eras (dates matter!)</h4>
+      <ul>
+        <li>Mainframe: <strong>1959</strong> (IBM 1958, DEC 1965)</li>
+        <li>PC: <strong>1981</strong> (IBM PC)</li>
+        <li>Client/Server: <strong>1983</strong></li>
+        <li>Enterprise: <strong>1992</strong></li>
+        <li>Cloud/Mobile: <strong>2000</strong></li>
+      </ul>
+    </div>
+    <div class="rev-card">
+      <h4>5 Technology Drivers</h4>
+      <ul>
+        <li>Moore's Law → 18 months double</li>
+        <li>Mass Storage → 1 year double</li>
+        <li>Metcalfe → exponential network value</li>
+        <li>Declining comm costs → usage explodes</li>
+        <li>Standards → scale + compatibility</li>
+      </ul>
+    </div>
+    <div class="rev-card">
+      <h4>Cloud: IaaS / PaaS / SaaS</h4>
+      <ul>
+        <li>IaaS = raw infrastructure</li>
+        <li>PaaS = development platform</li>
+        <li>SaaS = software via browser</li>
+        <li>Public / Private / Hybrid</li>
+        <li>SLA = formal agreement with provider</li>
+      </ul>
+    </div>
+    <div class="rev-card">
+      <h4>Key % Numbers</h4>
+      <ul>
+        <li>Server OS: Linux/Unix <strong>65%</strong>, Win <strong>35%</strong></li>
+        <li>Client OS: Windows <strong>~90%</strong></li>
+        <li>TCO: H/W+S/W = only <strong>~20%</strong></li>
+        <li>SW spend: <strong>35%</strong> external, <strong>4%</strong> SaaS</li>
+      </ul>
+    </div>
+    <div class="rev-card">
+      <h4>7 Components (mnemonic)</h4>
+      <ul>
+        <li><strong>H</strong>ardware → <strong>O</strong>S → <strong>E</strong>nterprise SW</li>
+        <li><strong>D</strong>ata → <strong>N</strong>etwork → <strong>I</strong>nternet</li>
+        <li><strong>C</strong>onsulting</li>
+        <li>= <strong>HOE-DNIC</strong></li>
+      </ul>
+    </div>
+    <div class="rev-card">
+      <h4>Software Trends</h4>
+      <ul>
+        <li>Open-source: Linux, Apache, Firefox</li>
+        <li>Java = OS-independent OOP</li>
+        <li>XML &gt; HTML for data processing</li>
+        <li>SOA = reusable services</li>
+        <li>Mashup = combine 2+ web apps</li>
+      </ul>
+    </div>
+    <div class="rev-card">
+      <h4>Hardware Trends</h4>
+      <ul>
+        <li>BYOD + Consumerization of IT</li>
+        <li>Grid = distributed supercomputer</li>
+        <li>Virtualization = 1 physical, many VMs</li>
+        <li>Green computing</li>
+        <li>Autonomic = self-managing systems</li>
+      </ul>
+    </div>
+    <div class="rev-card">
+      <h4>Management Issues</h4>
+      <ul>
+        <li>Scalability = grow with firm</li>
+        <li>Centralized vs. Decentralized IT</li>
+        <li>TCO = ALL costs, not just purchase price</li>
+        <li>6 competitive forces for IT investment</li>
+        <li>Legacy systems: costly to replace</li>
+      </ul>
+    </div>
+    <div class="rev-card">
+      <h4>Key Vendors (exam lists)</h4>
+      <ul>
+        <li>Enterprise SW: <strong>SAP, Oracle</strong></li>
+        <li>Consulting: <strong>Accenture, IBM GS, Infosys</strong></li>
+        <li>Network: <strong>Cisco, Juniper</strong></li>
+        <li>Telecom: <strong>AT&amp;T, Verizon</strong></li>
+        <li>Storage: <strong>EMC, Seagate, WD</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 class="section-title">Key Definitions — Rapid Fire</h2>
+  <div class="mono-block">
+IT Infrastructure    = Physical + software + services enabling enterprise operations
+Moore's Law         = Computing power doubles every 18 months
+Metcalfe's Law      = Network value ∝ n² (exponential with members)
+Mass Storage Law    = Data storage amount doubles every year
+TCO                 = Total Cost of Ownership (H/W+S/W = only ~20%)
+SaaS                = Software delivered via web browser from cloud
+IaaS                = Raw infrastructure (servers, storage) from cloud
+PaaS                = Development platform from cloud
+SOA                 = Architecture built from reusable service components
+XML                 = Markup language allowing computers to auto-process data tags
+Virtualization      = 1 physical resource acting as multiple virtual resources
+Grid Computing      = Distributed computers = virtual supercomputer
+BYOD                = Bring Your Own Device (employees use personal devices at work)
+SLA                 = Service Level Agreement with cloud/software provider
+Autonomic Computing = Self-configuring, self-healing, self-protecting systems
+Legacy Systems      = Older mainframe TPS — costly to replace, must be integrated
+Blade Servers       = Ultrathin computers in racks (mainframe ≈ thousands of blades)
+SAN                 = Storage Area Network — dedicated storage network
+Nanotechnology      = Transistors shrunk to virus-size; nanotubes 10,000× thinner than hair
+  </div>
+
+  <h2 class="section-title" style="margin-top:2rem">Common Exam Traps ⚠️</h2>
+  <div class="card">
+    <ul>
+      <li class="trap" style="list-style:none;padding-left:0;margin-bottom:0.5rem">Hardware + Software costs = <strong>only ~20%</strong> of TCO — NOT the majority</li>
+      <li class="trap" style="list-style:none;padding-left:0;margin-bottom:0.5rem">Moore's Law = <strong>18 months</strong> (NOT 12, NOT 24)</li>
+      <li class="trap" style="list-style:none;padding-left:0;margin-bottom:0.5rem">Mass Storage Law = <strong>1 year</strong> double (NOT 18 months — that's Moore's)</li>
+      <li class="trap" style="list-style:none;padding-left:0;margin-bottom:0.5rem">Server OS: Linux/Unix = <strong>65%</strong> — NOT Windows (Windows dominates clients at 90%)</li>
+      <li class="trap" style="list-style:none;padding-left:0;margin-bottom:0.5rem">Cloud = fastest growing, but has <strong>security + reliability drawbacks</strong></li>
+      <li class="trap" style="list-style:none;padding-left:0;margin-bottom:0.5rem">IaaS ≠ PaaS. IaaS = raw servers. PaaS = development environment.</li>
+      <li class="trap" style="list-style:none;padding-left:0;margin-bottom:0.5rem">Metcalfe's Law = value grows <strong>exponentially</strong>, not linearly</li>
+      <li class="trap" style="list-style:none;padding-left:0;margin-bottom:0.5rem">SOA = design architecture (NOT a vendor product)</li>
+      <li class="trap" style="list-style:none;padding-left:0;margin-bottom:0.5rem">First magnetic storage device = <strong>1955</strong>, first IBM PC = <strong>1981</strong>, first IBM mainframe = <strong>1958</strong></li>
+    </ul>
+  </div>
+</div>
+
+<script>
+// ===== NAVIGATION =====
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ===== THEME =====
+function toggleTheme() {
+  document.body.classList.toggle('light');
+}
+
+// ===== COLLAPSIBLE =====
+function toggleCollapse(header) {
+  const body = header.nextElementSibling;
+  const icon = header.querySelector('.collapse-icon');
+  body.classList.toggle('open');
+  icon.style.transform = body.classList.contains('open') ? 'rotate(0deg)' : 'rotate(-90deg)';
+}
+
+// ===== MCQ DATA =====
+const mcqData = [
+  { q: "IT infrastructure is best described as:", opts: ["A set of hardware devices only", "A service platform of physical devices, software, and services", "The internet and telecommunications network", "Enterprise software applications"], ans: 1, diff: "easy", exp: "IT infrastructure is a 'service platform' that includes physical devices AND software AND services — not just hardware. This perspective focuses on the business value it enables." },
+  { q: "Which era of IT infrastructure is considered the FASTEST growing form of computing?", opts: ["Personal Computer Era", "Client/Server Era", "Enterprise Computing Era", "Cloud and Mobile Computing Era"], ans: 3, diff: "easy", exp: "Cloud and Mobile Computing (2000–present) is explicitly described as the fastest-growing form of computing." },
+  { q: "According to Moore's Law, computing power doubles every:", opts: ["6 months", "12 months", "18 months", "24 months"], ans: 2, diff: "easy", exp: "Moore's Law states that computing power doubles approximately every 18 months — a key exam fact." },
+  { q: "The Law of Mass Digital Storage states that the amount of digital data being stored doubles every:", opts: ["6 months", "1 year", "18 months", "3 years"], ans: 1, diff: "medium", exp: "The Law of Mass Digital Storage says data doubles every YEAR. This is different from Moore's Law (18 months). A common exam trap!" },
+  { q: "Metcalfe's Law states that the value of a network:", opts: ["Grows linearly with each new member", "Stays constant regardless of members", "Grows exponentially as a function of network members", "Decreases as more members join due to congestion"], ans: 2, diff: "medium", exp: "Metcalfe's Law says value grows EXPONENTIALLY (not linearly) as network members increase — this creates powerful network effects." },
+  { q: "In a multi-tier client/server architecture, which of the following correctly describes the typical flow?", opts: ["Client → Database → Application → Web", "Client → Web Server → Application Server → Database Server", "Database → Application → Web → Client", "Mainframe → Client → Server → Database"], ans: 1, diff: "medium", exp: "The N-tier model flows: Client → Web Server → Application Server → Database Server. Each layer has a specific role." },
+  { q: "Which of the following is NOT one of the seven main components of IT infrastructure?", opts: ["Computer hardware platforms", "Marketing automation software", "Consulting and system integration services", "Internet platforms"], ans: 1, diff: "easy", exp: "The 7 components are: Hardware, OS, Enterprise SW, Data Mgmt, Networking, Internet, and Consulting. Marketing automation software is NOT one of them." },
+  { q: "What percentage of Total Cost of Ownership (TCO) does hardware and software typically account for?", opts: ["About 80%", "About 50%", "About 35%", "About 20%"], ans: 3, diff: "hard", exp: "Hardware + software = only ~20% of TCO. The other 80% includes installation, training, support, maintenance, downtime, space, and energy. This is a CRITICAL and commonly tested fact." },
+  { q: "Which cloud service model provides ready-to-use applications accessed through a web browser?", opts: ["IaaS (Infrastructure as a Service)", "PaaS (Platform as a Service)", "SaaS (Software as a Service)", "NaaS (Network as a Service)"], ans: 2, diff: "easy", exp: "SaaS delivers ready-to-use software via browser (e.g., Gmail, Salesforce). IaaS = raw infrastructure; PaaS = development platform." },
+  { q: "Virtualization technology primarily allows:", opts: ["Multiple physical machines to function as one", "A single physical resource to act as multiple virtual resources", "Mobile devices to connect to mainframes", "Grid computing to replace cloud computing"], ans: 1, diff: "medium", exp: "Virtualization = one physical machine running multiple virtual machines (each with its own OS). This reduces hardware costs and energy consumption." },
+  { q: "BYOD stands for:", opts: ["Build Your Own Database", "Bring Your Own Device", "Buy Your Own Data", "Broadband Your Own Domain"], ans: 1, diff: "easy", exp: "BYOD = Bring Your Own Device — the trend of employees using personal mobile devices in the workplace." },
+  { q: "What is the primary advantage of grid computing?", opts: ["Reduces the need for internet connectivity", "Combines distributed computers into a virtual supercomputer", "Replaces the need for enterprise software", "Stores data more securely than cloud computing"], ans: 1, diff: "medium", exp: "Grid computing connects geographically distributed computers into a single network, creating a virtual supercomputer — offering cost savings, speed, and agility." },
+  { q: "Which server operating systems hold approximately 65% of the server market?", opts: ["Windows Server and Mac OS", "Unix and Linux", "Chrome OS and Android", "Windows NT and Solaris"], ans: 1, diff: "medium", exp: "Approximately 65% of servers run Unix or Linux (open-source/enterprise), while about 35% run Windows Server." },
+  { q: "Service-Oriented Architecture (SOA) is best described as:", opts: ["A cloud deployment model combining public and private clouds", "A design approach using reusable self-contained service components", "A network protocol for web communication", "An enterprise database management system"], ans: 1, diff: "medium", exp: "SOA = building applications from reusable, self-contained services that communicate. This allows one service (e.g., invoice service) to be used across the entire firm." },
+  { q: "Which of the following is an example of open-source software?", opts: ["Microsoft Windows", "Oracle Database", "Apache Web Server", "SAP ERP"], ans: 2, diff: "easy", exp: "Apache is a classic open-source web server. Open-source software is free, produced by a community, and modifiable by users. Microsoft Windows and Oracle Database are commercial; SAP ERP is commercial." },
+  { q: "XML (Extensible Markup Language) is superior to HTML primarily because:", opts: ["It displays content more attractively on screen", "It allows computers to automatically process tagged data by meaning", "It is faster to download and render", "It supports more font and color options"], ans: 1, diff: "hard", exp: "XML uses meaningful tags that computers can process automatically (e.g., a 'price' tag tells a computer it can add up prices). HTML only controls display — it can't convey meaning to machines." },
+  { q: "The 'consumerization of IT' refers to:", opts: ["Businesses selling IT products to consumers", "Technology emerging in consumer markets first, then spreading to business", "Consumers learning enterprise software skills", "Cloud services being sold to individual consumers"], ans: 1, diff: "medium", exp: "Consumerization of IT = technologies first emerge in consumer markets (iPhones, tablets), then enter business environments — forcing IT departments to adapt." },
+  { q: "Legacy systems are defined as:", opts: ["The latest enterprise software platforms", "Older TPS created for mainframes that would be too costly to replace", "Cloud-based applications that replaced traditional software", "Open-source alternatives to commercial software"], ans: 1, diff: "medium", exp: "Legacy systems are older transaction processing systems (TPS) built for mainframes. They remain in use because replacement would be too costly — but they must be integrated with new systems." },
+  { q: "Which competitive force model factor concerns HOW MUCH to invest in IT infrastructure?", opts: ["Marketing analysis", "6 competitive forces including market demand, business strategy, and competitor investments", "Moore's Law projections only", "The firm's hardware depreciation schedule"], ans: 1, diff: "hard", exp: "The competitive forces model for IT investment includes 6 factors: market demand, firm's business strategy, firm's IT strategy/cost, IT assessment, competitor services, and competitor IT investments." },
+  { q: "Nanotubes are described as being approximately how much thinner than a human hair?", opts: ["100 times", "1,000 times", "10,000 times", "100,000 times"], ans: 2, diff: "hard", exp: "Nanotubes are about 10,000 times thinner than a human hair — this is the specific detail given in the textbook about nanotechnology." },
+  { q: "Which company's example illustrates SOA Web services connecting booking systems across firms?", opts: ["Southwest Airlines", "Dollar Rent A Car", "IBM Global Services", "Amazon Web Services"], ans: 1, diff: "medium", exp: "The textbook uses Dollar Rent A Car as the SOA example — they use web services to link their booking system with Southwest Airlines' website without building a separate custom connection." },
+  { q: "A Storage Area Network (SAN) is best described as:", opts: ["A wireless network for mobile devices", "A public cloud storage service", "A dedicated network connecting multiple storage devices", "A software system for database management"], ans: 2, diff: "medium", exp: "A SAN connects multiple storage devices on a dedicated private network — separate from the main LAN — providing high-speed, centralized data storage." },
+  { q: "Autonomic computing refers to systems that can:", opts: ["Learn from user behavior to personalize responses", "Self-configure, self-heal, and self-protect", "Automatically upgrade to the latest software versions only", "Process natural language commands without programming"], ans: 1, diff: "medium", exp: "Autonomic computing = systems that self-configure, self-heal when broken, and self-protect from intruders. Like self-updating antivirus software — reducing the need for manual IT intervention." },
+  { q: "HTML5 differs from earlier HTML versions primarily because it:", opts: ["Requires a separate plugin for all multimedia", "Adds native animation and video without third-party add-ons like Flash", "Only works on mobile devices", "Replaces XML as the primary data exchange format"], ans: 1, diff: "medium", exp: "HTML5 includes built-in animation and video capabilities, eliminating the need for third-party plugins like Adobe Flash for multimedia content." },
+  { q: "Which of the following correctly states the main DRAWBACK of cloud computing?", opts: ["It increases hardware purchase costs significantly", "It cannot support mobile devices", "Security and reliability concerns depend on vendor", "It requires on-premise server installation"], ans: 2, diff: "medium", exp: "Cloud computing's main drawbacks are security (data stored externally) and reliability (dependent on vendor's uptime). You have less direct control." },
+  { q: "A 'mashup' in the context of software platforms refers to:", opts: ["A mix of open-source and commercial software", "Combining two or more online applications", "A mobile app that works on multiple OS platforms", "Merging legacy systems with modern cloud services"], ans: 1, diff: "medium", exp: "A mashup combines two or more online applications — e.g., combining Google Maps with local restaurant data to create a location-based dining app." },
+  { q: "Green computing primarily addresses:", opts: ["Environmental impact of manufacturing, using, and disposing of computing hardware", "Software designed to monitor carbon footprints", "Remote work computing environments", "Energy used by mobile devices in transmission"], ans: 0, diff: "easy", exp: "Green computing encompasses practices and technologies for environmentally responsible manufacturing, use, and disposal of computing and networking hardware." },
+  { q: "Which era introduced integration of disparate networks and applications using Internet standards?", opts: ["Mainframe era", "Personal Computer era", "Client/Server era", "Enterprise Computing era"], ans: 3, diff: "hard", exp: "The Enterprise Computing era (1992–present) is characterized by integrating disparate networks and applications using Internet standards (TCP/IP) and enterprise applications (SAP, Oracle ERP)." },
+  { q: "The first IBM mainframe was introduced in what year?", opts: ["1955", "1958", "1965", "1972"], ans: 1, diff: "hard", exp: "The first IBM mainframe was introduced in 1958 (though the mainframe era is dated from 1959). DEC introduced minicomputers in 1965. This is a specific date often tested." },
+  { q: "What does a Service Level Agreement (SLA) represent in the context of cloud/software services?", opts: ["A software licensing fee structure", "A formal contractual agreement between a firm and its service provider", "An internal IT governance policy", "The technical specification of a cloud API"], ans: 1, diff: "medium", exp: "An SLA (Service Level Agreement) is a formal agreement between a firm and its cloud/software service provider — defining guaranteed service levels, uptime, and responsibilities." }
+];
+
+// ===== WRITTEN QA DATA =====
+const shortQA = [
+  { q: "What is the 'service platform' perspective on IT infrastructure, and why is it considered more accurate?", ans: `<h4>Model Answer:</h4>The service platform perspective views IT infrastructure not just as a collection of physical hardware, but as a set of services the firm provides to its employees, customers, and suppliers. It is considered more accurate because it focuses on the business value and capabilities enabled by the infrastructure — rather than just the physical assets. This perspective helps management justify infrastructure investments by linking them directly to business outcomes. For example, cloud computing services, data management, and application software all contribute to specific business capabilities, and measuring them as services provides a more accurate view of their value.` },
+  { q: "Distinguish between Moore's Law and the Law of Mass Digital Storage.", ans: `<h4>Model Answer:</h4><strong>Moore's Law:</strong> Computing power doubles approximately every 18 months, while the cost remains relatively constant. This drives exponential growth in processor capability — from thousands to billions of transistors per chip.<br><br><strong>Law of Mass Digital Storage:</strong> The amount of data being stored digitally doubles every year, while the cost per kilobyte falls exponentially. Since the first magnetic storage device in 1955, storage has become millions of times cheaper.<br><br><strong>Key difference:</strong> Moore's Law focuses on processing power (18-month cycle), while the Mass Storage Law focuses on storage capacity and cost (annual doubling).` },
+  { q: "Explain the difference between IaaS, PaaS, and SaaS with one example of each.", ans: `<h4>Model Answer:</h4><strong>IaaS (Infrastructure as a Service):</strong> Provides raw computing infrastructure — servers, storage, networking — over the internet. Customers manage their own OS and applications. Example: Amazon EC2 provides virtual servers on demand.<br><br><strong>PaaS (Platform as a Service):</strong> Provides a development platform with tools, runtime environments, and middleware. Customers develop and deploy their own applications without managing underlying infrastructure. Example: Google App Engine.<br><br><strong>SaaS (Software as a Service):</strong> Provides complete, ready-to-use applications accessed via web browser. No installation or maintenance required. Example: Salesforce CRM, Google Gmail.` },
+  { q: "Why do legacy systems remain in use despite being outdated?", ans: `<h4>Model Answer:</h4>Legacy systems are older transaction processing systems (TPS) originally created for mainframe computers. They remain in use for two main reasons: (1) <strong>Cost:</strong> The cost of replacing or redesigning them would be prohibitively expensive, as they often handle millions of critical transactions and are deeply embedded in business processes. (2) <strong>Risk:</strong> Replacing systems that process core business transactions carries significant operational risk. Therefore, firms instead integrate legacy systems with newer infrastructure using middleware and web services, accepting their limitations while preserving their stability and functionality.` },
+  { q: "What is Total Cost of Ownership (TCO) and why is it important?", ans: `<h4>Model Answer:</h4>TCO (Total Cost of Ownership) is a model that analyzes both the direct AND indirect costs of owning and operating an IT asset over its entire life. It is important because the purchase price of hardware and software represents only about 20% of the true cost. The remaining 80% includes: installation, training, technical support, maintenance, infrastructure overhead, downtime costs, physical space, and energy consumption. Without calculating TCO, firms dramatically underestimate the true investment required. TCO can be reduced through cloud services (eliminating hardware costs), greater centralization, and standardization of hardware and software.` },
+  { q: "What is Metcalfe's Law, and how does it explain the growth of the Internet?", ans: `<h4>Model Answer:</h4>Metcalfe's Law states that the value or power of a network grows exponentially as a function of the number of its members (approximately n²). This means that as more people join a network, the value increases disproportionately — not just for new members, but for all existing members as well. Applied to the Internet: as more people gained access, the Internet became more valuable to everyone (more email recipients, more websites, more services). This increased value attracted even more users, creating a self-reinforcing cycle of growth. This is also why network effects make it so difficult for new platforms to displace established ones.` },
+];
+
+const longQA = [
+  { q: "Describe the five eras of IT infrastructure evolution. For each era, identify the approximate start date, key technology, and its significance to business.", ans: `<h4>Model Answer (Essay Structure):</h4>
+<strong>1. General-Purpose Mainframe and Minicomputer Era (1959–present)</strong><br>
+Began with IBM's first mainframes (1958) — massive, centralized computers shared via dumb terminals. In 1965, DEC introduced less expensive minicomputers, making computing accessible to medium-sized organizations. Business significance: Computing was centralized, controlled, and expensive — only large organizations could afford it.<br><br>
+<strong>2. Personal Computer Era (1981–present)</strong><br>
+The 1981 IBM PC democratized computing. Proliferation through the 1980s–90s fueled personal productivity software (word processing, spreadsheets). Business significance: Individual workers gained computing power, boosting personal productivity and enabling small businesses to adopt technology.<br><br>
+<strong>3. Client/Server Era (1983–present)</strong><br>
+Desktop clients were networked to servers, splitting processing between them. Multi-tier (N-tier) architectures emerged: web server → application server → database server. Business significance: Networked computing enabled shared resources, email, and the first enterprise applications at scale.<br><br>
+<strong>4. Enterprise Computing Era (1992–present)</strong><br>
+Internet standards (TCP/IP, HTTP) and enterprise applications (SAP, Oracle ERP) enabled integration of disparate business systems across departments and geographies. Business significance: For the first time, firms could achieve enterprise-wide integration, enabling real-time data sharing and cross-functional business processes.<br><br>
+<strong>5. Cloud and Mobile Computing Era (2000–present)</strong><br>
+Computing power and software are delivered over the internet on demand (utility model). Mobile devices extend this anywhere, anytime. This is the fastest-growing form of computing. Business significance: Firms can minimize capital IT investments, scale dynamically, and empower a mobile workforce — fundamentally changing how IT is acquired and consumed.` },
+  { q: "A mid-sized retail company is planning a major IT infrastructure investment. Using the Competitive Forces Model and the concept of Total Cost of Ownership (TCO), advise the company on how to make a wise infrastructure investment decision.", ans: `<h4>Model Answer (Essay Structure):</h4>
+<strong>Introduction:</strong> Infrastructure investment decisions are among the most complex financial decisions firms face. Two frameworks guide effective decision-making: the Competitive Forces Model and TCO analysis.<br><br>
+<strong>1. Competitive Forces Model — Determine HOW MUCH to invest:</strong><br>
+The company must evaluate six factors: (a) <em>Market demand</em> — What services do customers expect? (b) <em>Business strategy</em> — Is the firm differentiating on price, speed, or service? (c) <em>Current IT strategy and costs</em> — What are existing capabilities and constraints? (d) <em>IT assessment</em> — What technologies are available and mature? (e) <em>Competitor services</em> — What are rivals offering digitally? (f) <em>Competitor IT investments</em> — Are competitors investing heavily in cloud, mobile, or analytics?<br><br>
+<strong>2. TCO Analysis — Understand TRUE costs:</strong><br>
+Hardware and software are only ~20% of total cost. The retail firm must budget for installation, staff training, ongoing support and maintenance, downtime risk, data center space, and energy. For example, a $500,000 server investment might have a 5-year TCO exceeding $2.5 million when all indirect costs are included.<br><br>
+<strong>3. Strategic Recommendations:</strong><br>
+Consider cloud-based solutions (IaaS/SaaS) to eliminate capital expenditure and reduce TCO. Standardize hardware and software to achieve economies of scale. Develop formal SLAs with any cloud providers. Assess scalability needs given retail seasonality (Black Friday spikes). Ensure integration with existing legacy inventory and POS systems.<br><br>
+<strong>Conclusion:</strong> Wise IT infrastructure investment balances competitive necessity (assessed through the 6 forces) with financial discipline (measured through TCO). Neither framework alone is sufficient — both must be applied together.` },
+  { q: "Compare and contrast grid computing, virtualization, and cloud computing. How are they related, and what unique business benefits does each provide?", ans: `<h4>Model Answer:</h4>
+<strong>Grid Computing:</strong> Connects geographically distributed computers into a single network, creating a virtual supercomputer. The combined processing power tackles tasks too large for any single machine. Business benefits: massive computational power for research, simulations, or financial modeling at lower cost than supercomputers. Limitation: requires technical coordination across sites.<br><br>
+<strong>Virtualization:</strong> Software allows one physical server to run multiple virtual machines, each with its own operating system. Business benefits: reduces hardware and power costs (fewer physical servers needed), simplifies centralization and backup, and allows faster provisioning of new environments.<br><br>
+<strong>Cloud Computing:</strong> On-demand delivery of computing resources (IaaS, PaaS, SaaS) over a network. Business benefits: eliminates capital expenditure, enables dynamic scaling, supports mobile workforces, and shifts IT from CapEx to OpEx. Drawbacks: security concerns, vendor reliability dependency.<br><br>
+<strong>Relationships:</strong> These technologies are complementary and layered. Virtualization is the foundational technology that makes cloud computing possible — cloud providers run virtualized servers in massive data centers. Grid computing is an alternative model for high-performance computing needs that cloud services now partly fulfill through IaaS. Together, they represent the evolution toward flexible, scalable, on-demand computing rather than fixed physical infrastructure.` },
+];
+
+// ===== RENDER MCQ =====
+let answered = 0, correct = 0, wrong = 0;
+function renderMCQ() {
+  const container = document.getElementById('mcq-container');
+  container.innerHTML = '';
+  mcqData.forEach((q, i) => {
+    const diffLabel = q.diff === 'easy' ? 'EASY' : q.diff === 'medium' ? 'MEDIUM' : 'HARD';
+    const diffClass = q.diff === 'easy' ? 'diff-easy' : q.diff === 'medium' ? 'diff-med' : 'diff-hard';
+    const optsHtml = q.opts.map((o, j) => `<div class="opt" data-q="${i}" data-o="${j}" onclick="selectOpt(this,${i},${j},${q.ans})">${o}</div>`).join('');
+    container.innerHTML += `
+      <div class="mcq-card" id="mcq-${i}">
+        <div class="mcq-num">Q${i+1} <span class="mcq-diff ${diffClass}">${diffLabel}</span></div>
+        <div class="mcq-q">${q.q}</div>
+        <div class="options">${optsHtml}</div>
+        <div class="explanation" id="exp-${i}">💬 <strong>Explanation:</strong> ${q.exp}</div>
+      </div>`;
+  });
+}
+function selectOpt(el, qi, oi, ans) {
+  const card = document.getElementById(`mcq-${qi}`);
+  if (card.dataset.answered) return;
+  card.dataset.answered = '1';
+  const opts = card.querySelectorAll('.opt');
+  opts.forEach((o, j) => { o.style.pointerEvents = 'none'; if (j === ans) o.classList.add('correct'); });
+  if (oi !== ans) el.classList.add('wrong');
+  document.getElementById(`exp-${qi}`).classList.add('show');
+  answered++;
+  if (oi === ans) correct++; else wrong++;
+  document.getElementById('score-val').textContent = `${answered}/30`;
+  document.getElementById('correct-count').textContent = correct;
+  document.getElementById('wrong-count').textContent = wrong;
+  document.getElementById('progress-fill').style.width = `${(answered/30)*100}%`;
+}
+function resetMCQ() {
+  answered = 0; correct = 0; wrong = 0;
+  document.getElementById('score-val').textContent = '0/30';
+  document.getElementById('correct-count').textContent = '0';
+  document.getElementById('wrong-count').textContent = '0';
+  document.getElementById('progress-fill').style.width = '0%';
+  renderMCQ();
+}
+
+// ===== RENDER WRITTEN QA =====
+function renderWritten() {
+  const sc = document.getElementById('short-qa');
+  const lc = document.getElementById('long-qa');
+  shortQA.forEach((qa, i) => {
+    sc.innerHTML += `
+      <div class="wq-card">
+        <div class="wq-type">SHORT ANSWER</div>
+        <div class="wq-q">Q${i+1}: ${qa.q}</div>
+        <button class="model-answer-btn" onclick="toggleAnswer(this)">Show Model Answer</button>
+        <div class="model-answer">${qa.ans}</div>
+      </div>`;
+  });
+  longQA.forEach((qa, i) => {
+    lc.innerHTML += `
+      <div class="wq-card">
+        <div class="wq-type">LONG ESSAY</div>
+        <div class="wq-q">Q${i+1}: ${qa.q}</div>
+        <button class="model-answer-btn" onclick="toggleAnswer(this)">Show Model Answer</button>
+        <div class="model-answer">${qa.ans}</div>
+      </div>`;
+  });
+}
+function toggleAnswer(btn) {
+  const ans = btn.nextElementSibling;
+  ans.classList.toggle('show');
+  btn.textContent = ans.classList.contains('show') ? 'Hide Answer' : 'Show Model Answer';
+}
+
+// ===== INIT =====
+renderMCQ();
+renderWritten();
+</script>
+</body>
+</html>
